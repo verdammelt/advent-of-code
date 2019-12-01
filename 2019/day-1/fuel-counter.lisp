@@ -6,6 +6,13 @@
 (defun fuel-cost (mass)
   (- (floor mass 3) 2))
 
+(defun total-fuel-cost (mass)
+  (labels ((helper (m costs)
+             (let ((cost (fuel-cost m)))
+               (if (< cost 1) costs
+                   (helper cost (append costs (list cost)))))))
+    (reduce #'+ (helper mass (list)))))
+
 (defun file-lines (file)
   (with-open-file (stream file :direction :input)
     (loop for line = (read-line stream nil nil)
@@ -16,5 +23,5 @@
 
 (defun execute (input-file)
   (let* ((masses (mapcar #'parse-line (file-lines input-file)))
-         (fuel-costs (mapcar #'fuel-cost masses)))
+         (fuel-costs (mapcar #'total-fuel-cost masses)))
     (reduce #'+ fuel-costs)))
