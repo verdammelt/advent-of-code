@@ -16,49 +16,78 @@
   (with-open-file (stream file :direction :input)
     (mapcar #'parse-integer (split-string (read-line stream) #\,))))
 
-(defun get-register (tape idx)
-  (if (< (length tape) idx) nil
-      (elt tape idx)))
-(defun (setf get-register) (new-value tape idx)
-  (setf (elt tape idx) new-value))
+(defclass computer ()
+  ((instruction-pointer :initform 0)
+   (memory :initform nil :initarg :memory)
+   (state :initform :off :type (member :off :on :halt) :reader state)))
 
-(defun write-to-tape (tape idx value)
-  (setf (get-register tape idx) value)
-  tape)
+(defun make-computer (memory)
+  (make-instance 'computer :memory memory))
 
-(defun compute (tape pc)
-  (labels ((add (arg1 arg2 result-location pc)
-             (compute (write-to-tape tape result-location (+ arg1 arg2)) pc))
-           (mul (arg1 arg2 result-location pc)
-             (compute (write-to-tape tape result-location (* arg1 arg2)) pc))
-           (halt (arg1 arg2 result-location pc)
-             (declare (ignore arg1 arg2 result-location pc))
-             tape)
-           (lookup-opcode (op)
-             (ecase op
-               (1 #'add)
-               (2 #'mul)
-               (99 #'halt))))
-    (if (< (length tape) pc) tape
-        (progn (let ((op (lookup-opcode (get-register tape pc)))
-                     (arg1-location (get-register tape (+ pc 1)))
-                     (arg2-location (get-register tape (+ pc 2)))
-                     (result-location (get-register tape (+ pc 3))))
-                 (funcall op
-                          (get-register tape arg1-location)
-                          (get-register tape arg2-location)
-                          result-location
-                          (+ pc 4)))))))
+(defun address (memory idx)
+  (elt memory idx))
+(defun (setf address) (new-value memory idx)
+  (setf (elt memory idx) new-value))
 
-(defun execute (input-file)
-  (let ((tape (read-input input-file))
-        (pc 0))
-    (compute tape pc)))
+(defun get-next-memory (computer)
+  (with-slots (instruction-pointer memory) computer
+    (prog1 (address memory instruction-pointer)
+      (incf instruction-pointer))))
+
+(defun peek (computer pointer)
+  (address (slot-value computer 'memory) pointer))
+
+(defun get-parameters (computer num-parameters)
+  (with-slots (instruction-pointer memory) computer
+    (loop for idx from 1 to num-parameters
+            collect (get-next-memory computer))))
+
+(defgeneric execute (instruction computer))
+(defmethod execute ((instruction (eql :add)) (computer computer))
+  (destructuring-bind (arg1-location arg2-location result-location)
+      (get-parameters computer 3)
+    (with-slots (memory state) computer
+      (let ((arg1 (address memory arg1-location))
+            (arg2 (address memory arg2-location)))
+        (setf state :running
+              (address memory result-location) (+ arg1 arg2))))))
+
+(defmethod execute ((instruction (eql :mul)) (computer computer))
+  (destructuring-bind (arg1-location arg2-location result-location)
+      (get-parameters computer 3)
+    (with-slots (memory state) computer
+      (let ((arg1 (address memory arg1-location))
+            (arg2 (address memory arg2-location)))
+        (setf state :running
+              (address memory result-location) (* arg1 arg2))))))
+
+(defmethod execute ((instruction (eql :halt)) (computer computer))
+  (setf (slot-value computer 'state) :halt))
+
+(defun get-instruction (computer)
+  (ecase (get-next-memory computer)
+    (1 :add)
+    (2 :mul)
+    (99 :halt)))
+
+(defun process-instruction (computer)
+  (funcall #'execute (get-instruction computer) computer))
+
+(defun compute (initial-memory)
+  (loop
+    with computer = (make-computer initial-memory)
+    until (eq (state computer) :halt)
+    do (process-instruction computer)
+    finally (return computer)))
+
+(defun modify-memory (memory updates)
+  (dolist (update updates memory)
+    (setf (address memory (first update)) (second update))))
 
 ;; correct answer: 4945026
 (defun 1202-error (input-file)
-  (let ((raw-tape (read-input input-file))
-        (pc 0))
-    (let* ((tape (write-to-tape raw-tape 1 12))
-           (tape (write-to-tape tape 2 2)))
-      (compute tape pc))))
+  (peek
+   (compute
+    (modify-memory (read-input input-file)
+                   '((1 12) (2 2))))
+   0))
