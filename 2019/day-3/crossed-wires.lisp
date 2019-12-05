@@ -97,17 +97,23 @@
     (maphash #'(lambda (k v) (when (> v 1) (push k crosses))) all-refs)
     (remove *origin* crosses :test #'equal)))
 
-(defun manhattan-distance (coord)
+(defun manhattan-distance (coord paths)
+  (declare (ignore paths))
   (+ (abs (- (car *origin*) (car coord)))
      (abs (- (cdr *origin*) (cdr coord)))))
+
+(defun signal-delay (coord paths)
+  (apply #'+ (mapcar #'(lambda (path) (position coord path :test #'equal)) paths)))
 
 (defun nearest-cross (crosses calc-fn)
   (first (sort crosses #'< :key calc-fn)))
 
 (defun find-nearest-cross (wires distance-fn)
-  (let* ((paths (mapcar #'make-path-with-no-self-crosses wires))
-         (crosses (find-crosses paths)))
-    (funcall distance-fn (nearest-cross crosses distance-fn))))
+  (let* ((paths (mapcar #'make-path wires))
+         (no-self-cross (mapcar #'(lambda (path) (remove-duplicates path :test #'equal)) paths))
+         (crosses (find-crosses no-self-cross)))
+    (flet ((calc-fn (coord) (funcall distance-fn coord paths)))
+      (calc-fn (nearest-cross crosses (function calc-fn))))))
 
 #|
 (find-nearest-cross *raw-input* #'manhattan-distance) ;; => 227
