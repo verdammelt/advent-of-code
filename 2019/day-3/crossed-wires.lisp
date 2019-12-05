@@ -95,17 +95,20 @@
                           :initial-value (make-hash-table :test #'equal)))
         (crosses (list)))
     (maphash #'(lambda (k v) (when (> v 1) (push k crosses))) all-refs)
-    (mapcar #'(lambda (coord) (list (manhattan-distance coord) coord))
-            (remove *origin* crosses :test #'equal))))
+    (remove *origin* crosses :test #'equal)))
 
 (defun manhattan-distance (coord)
   (+ (abs (- (car *origin*) (car coord)))
      (abs (- (cdr *origin*) (cdr coord)))))
 
-(defun nearest-cross (crosses)
-  (car (sort crosses #'< :key #'car)))
+(defun nearest-cross (crosses calc-fn)
+  (first (sort crosses #'< :key calc-fn)))
 
-(defun find-nearest-cross-by-distance (wires)
+(defun find-nearest-cross (wires distance-fn)
   (let* ((paths (mapcar #'make-path-with-no-self-crosses wires))
          (crosses (find-crosses paths)))
-    (nearest-cross crosses)))
+    (funcall distance-fn (nearest-cross crosses distance-fn))))
+
+#|
+(find-nearest-cross *raw-input* #'manhattan-distance) ;; => 227
+|#
