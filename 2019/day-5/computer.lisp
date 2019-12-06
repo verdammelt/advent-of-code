@@ -84,6 +84,34 @@
       (write-output computer (car args))
       (setf state :running))))
 
+(defmethod execute ((instruction (eql :jump-if-true)) modes (computer computer))
+  (let ((args (get-parameters computer 2 modes)))
+    (with-slots (instruction-pointer state) computer
+      (setf state :running)
+      (unless (zerop (first args))
+        (setf instruction-pointer (second args))))))
+
+(defmethod execute ((instruction (eql :jump-if-false)) modes (computer computer))
+  (let ((args (get-parameters computer 2 modes)))
+    (with-slots (instruction-pointer state) computer
+      (setf state :running)
+      (when (zerop (first args))
+        (setf instruction-pointer (second args))))))
+
+(defmethod execute ((instrution (eql :less-than)) modes (computer computer))
+  (let ((args (get-parameters computer 2 modes))
+        (result-location (get-immediate-parameter computer)))
+    (with-slots (memory state) computer
+      (setf state :running
+            (address memory result-location) (if (apply #'< args) 1 0)))))
+
+(defmethod execute ((instruction (eql :eql)) modes (computer computer))
+  (let ((args (get-parameters computer 2 modes))
+        (result-location (get-immediate-parameter computer)))
+    (with-slots (memory state) computer
+        (setf state :running
+              (address memory result-location) (if (apply #'= args) 1 0)))))
+
 (defmethod execute ((instruction (eql :halt)) modes (computer computer))
   (setf (slot-value computer 'state) :halt))
 
@@ -102,6 +130,10 @@
                 (2 :mul)
                 (3 :inp)
                 (4 :out)
+                (5 :jump-if-true)
+                (6 :jump-if-false)
+                (7 :less-than)
+                (8 :eql)
                 (99 :halt))
               modes))))
 
@@ -117,38 +149,3 @@
     until (eq (state computer) :halt)
     do (process-instruction computer)
      finally (return computer)))
-
-;;;
-;;; tests
-;;;
-;; add
-(assert (= (peek (compute '(1 5 6 0 99 2 2)) 0) 4))
-;; mul
-(assert (= (peek (compute '(2 5 6 0 99 2 3)) 0) 6))
-;; immediate mode (first parameter)
-(assert (= (peek (compute '(101 2 6 0 99 X 2)) 0) 4))
-;; immediate mode (second parameter)
-(assert (= (peek (compute '(1001 5 2 0 99 2 X)) 0) 4))
-;; immediate mode (all parameters)
-(assert (= (peek (compute '(1101 2 2 0 99)) 0) 4))
-;; example program (will terminate because 99 written to next PC
-(assert (eq (slot-value (compute '(1002 4 3 4 33)) 'state) :halt))
-;; input
-(with-input-from-string (input-stream "666")
-  (assert (= (peek (compute '(3 0 99)
-                            :input-stream input-stream)
-                   0)
-             666)))
-;; output
-(assert (string= (with-output-to-string (output-stream)
-                   (compute '(1101 2 3 0 4 0 99)
-                            :output-stream output-stream))
-                 (format nil "5~&")))
-;; example program (input/output)
-(let ((expected "13"))
-  (assert (string= (with-output-to-string (output-stream)
-                     (with-input-from-string (input-stream expected)
-                       (compute '(3 0 4 0 999)
-                                :input-stream input-stream
-                                :output-stream output-stream)))
-                   (format nil "~A~&" expected))))
