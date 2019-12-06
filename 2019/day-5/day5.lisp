@@ -25,3 +25,11 @@
   "correct answer is: 7692125"
   (with-input-from-string (input "1")
     (computer:compute (copy-seq *program-input*) :input-stream input)))
+
+(defun day5-part2 ()
+  "correct ansewr is: 14340395"
+  (with-output-to-string (output)
+    (with-input-from-string (input "5")
+      (computer:compute (copy-seq *program-input*)
+                        :input-stream input
+                        :output-stream output))))
