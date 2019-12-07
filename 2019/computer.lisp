@@ -1,8 +1,14 @@
 (defpackage #:computer
   (:use :common-lisp)
-  (:export :compute :peek))
+  (:export :compute :peek
+           :run-program
+           :computer
+           :*debug-mode*
+           :get-output))
 
 (in-package #:computer)
+
+(defparameter *debug-mode* nil)
 
 (defclass computer ()
   ((instruction-pointer :initform 0)
@@ -11,11 +17,21 @@
    (input-stream :initform *standard-input* :initarg :input-stream)
    (output-stream :initform *standard-output* :initarg :output-stream)))
 
+(defmethod print-object ((object computer) stream)
+  (print-unreadable-object (object stream :type t :identity t)
+    (with-slots (state instruction-pointer) object
+      (format stream "(STATE:~A PC:~A)" state instruction-pointer))))
+
+;; instead of copy-seq here - create initialize-instance method that does that.
 (defun make-computer (memory input-stream output-stream)
   (make-instance 'computer
-                 :memory memory
+                 :memory (copy-seq memory)
                  :input-stream input-stream
                  :output-stream output-stream))
+
+(defgeneric get-output (computer))
+(defmethod get-output ((computer computer))
+  (get-output-stream-string (slot-value computer 'output-stream)))
 
 (defun address (memory idx)
   (elt memory idx))
@@ -46,16 +62,28 @@
   (get-next-memory computer))
 
 (defun read-input (computer)
-  (format *query-io* "~&(~D)> " (slot-value computer 'instruction-pointer))
-  (read (slot-value computer 'input-stream)))
+  (with-slots (instruction-pointer input-stream) computer
+    (when (interactive-stream-p input-stream)
+      (format *query-io* "~&(~D)> " instruction-pointer))
+    (read input-stream)))
 
 (defun write-output (computer value)
   (with-slots (output-stream) computer
     (write value :stream output-stream)
-    (fresh-line output-stream)))
+    (when (interactive-stream-p output-stream)
+      (fresh-line output-stream))))
 
 ; (fmakunbound 'execute)
 (defgeneric execute (instruction modes computer))
+
+(defmethod execute :around (instruction modes computer)
+  (when *debug-mode*
+    (format t "~&EXECUTE(~S ~S ~S)" instruction modes computer))
+  (let ((result (call-next-method)))
+    (when *debug-mode*
+      (format t " => ~W~%" result))
+    result))
+
 (defmethod execute ((instruction (eql :add)) modes (computer computer))
   (let ((args (get-parameters computer 2 modes))
         (result-location (get-immediate-parameter computer)))
@@ -69,7 +97,6 @@
     (with-slots (memory state) computer
       (setf state :running
             (address memory result-location) (apply #'* args)))))
-
 
 (defmethod execute ((instruction (eql :inp)) modes (computer computer))
   (let ((result-location (get-immediate-parameter computer)))
@@ -141,11 +168,23 @@
   (multiple-value-bind (op modes) (get-instruction computer)
    (funcall #'execute op modes computer)))
 
+(defgeneric run-program (computer &optional additional-input))
+(defmethod run-program ((computer computer) &optional additional-input)
+  (when additional-input
+    (with-slots (input-stream) computer
+      (setf input-stream
+            (make-concatenated-stream input-stream
+                                      ;; because we will be READing from the and
+                                      ;; we want the inputs to be distinct.
+                                      (make-string-input-stream " ")
+                                      additional-input))))
+  (loop
+     :until (eq (state computer) :halt)
+     :do (process-instruction computer)
+     :finally (return computer)))
+
 (defun compute (initial-memory &key
                                  (input-stream *standard-input*)
                                  (output-stream *standard-output*))
-  (loop
-    with computer = (make-computer initial-memory input-stream output-stream)
-    until (eq (state computer) :halt)
-    do (process-instruction computer)
-     finally (return computer)))
+  (run-program
+   (make-computer initial-memory input-stream output-stream)))
