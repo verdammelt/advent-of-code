@@ -1,3 +1,5 @@
+(load "../file-utils")
+
 (defpackage :fuel-counter
   (:use :common-lisp))
 
@@ -13,15 +15,10 @@
                    (helper cost (append costs (list cost)))))))
     (reduce #'+ (helper mass (list)))))
 
-(defun file-lines (file)
-  (with-open-file (stream file :direction :input)
-    (loop for line = (read-line stream nil nil)
-       while line collect line)))
-
 (defun parse-line (line)
   (with-input-from-string (stream line) (read stream)))
 
 (defun execute (input-file)
-  (let* ((masses (mapcar #'parse-line (file-lines input-file)))
+  (let* ((masses (mapcar #'parse-line (file-utils:read-lines input-file)))
          (fuel-costs (mapcar #'total-fuel-cost masses)))
     (reduce #'+ fuel-costs)))

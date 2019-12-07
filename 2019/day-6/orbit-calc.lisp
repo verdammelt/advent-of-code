@@ -1,23 +1,11 @@
+(load "../file-utils")
+(load "../string-utils")
+
 (defpackage :orbit-calc
   (:use :common-lisp)
   (:export :checksum))
 
 (in-package :orbit-calc)
-
-(defun split-string (string &optional (delimeter #\Space))
-  (labels ((split-string-iter (string result)
-             (let ((idx (position delimeter string :from-end t)))
-               (if idx
-                   (split-string-iter (subseq string 0 idx)
-                                      (cons (subseq string (1+ idx)) result))
-                   (cons string result)))))
-    (split-string-iter string (list))))
-
-(defun read-file-lines (file)
-  (with-open-file (input file)
-    (loop
-       :for line := (read-line input nil nil)
-       :while line :collect line)))
 
 ;; orbit data is a hashtable of child -> parent
 (defun add-orbit (orbits com sat)
@@ -34,8 +22,8 @@
 
 (defun load-orbits (datafile)
   "LOAD-ORBITS reads the data file and returns a orbit representation"
-  (labels ((split (s) (split-string s #\)))
-           (slurp (file) (mapcar #'split (read-file-lines file))))
+  (labels ((split (s) (string-utils:split s #\)))
+           (slurp (file) (mapcar #'split (file-utils:read-lines file))))
     (let* ((orbit-pairs (slurp datafile)))
       (reduce #'(lambda (orbits pair)
                   (add-orbit orbits (first pair) (second pair)))

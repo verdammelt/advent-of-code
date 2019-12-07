@@ -1,7 +1,7 @@
 (defpackage :day5
   (:use :common-lisp))
 
-(load "./computer")
+(load "../computer")
 
 ;;; from day 2
 ;;; TODO find place for this utility

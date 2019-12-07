@@ -13,33 +13,18 @@
 ;;; distance: 135
 ;;;
 
+(load "../file-utils")
+(load "../string-utils")
+
 (defpackage :crossed-wires
   (:use :common-lisp)
   (:shadow :step))
 
 (in-package :crossed-wires)
 
-;;; from day-1
-;;; TODO: make common place for utilities
-(defun file-lines (file)
-  (with-open-file (stream file :direction :input)
-    (loop for line = (read-line stream nil nil)
-          while line collect line)))
+(defun parse-lines (lines) (mapcar #'(lambda (s) (string-utils:split s #\,)) lines))
 
-;;; from day-2
-;;; TODO: make common place for utilities
-(defun split-string (string &optional (delimeter #\Space))
-  (labels ((split-string-iter (string result)
-             (let ((idx (position delimeter string :from-end t)))
-               (if idx
-                   (split-string-iter (subseq string 0 idx)
-                                      (cons (subseq string (1+ idx)) result))
-                   (cons string result)))))
-    (split-string-iter string (list))))
-
-(defun parse-lines (lines) (mapcar #'(lambda (s) (split-string s #\,)) lines))
-
-(defparameter *raw-input* (parse-lines (file-lines "./input.txt")))
+(defparameter *raw-input* (parse-lines (file-utils:read-lines "./input.txt")))
 
 (defparameter *origin* '(0 . 0))
 
