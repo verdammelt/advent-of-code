@@ -4,6 +4,7 @@
            :run-program
            :computer
            :*debug-mode*
+           :get-state
            :get-output))
 
 (in-package #:computer)
@@ -13,9 +14,15 @@
 (defclass computer ()
   ((instruction-pointer :initform 0)
    (memory :initform nil :initarg :memory)
-   (state :initform :off :type (member :off :on :halt) :reader state)
+   (state :initform :off :type (member :off :on :halt :blocked-input)
+          :reader get-state)
    (input-stream :initform *standard-input* :initarg :input-stream)
-   (output-stream :initform *standard-output* :initarg :output-stream)))
+   (output-stream :initform *standard-output*
+                  :initarg :output-stream)))
+
+(defgeneric get-output (computer))
+(defmethod get-output ((computer computer))
+  (get-output-stream-string (slot-value computer 'output-stream)))
 
 (defmethod print-object ((object computer) stream)
   (print-unreadable-object (object stream :type t :identity t)
@@ -28,10 +35,6 @@
                  :memory (copy-seq memory)
                  :input-stream input-stream
                  :output-stream output-stream))
-
-(defgeneric get-output (computer))
-(defmethod get-output ((computer computer))
-  (get-output-stream-string (slot-value computer 'output-stream)))
 
 (defun address (memory idx)
   (elt memory idx))
@@ -100,10 +103,15 @@
 
 (defmethod execute ((instruction (eql :inp)) modes (computer computer))
   (let ((result-location (get-immediate-parameter computer)))
-    (with-slots (memory state) computer
-      (setf state :running
-            (address memory result-location)
-            (read-input computer)))))
+    (with-slots (memory state instruction-pointer) computer
+      (handler-case
+          (setf state :running
+                (address memory result-location)
+                (read-input computer))
+        (end-of-file ()
+          (setf state :blocked-input)
+          (decf instruction-pointer 2))
+        ))))
 
 (defmethod execute ((instruction (eql :out)) modes (computer computer))
   (let ((args (get-parameters computer 1 modes)))
@@ -170,6 +178,9 @@
 
 (defgeneric run-program (computer &optional additional-input))
 (defmethod run-program ((computer computer) &optional additional-input)
+  ;; cannot run a halted computer...
+  (when (eq (get-state computer) :halt) (error 'computer-halted))
+
   (when additional-input
     (with-slots (input-stream) computer
       (setf input-stream
@@ -179,8 +190,9 @@
                                       (make-string-input-stream " ")
                                       additional-input))))
   (loop
-     :until (eq (state computer) :halt)
      :do (process-instruction computer)
+     :until (or (eq (get-state computer) :halt)
+                (eq (get-state computer) :blocked-input))
      :finally (return computer)))
 
 (defun compute (initial-memory &key
