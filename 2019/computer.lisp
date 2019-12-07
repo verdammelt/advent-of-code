@@ -1,6 +1,6 @@
 (defpackage #:computer
   (:use :common-lisp)
-  (:export :compute))
+  (:export :compute :peek))
 
 (in-package #:computer)
 
