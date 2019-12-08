@@ -20,6 +20,10 @@
    (output-stream :initform *standard-output*
                   :initarg :output-stream)))
 
+(defmethod initialize-instance :after ((obj computer) &key &allow-other-keys)
+  (with-slots (memory) obj
+    (setf memory (copy-seq memory))))
+
 (defgeneric get-output (computer))
 (defmethod get-output ((computer computer))
   (get-output-stream-string (slot-value computer 'output-stream)))
@@ -29,10 +33,9 @@
     (with-slots (state instruction-pointer) object
       (format stream "(STATE:~A PC:~A)" state instruction-pointer))))
 
-;; instead of copy-seq here - create initialize-instance method that does that.
 (defun make-computer (memory input-stream output-stream)
   (make-instance 'computer
-                 :memory (copy-seq memory)
+                 :memory memory
                  :input-stream input-stream
                  :output-stream output-stream))
 
@@ -79,27 +82,29 @@
 ; (fmakunbound 'execute)
 (defgeneric execute (instruction modes computer))
 
-(defmethod execute :around (instruction modes computer)
-  (when *debug-mode*
-    (format t "~&EXECUTE(~S ~S ~S)" instruction modes computer))
-  (let ((result (call-next-method)))
-    (when *debug-mode*
-      (format t " => ~W~%" result))
-    result))
+(defmacro def-memory-modifier (name modify &key (num-args 2))
+  `(defmethod execute ((instruction (eql ,name)) modes (computer computer))
+     (let ((args (get-parameters computer ,num-args modes))
+           (result-location (get-immediate-parameter computer)))
+       (with-slots (memory state) computer
+         (setf state :running
+               (address memory result-location) (apply ,modify args))))))
 
-(defmethod execute ((instruction (eql :add)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes))
-        (result-location (get-immediate-parameter computer)))
-    (with-slots (memory state) computer
-      (setf state :running
-            (address memory result-location) (apply #'+ args)))))
+(def-memory-modifier :add #'+)
+(def-memory-modifier :mul #'*)
+(def-memory-modifier :less-than #'(lambda (arg1 arg2) (if (< arg1 arg2) 1 0)))
+(def-memory-modifier :eql #'(lambda (arg1 arg2) (if (= arg1 arg2) 1 0)))
 
-(defmethod execute ((instruction (eql :mul)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes))
-        (result-location (get-immediate-parameter computer)))
-    (with-slots (memory state) computer
-      (setf state :running
-            (address memory result-location) (apply #'* args)))))
+(defmacro def-jump-if (name test)
+  `(defmethod execute ((instruction (eql ,name)) modes (computer computer))
+     (let ((args (get-parameters computer 2 modes)))
+       (with-slots (instruction-pointer state) computer
+         (setf state :running)
+         (when (funcall ,test (first args))
+           (setf instruction-pointer (second args)))))))
+
+(def-jump-if :jump-if-true (complement #'zerop))
+(def-jump-if :jump-if-false #'zerop)
 
 (defmethod execute ((instruction (eql :inp)) modes (computer computer))
   (let ((result-location (get-immediate-parameter computer)))
@@ -110,42 +115,13 @@
                 (read-input computer))
         (end-of-file ()
           (setf state :blocked-input)
-          (decf instruction-pointer 2))
-        ))))
+          (decf instruction-pointer 2))))))
 
 (defmethod execute ((instruction (eql :out)) modes (computer computer))
   (let ((args (get-parameters computer 1 modes)))
     (with-slots (state) computer
       (write-output computer (car args))
       (setf state :running))))
-
-(defmethod execute ((instruction (eql :jump-if-true)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes)))
-    (with-slots (instruction-pointer state) computer
-      (setf state :running)
-      (unless (zerop (first args))
-        (setf instruction-pointer (second args))))))
-
-(defmethod execute ((instruction (eql :jump-if-false)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes)))
-    (with-slots (instruction-pointer state) computer
-      (setf state :running)
-      (when (zerop (first args))
-        (setf instruction-pointer (second args))))))
-
-(defmethod execute ((instrution (eql :less-than)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes))
-        (result-location (get-immediate-parameter computer)))
-    (with-slots (memory state) computer
-      (setf state :running
-            (address memory result-location) (if (apply #'< args) 1 0)))))
-
-(defmethod execute ((instruction (eql :eql)) modes (computer computer))
-  (let ((args (get-parameters computer 2 modes))
-        (result-location (get-immediate-parameter computer)))
-    (with-slots (memory state) computer
-        (setf state :running
-              (address memory result-location) (if (apply #'= args) 1 0)))))
 
 (defmethod execute ((instruction (eql :halt)) modes (computer computer))
   (setf (slot-value computer 'state) :halt))
