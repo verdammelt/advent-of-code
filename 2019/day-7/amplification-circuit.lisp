@@ -71,7 +71,7 @@
 (defun create-amplifier (program name phase-setting)
   (make-instance 'amplifier
                  :name name
-                 :memory (copy-seq program)
+                 :memory program
                  :input-stream
                  (make-string-input-stream (format nil "~D" phase-setting))
                  :output-stream
