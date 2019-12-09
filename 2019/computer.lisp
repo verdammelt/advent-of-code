@@ -1,3 +1,4 @@
+; (delete-package (find-package :computer))
 (defpackage #:computer
   (:use :common-lisp)
   (:export :compute :peek
@@ -13,6 +14,7 @@
 
 (defclass computer ()
   ((instruction-pointer :initform 0)
+   (reference-base :initform 0)
    (memory :initform nil :initarg :memory)
    (state :initform :off :type (member :off :on :halt :blocked-input)
           :reader get-state)
@@ -22,7 +24,7 @@
 
 (defmethod initialize-instance :after ((obj computer) &key &allow-other-keys)
   (with-slots (memory) obj
-    (setf memory (copy-seq memory))))
+    (setf memory (make-array (length memory) :initial-contents memory))))
 
 (defgeneric get-output (computer))
 (defmethod get-output ((computer computer))
@@ -30,8 +32,11 @@
 
 (defmethod print-object ((object computer) stream)
   (print-unreadable-object (object stream :type t :identity t)
-    (with-slots (state instruction-pointer) object
-      (format stream "(STATE:~A PC:~A)" state instruction-pointer))))
+    (with-slots (state instruction-pointer reference-base memory) object
+      (format stream "(STATE:~A PC:~A REF:~A MEMSIZE:~A)"
+              state
+              instruction-pointer reference-base
+              (length memory)))))
 
 (defun make-computer (memory input-stream output-stream)
   (make-instance 'computer
@@ -39,30 +44,46 @@
                  :input-stream input-stream
                  :output-stream output-stream))
 
-(defun address (memory idx)
-  (elt memory idx))
-(defun (setf address) (new-value memory idx)
-  (setf (elt memory idx) new-value))
+(defun maybe-expand-memory (computer address)
+  (with-slots (memory) computer
+    (let ((memory-size (length memory)))
+      (when (>= address memory-size)
+        (let ((growth-factor (ceiling address memory-size)))
+         (setf memory
+               (adjust-array memory
+                             (* growth-factor memory-size)
+                             :initial-element 0)))))))
+
+(defun get-memory-at-address (computer address)
+  (with-slots (memory) computer
+    (maybe-expand-memory computer address)
+    (elt memory address)))
+(defun (setf get-memory-at-address) (new-value computer address)
+  (with-slots (memory) computer
+    (maybe-expand-memory computer address)
+    (setf (elt (slot-value computer 'memory) address) new-value)))
 
 (defun get-next-memory (computer)
-  (with-slots (instruction-pointer memory) computer
-    (prog1 (address memory instruction-pointer)
+  (with-slots (instruction-pointer) computer
+    (prog1 (get-memory-at-address computer instruction-pointer)
       (incf instruction-pointer))))
 
 (defun peek (computer pointer)
-  (address (slot-value computer 'memory) pointer))
+  (get-memory-at-address computer pointer))
 
-(defun immediate-address-p (idx modes)
-  (when (< idx (length modes))
-    (= (nth idx modes) 1)))
+(defun get-next-value (computer mode)
+  (let ((value (get-next-memory computer)))
+    (ecase mode
+      (0 (get-memory-at-address computer value))
+      (1 value)
+      (2 (get-memory-at-address computer
+                                (+ value
+                                   (slot-value computer 'reference-base)))))))
 
 (defun get-parameters (computer num-parameters modes)
-  (with-slots (instruction-pointer memory) computer
-    (loop
-       :for idx :from 0 :below num-parameters
-       :for value := (get-next-memory computer)
-       :if (immediate-address-p idx modes) :collect value
-       :else :collect (address memory value))))
+  (loop
+     :for idx :from 0 :below num-parameters
+     :collect (get-next-value computer (nth idx modes))))
 
 (defun get-immediate-parameter (computer)
   (get-next-memory computer))
@@ -75,20 +96,31 @@
 
 (defun write-output (computer value)
   (with-slots (output-stream) computer
-    (write value :stream output-stream)
+    (format output-stream "~A " value)
     (when (interactive-stream-p output-stream)
       (fresh-line output-stream))))
 
 ; (fmakunbound 'execute)
 (defgeneric execute (instruction modes computer))
 
+(defun write-to-memory (computer result-location mode value)
+  (setf (get-memory-at-address computer
+                               (+ result-location
+                                  (if (= mode 2) (slot-value computer 'reference-base)
+                                      0)))
+        value))
+
 (defmacro def-memory-modifier (name modify &key (num-args 2))
   `(defmethod execute ((instruction (eql ,name)) modes (computer computer))
      (let ((args (get-parameters computer ,num-args modes))
            (result-location (get-immediate-parameter computer)))
-       (with-slots (memory state) computer
-         (setf state :running
-               (address memory result-location) (apply ,modify args))))))
+       (with-slots (state) computer
+         (setf state :running)
+         ;; fix this
+         ;; (get-memory-at-address computer result-location)
+         ;; (apply ,modify args)
+         (write-to-memory computer result-location (nth 2 modes) (apply ,modify args))
+         ))))
 
 (def-memory-modifier :add #'+)
 (def-memory-modifier :mul #'*)
@@ -108,11 +140,15 @@
 
 (defmethod execute ((instruction (eql :inp)) modes (computer computer))
   (let ((result-location (get-immediate-parameter computer)))
-    (with-slots (memory state instruction-pointer) computer
+    (with-slots (state instruction-pointer) computer
       (handler-case
-          (setf state :running
-                (address memory result-location)
-                (read-input computer))
+         (progn  (setf state :running
+                 ;; fix this
+                 ;; (get-memory-at-address computer result-location)
+                 ;; (read-input computer)
+                       )
+                 (write-to-memory computer result-location (nth 0 modes)
+                                  (read-input computer)))
         (end-of-file ()
           (setf state :blocked-input)
           (decf instruction-pointer 2))))))
@@ -122,6 +158,12 @@
     (with-slots (state) computer
       (write-output computer (car args))
       (setf state :running))))
+
+(defmethod execute ((instruction (eql :set-ref-base)) modes (computer computer))
+  (let ((args (get-parameters computer 1 modes)))
+    (with-slots (state reference-base) computer
+      (setf state :running
+            reference-base (+ reference-base (first args))))))
 
 (defmethod execute ((instruction (eql :halt)) modes (computer computer))
   (setf (slot-value computer 'state) :halt))
@@ -145,6 +187,7 @@
                 (6 :jump-if-false)
                 (7 :less-than)
                 (8 :eql)
+                (9 :set-ref-base)
                 (99 :halt))
               modes))))
 
