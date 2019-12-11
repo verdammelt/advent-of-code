@@ -9,10 +9,18 @@
 
 (defparameter *empty-space* #\.)
 
+(defclass asteroid () ((x :initarg :x :reader x) (y :initarg :y :reader y)))
+(defun make-asteroid (x y) (make-instance 'asteroid :x x :y y))
+
+(defmethod print-object ((object asteroid) stream)
+  (print-unreadable-object (object stream :type t :identity nil)
+    (format stream "[~A, ~A]" (x object) (y object))))
+
+
 (defun parse-data-row (y row)
   (loop
      :for x :from 0 :below (length row)
-       :collect `(,(char row x) (,x ,y))))
+       :collect `(,(char row x) ,(make-asteroid x y))))
 
 (defun find-asteroids (data)
   (mapcar #'second
@@ -38,19 +46,19 @@
 
 (defparameter *test-data*
   (list
-   (list :best '(3 4)
+   (list :best (make-asteroid 3 4)
          :count 8
          :data (load-map "./test-1.txt"))
-   (list :best '(5 8)
+   (list :best (make-asteroid 5 8)
          :count 33
          :data (load-map "./test-2.txt"))
-   (list :best '(1 2)
+   (list :best (make-asteroid 1 2)
          :count 35
          :data (load-map "./test-3.txt"))
-   (list :best '(6 3)
+   (list :best (make-asteroid 6 3)
          :count 41
          :data (load-map "./test-4.txt"))
-   (list :best '(11 13)
+   (list :best (make-asteroid 11 13)
          :count 210
          :data (load-map "./test-5.txt"))))
 
@@ -75,8 +83,24 @@
 ;; (thought: maybe treat each asteroid in first loop as (0 0) then positive/negative
 ;;  can be handled separately?)
 
-(defun slope-intercept-fn (point1 point2)
-  (let ((m (/ (- (second point1) (second point2))
-              (- (first point1) (first point2))))
-        (b (second point1)))
-    #'(lambda (point) (+ (* m (first point)) b))))
+(defun slope-between-asteroids (a1 a2)
+  (atan (- (x a2) (x a1))
+        (- (y a2) (y a1))))
+
+(defun find-slopes-from (a1 map)
+  (let ((slopes
+         (reduce
+          #'(lambda (slopes a2) (incf (gethash (slope-between-asteroids a1 a2) slopes 0)) slopes)
+          (all-asteroids map)
+          :initial-value (make-hash-table))))
+    (remhash 0.0 slopes)
+    slopes))
+
+(defun best-asteroid-for-base (map)
+  (first
+   (sort (map-asteroids map #'(lambda (a) (list a (hash-table-count (find-slopes-from a map)))))
+         #'>
+         :key #'second)))
+
+;; part 1 answer is 286 - however the above code was giving 285
+;; noticed an off-by-one problem in 3rd-6th test data.
