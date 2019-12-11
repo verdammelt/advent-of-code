@@ -7,7 +7,7 @@
 
 (in-package :monitor-station)
 
-(defparameter *empty-space* #\.)
+;;; ---------- ASTEROID ----------
 
 (defclass asteroid () ((x :initarg :x :reader x) (y :initarg :y :reader y)))
 (defun make-asteroid (x y) (make-instance 'asteroid :x x :y y))
@@ -16,6 +16,9 @@
   (print-unreadable-object (object stream :type t :identity nil)
     (format stream "[~A, ~A]" (x object) (y object))))
 
+;;; ---------- PARSING ----------
+
+(defparameter *empty-space* #\.)
 
 (defun parse-data-row (y row)
   (loop
@@ -30,58 +33,21 @@
                      :append (parse-data-row y (nth y data)))
                   :key #'first)))
 
-(defun make-map (asteroid-list)
-  (reduce #'(lambda (map coord)
-              (setf (gethash coord map) t)
-              map)
-          asteroid-list
-          :initial-value (make-hash-table :test 'equal)))
-
 (defun load-map (file)
-  (let* ((raw-data (file-utils:read-lines file))
-         (dimensions (list (length (first raw-data))
-                           (length raw-data))))
-    (list :dimensions dimensions
-          :map (make-map (find-asteroids raw-data)))))
+  (find-asteroids (file-utils:read-lines file)))
 
-(defparameter *test-data*
-  (list
-   (list :best (make-asteroid 3 4)
-         :count 8
-         :data (load-map "./test-1.txt"))
-   (list :best (make-asteroid 5 8)
-         :count 33
-         :data (load-map "./test-2.txt"))
-   (list :best (make-asteroid 1 2)
-         :count 35
-         :data (load-map "./test-3.txt"))
-   (list :best (make-asteroid 6 3)
-         :count 41
-         :data (load-map "./test-4.txt"))
-   (list :best (make-asteroid 11 13)
-         :count 210
-         :data (load-map "./test-5.txt"))))
+;;; ---------- TEST & PUZZLE DATA ----------
 
-(defparameter *puzzle-input* (load-map "./input.txt"))
-
-(defun map-asteroids (map fn)
-  (loop for k being the hash-key of map collect (funcall fn k)))
-
-(defun all-asteroids (map)
-  (map-asteroids map #'identity))
-
-;; for every asteroid
-;; - for all remaining asteroids
-;;   - make a line to this second asteroid
-;;   - collect all other asteroids on this line (any asteroid on the line 'hides' the others on the line
-;;   - remove these asteroids from consideration
-;; - count up these collections of asteroids
-;; - find asteroid with the large number of these collections.
 ;;
-;; problem: points asteroid in the middles has other asteroids on either side of it
-;; on the same line but need to be counted differently... how?
-;; (thought: maybe treat each asteroid in first loop as (0 0) then positive/negative
-;;  can be handled separately?)
+;; test-1 - 3,4 - 8
+;; test-2 - 5,8 - 33
+;; test-3 - 1,2 - 35
+;; test-4 - 6,3 - 41
+;; test-5 - 11,13 - 210
+(defparameter *maps*
+  (mapcar #'load-map
+          '("./test-1.txt" "./test-2.txt" "./test-3.txt" "./test-4.txt" "./test-5.txt"
+            "./input.txt")))
 
 (defun slope-between-asteroids (a1 a2)
   (atan (- (x a2) (x a1))
@@ -90,15 +56,14 @@
 (defun find-slopes-from (a1 map)
   (let ((slopes
          (reduce
-          #'(lambda (slopes a2) (incf (gethash (slope-between-asteroids a1 a2) slopes 0)) slopes)
-          (all-asteroids map)
+          #'(lambda (slopes a2) (unless (eq a1 a2) (incf (gethash (slope-between-asteroids a1 a2) slopes 0))) slopes)
+          map
           :initial-value (make-hash-table))))
-    (remhash 0.0 slopes)
     slopes))
 
 (defun best-asteroid-for-base (map)
   (first
-   (sort (map-asteroids map #'(lambda (a) (list a (hash-table-count (find-slopes-from a map)))))
+   (sort (mapcar #'(lambda (a) (list a (hash-table-count (find-slopes-from a map)))) map)
          #'>
          :key #'second)))
 
