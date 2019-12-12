@@ -113,12 +113,68 @@
      :do (computer:run-program (brain painter) (make-color-stream (handle-io painter)))
      :finally (return painter)))
 
-(defun monet (&optional (program *program*))
+(defun monet (&key (program *program*) (starting-color :black))
   (let ((painter (make-instance 'painter :program program)))
+    (apply-paint painter starting-color)
     (computer:run-program painter)))
 
-(defun how-much-painting (&optional (program *program*))
-  (hash-table-count (slot-value (monet program) 'canvas)))
+(defun how-much-painting (&key (program *program*))
+  (hash-table-count (slot-value (monet :program program) 'canvas)))
 
 ;; part I
 (assert (= (how-much-painting) 2478))
+
+;; ---------- part II ----------
+
+(defun find-limits (canvas)
+  (let ((min-x 0) (min-y 0) (max-x 0) (max-y 0))
+    (maphash
+     #'(lambda (key value) (declare (ignore value))
+          (setf min-x (min min-x (x key))
+                min-y (min min-y (y key))
+                max-x (max max-x (x key))
+                max-y (max max-y (y key))))
+     canvas)
+    (values min-x min-y max-x max-y)))
+
+(defun calc-dimensions (canvas)
+  (multiple-value-bind (min-x min-y max-x max-y)
+      (find-limits canvas)
+    (list (1+ (- max-x min-x))
+          (1+ (- max-y min-y)))))
+
+(defun draw-on-screen (screen)
+  #'(lambda (location color)
+      (setf (aref screen (abs (x location)) (abs (y location))) color)))
+
+(defun render-color (color)
+  (case color
+    (:black #\.)
+    (:white #\#)))
+
+(defun format-line (size)
+  (format t "~&~v@{~A~:*~}~&" size "-"))
+
+(defun render (painter)
+  (let* ((canvas (slot-value painter 'canvas))
+         (dimensions (calc-dimensions canvas))
+         (screen (make-array dimensions :initial-element :black)))
+    (maphash (draw-on-screen screen) canvas)
+    (loop
+       :initially (format-line (second dimensions))
+       :for x :below (first dimensions)
+       :do (progn (loop
+                     :for y :below (second dimensions)
+                     :do (format t "~C" (render-color (aref screen x y))))
+                  (format t "~&"))
+         :finally (format-line (second dimensions)))))
+
+;; -------------------------------------------
+;; .#..#..##..####.###..#..#..##...##..####...
+;; .#..#.#..#....#.#..#.#..#.#..#.#..#....#...
+;; .####.#......#..#..#.#..#.#....#..#...#....
+;; .#..#.#.....#...###..#..#.#.##.####..#.....
+;; .#..#.#..#.#....#.#..#..#.#..#.#..#.#......
+;; .#..#..##..####.#..#..##...###.#..#.####...
+;; -------------------------------------------
+;; HCZRUGAZ
