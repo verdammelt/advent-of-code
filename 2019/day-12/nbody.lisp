@@ -86,3 +86,54 @@
 
 ;;; ---------- part I ----------
 (assert (= 7722 (total-energy (n-time-steps 1000 (load-data "./input.txt")))))
+
+(defun find-cycle (initial)
+  (declare (optimize (speed 3) (debug 0) (safety 0)))
+  (do ((moons (time-step initial) (time-step moons))
+       (count 1 (+ count 1)))
+      ((equal moons initial) count)))
+
+(defun find-cycle-axis (initial accessor)
+  (let ((start (funcall accessor initial)))
+    (do ((moons (time-step initial) (time-step moons))
+         (count 1 (+ 1 count)))
+        ((equal start (funcall accessor moons)) count))))
+
+;;; this is not giving the correct info...
+(defun find-cycle-lcm (initial)
+  (flet ((get-axis (axis) (lambda (ms) (mapcar #'(lambda (m) (funcall axis (moon-loc m))) ms))))
+    (lcm (find-cycle-axis initial (get-axis #'coord-x))
+         (find-cycle-axis initial (get-axis #'coord-y))
+         (find-cycle-axis initial (get-axis #'coord-z)))))
+
+(defun find-zero-velocity (initial)
+  (let ((zero-velocity (make-zero-coord)))
+   (do ((moons (time-step initial) (time-step moons))
+        (count 1 (+ count 1)))
+       ((every #'(lambda (m) (equal zero-velocity (moon-vel m))) moons) (* 2 count)))))
+
+(defun zero-velocities (moons axis)
+  (every #'zerop (mapcar axis (mapcar #'moon-vel moons))))
+
+;; this one works.
+(defun from-reddit (initial)
+  (do ((moons (time-step initial) (time-step moons))
+       (count 1 (+ count 1))
+       (x-period nil)
+       (y-period nil)
+       (z-period nil))
+      ((and x-period y-period z-period)
+       (* 2 (lcm x-period y-period z-period)))
+    (if (and (not x-period) (zero-velocities moons #'coord-x))
+        (setf x-period count))
+    (if (and (not y-period) (zero-velocities moons #'coord-y))
+        (setf y-period count))
+    (if (and (not z-period) (zero-velocities moons #'coord-z))
+        (setf z-period count))))
+
+(defun run-the-test (datafile cycle-finder)
+  (let ((data (load-data datafile)))
+    (sb-ext:gc :full t)
+    (time (funcall cycle-finder data))))
+
+;;; Answer: 292653556339368
