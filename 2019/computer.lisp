@@ -1,12 +1,14 @@
 ; (delete-package (find-package :computer))
 (defpackage #:computer
   (:use :common-lisp)
-  (:export :compute :peek
+  (:export :compute :peek :poke
+           :make-computer
            :run-program
            :computer
            :*debug-mode*
            :get-state
-           :get-output))
+           :get-output
+           :halted-p))
 
 (in-package #:computer)
 
@@ -29,6 +31,10 @@
 (defgeneric get-output (computer))
 (defmethod get-output ((computer computer))
   (get-output-stream-string (slot-value computer 'output-stream)))
+
+(defgeneric halted-p (computer))
+(defmethod halted-p ((computer computer))
+  (eq (get-state computer) :halt))
 
 (defmethod print-object ((object computer) stream)
   (print-unreadable-object (object stream :type t :identity t)
@@ -70,6 +76,9 @@
 
 (defun peek (computer pointer)
   (get-memory-at-address computer pointer))
+
+(defun poke (computer pointer new-value)
+  (setf (get-memory-at-address computer pointer) new-value))
 
 (defun get-next-value (computer mode)
   (let ((value (get-next-memory computer)))
