@@ -15,6 +15,7 @@
 
 (defun ones-only (n) (mod n 10))
 
+
 (defun compute-pattern (digit-num target-length)
   (labels ((compute (digits acc)
              (cond ((> (length acc) target-length) acc)
@@ -22,7 +23,7 @@
                    (t (compute (rest digits)
                                (append acc (repeat digit-num
                                                    (first digits))))))))
-    (rest (compute *base-pattern* (list)))))
+    (subseq (rest (compute *base-pattern* (list))) 0 target-length)))
 
 (defun sum-nums (nums) (apply #'+ nums))
 
@@ -44,6 +45,17 @@
      for input = signal-data then (compute-phase input)
      for num from 0 below num-phases
      finally (return input)))
+
+(defun get-message-offset (signal-data)
+  (parse-integer (write-signal (subseq signal-data 0 7) nil)))
+
+(defun compute-message (signal-data
+                        &key (forced-offset nil) (repeat-count 10000))
+  (let* ((offset (or forced-offset (get-message-offset signal-data)))
+         (full-signal (apply #'append (repeat repeat-count signal-data)))
+         (100th-phase (run-n-phases (subseq full-signal 0 (+ offset 8)) 100))
+         (message (subseq 100th-phase offset (+ offset 8))))
+    (write-signal message nil)))
 
 (defun write-signal (signal-data &optional (stream t))
   (format stream "~{~D~}" signal-data))
