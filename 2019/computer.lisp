@@ -8,7 +8,8 @@
            :*debug-mode*
            :get-state
            :get-output
-           :halted-p))
+           :halted-p
+           :load-program))
 
 (in-package #:computer)
 
@@ -57,7 +58,7 @@
         (let ((growth-factor (ceiling address memory-size)))
          (setf memory
                (adjust-array memory
-                             (* growth-factor memory-size)
+                             (+ (* growth-factor memory-size) 1)
                              :initial-element 0)))))))
 
 (defun get-memory-at-address (computer address)
