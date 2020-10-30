@@ -8,3 +8,6 @@
 
 (assert (= 2572 (aoc:perform-day-task 2015 3 #'count-houses-visited #'delivery-parse)))
 (assert (= 2631 (aoc:perform-day-task 2015 3 #'share-route-with-robosanta #'delivery-parse)))
+
+(assert (= 117946 (aoc:perform-day-task 2015 4 #'first-advent-coin-idx #'parse-secret-key)))
+(assert (= 3938038 (aoc:perform-day-task 2015 4 #'first-index-with-six-zeros #'parse-secret-key)))

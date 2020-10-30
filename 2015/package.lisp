@@ -9,4 +9,7 @@
 
    ;; day 3
    #:delivery-parse #:count-houses-visited
+
+   ;; day 4
+   #:first-advent-coin #:first-index-with-six-zeros #:parse-secret-key
    ))
