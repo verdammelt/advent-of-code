@@ -4,10 +4,13 @@
   :author "Mark Simpson"
   :mailto "mark@defmethod.io"
 
-  :depends-on ("aoc" "split-sequence" "alexandria")
+  :depends-on ("aoc" "split-sequence")
 
   :pathname "2015"
-  :components ((:file "package")
-               (:file "apartment" :depends-on ("package"))
-               (:file "wrapping" :depends-on ("package"))
-               (:file "delivery" :depends-on ("package"))))
+  :components ((:module "base"
+                        :pathname ""
+                        :components ((:file "package")
+                                    (:file "apartment" :depends-on ("package"))
+                                    (:file "wrapping" :depends-on ("package"))
+                                    (:file "delivery" :depends-on ("package"))))
+               (:file "solution-tests" :depends-on ("base"))))

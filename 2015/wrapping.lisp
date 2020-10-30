@@ -18,8 +18,9 @@
   (+ (apply #'surface-area dimensions)
      (a-little-extra dimensions)))
 
-(defun parse-to-dimensions (line)
-  (mapcar #'parse-integer (split-sequence:split-sequence #\x line)))
+(defun parse-to-dimensions (lines)
+  (loop for line in lines
+     collect (mapcar #'parse-integer (split-sequence:split-sequence #\x line))))
 
 (defun total-square-feet (inputs)
   (apply #'+ (mapcar #'square-feet-of-paper inputs)))
@@ -27,9 +28,9 @@
 (let ((test-data '((("2x3x4") . 58)
                    (("1x1x10") . 43)
                    (("2x3x4" "1x1x10") . #.(+ 58 43)))))
-  (loop for (line . sqft-paper) in test-data
-        do (assert (= (total-square-feet (mapcar #'parse-to-dimensions line))
-                      sqft-paper))))
+  (loop for (lines . sqft-paper) in test-data
+     do (assert (= (total-square-feet (parse-to-dimensions lines))
+                   sqft-paper))))
 
 (defun smallest-perimeter (dimensions)
   (* 2 (apply #'+ (smallest-side-dimensions dimensions))))
@@ -47,6 +48,6 @@
 (let ((test-data '((("2x3x4") . 34)
                    (("1x1x10") . 14)
                    (("2x3x4" "1x1x10") . #.(+ 34 14)))))
-  (loop for (line . ribbon-size) in test-data
-        do (assert (= (total-ribbon-size (mapcar #'parse-to-dimensions line))
+  (loop for (lines . ribbon-size) in test-data
+        do (assert (= (total-ribbon-size (parse-to-dimensions lines))
                       ribbon-size))))

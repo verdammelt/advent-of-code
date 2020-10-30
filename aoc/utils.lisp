@@ -14,11 +14,10 @@
                  :type "dat"))
 
 (defun parsed-day-data (year day parser)
-  (mapcar parser (read-data-lines (day-data-file year day))))
-
-(defun with-only-first-input (fn)
-  (lambda (inputs) (funcall fn (first inputs))))
+  (funcall parser (read-data-lines (day-data-file year day))))
 
 (defun perform-day-task (year day task &optional (parser #'identity))
-  (format t "Performing task ~S for Day ~D-~D... " task year day)
-  (format t "~&~A~&" (funcall task (parsed-day-data year day parser))))
+  (let ((result (funcall task (parsed-day-data year day parser))))
+    (format t ";; Performing task ~S for Day ~D-~2,'0D... " task year day)
+    (format t "~S~&" result)
+    result))
