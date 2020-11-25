@@ -13,5 +13,6 @@
                                      (:file "apartment" :depends-on ("package"))
                                      (:file "wrapping" :depends-on ("package"))
                                      (:file "delivery" :depends-on ("package"))
-                                     (:file "adventcoin" :depends-on ("package"))))
+                                     (:file "adventcoin" :depends-on ("package"))
+                                     (:file "naughty-nice" :depends-on ("package"))))
                (:file "solution-tests" :depends-on ("base"))))

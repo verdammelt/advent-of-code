@@ -12,4 +12,7 @@
 
    ;; day 4
    #:first-advent-coin #:first-index-with-six-zeros #:parse-secret-key
+
+   ;; day 5
+   #:count-if-nice #:parse-list
    ))
