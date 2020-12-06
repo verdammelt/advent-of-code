@@ -11,9 +11,9 @@
                 (char character 0)))))
 
 (defparameter +data-set+
-  (aoc:read-data (aoc:data-pathname "day2" "txt") :line-parser #'parse-password-info))
+  (aoc:read-data (aoc:data-pathname "day02" "txt") :line-parser #'parse-password-info))
 (defparameter +short-data-set+
-  (aoc:read-data (aoc:data-pathname "day2-example" "txt") :line-parser #'parse-password-info))
+  (aoc:read-data (aoc:data-pathname "day02-example" "txt") :line-parser #'parse-password-info))
 
 (defun find-all (item sequence &key from-end (test #'eql) (start 0) end count key)
   (remove-if-not #'(lambda (x) (funcall test x item)) sequence

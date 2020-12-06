@@ -15,10 +15,10 @@
                    :pre-process #'pre-process
                    :line-parser #'parse-passport)))
 
-(defparameter +input+ (read-passport-data "day4" "txt"))
-(defparameter +example+ (read-passport-data "day4-example" "txt"))
-(defparameter +invalid+ (read-passport-data "day4-invalid" "txt"))
-(defparameter +valid+ (read-passport-data "day4-valid" "txt"))
+(defparameter +input+ (read-passport-data "day04" "txt"))
+(defparameter +example+ (read-passport-data "day04-example" "txt"))
+(defparameter +invalid+ (read-passport-data "day04-invalid" "txt"))
+(defparameter +valid+ (read-passport-data "day04-valid" "txt"))
 
 (defun always-valid (str) (declare (ignore str)) t)
 

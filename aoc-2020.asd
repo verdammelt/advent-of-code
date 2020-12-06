@@ -10,12 +10,12 @@
   :serial t
   :components ((:module "code" :pathname ""
                 :components ((:file "utils")
-                             (:file "day1")
-                             (:file "day2")
-                             (:file "day3")
-                             (:file "day4")
-                             (:file "day5")
-                             (:file "day6")))
+                             (:file "day01")
+                             (:file "day02")
+                             (:file "day03")
+                             (:file "day04")
+                             (:file "day05")
+                             (:file "day06")))
                (:module "test" :pathname ""
                 :components ((:file "tests"))))
 
