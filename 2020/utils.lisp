@@ -1,7 +1,6 @@
 (defpackage #:aoc-2020/utils
   (:use :cl)
-  (:export :split-on-empty-line :join-strings
-           :data-pathname))
+  (:export :split-on-empty-line :join-strings))
 
 (in-package #:aoc-2020/utils)
 
@@ -14,6 +13,3 @@
 (defun join-strings (separator strings)
   (let ((separator (if (string= separator "~") "~~" separator)))
     (format nil (concatenate 'string "~{~A~^" separator "~}") strings)))
-
-(defun data-pathname (filename)
-  (make-pathname :directory '(:relative "2020" "inputs") :name filename :type "txt"))

@@ -26,7 +26,7 @@
 (assert (= 119 (seat-id "FFFBBBFRRR")))
 (assert (= 820 (seat-id "BBFFBBFRLL")))
 
-(defparameter +input+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day5")))
+(defparameter +input+ (aoc:read-data (aoc:data-pathname "day5" "txt")))
 
 (defun empty-seats (boarding-passes)
   (let ((seat-ids (sort (mapcar #'seat-id boarding-passes) #'>)))

@@ -3,8 +3,8 @@
 
 (in-package #:aoc-2020-03)
 
-(defparameter +input+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day3")))
-(defparameter +example+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day3-example")))
+(defparameter +input+ (aoc:read-data (aoc:data-pathname "day3" "txt")))
+(defparameter +example+ (aoc:read-data (aoc:data-pathname "day3-example" "txt")))
 
 (defun slope-run (slope) (realpart slope))
 (defun slope-rise (slope) (imagpart slope))

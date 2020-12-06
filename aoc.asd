@@ -4,7 +4,7 @@
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("uiop")
+  :depends-on ("uiop" "cl-ppcre")
 
   :pathname "aoc"
   :serial t

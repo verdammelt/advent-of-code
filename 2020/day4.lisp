@@ -3,10 +3,22 @@
 
 (in-package #:aoc-2020-04)
 
-(defparameter +input+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day4")))
-(defparameter +example+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day4-example")))
-(defparameter +invalid+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day4-invalid")))
-(defparameter +valid+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day4-valid")))
+(defun parse-passport (passport)
+  (mapcar #'(lambda (s) (split-sequence:split-sequence #\: s))
+          (split-sequence:split-sequence #\Space passport)))
+
+(defun read-passport-data (name type)
+  (flet ((pre-process (lines)
+           (mapcar #'(lambda (strs) (join-strings " " strs))
+                   (split-on-empty-line lines))))
+    (aoc:read-data (aoc:data-pathname name type)
+                   :pre-process #'pre-process
+                   :line-parser #'parse-passport)))
+
+(defparameter +input+ (read-passport-data "day4" "txt"))
+(defparameter +example+ (read-passport-data "day4-example" "txt"))
+(defparameter +invalid+ (read-passport-data "day4-invalid" "txt"))
+(defparameter +valid+ (read-passport-data "day4-valid" "txt"))
 
 (defun always-valid (str) (declare (ignore str)) t)
 
@@ -51,13 +63,6 @@
 (defun validate-field (field value)
   (funcall (cdr (assoc field *fields* :test #'string=)) value))
 
-(defun combine-passport-lines (data)
-  (mapcar #'join-strings (split-on-empty-line data)))
-
-(defun parse-passport (passport)
-  (mapcar #'(lambda (s) (split-sequence:split-sequence #\: s))
-          (split-sequence:split-sequence #\Space passport)))
-
 (defun required-fields (fields)
   "All fields but CID are required"
   (remove "cid" (mapcar #'car fields) :test #'string=))
@@ -85,6 +90,5 @@
             validators
             :initial-value t)))
 
-(defun valid-passports (batch-lines validator)
-  (remove-if-not validator
-                 (mapcar #'parse-passport (combine-passport-lines batch-lines))))
+(defun valid-passports (passports validator)
+  (remove-if-not validator passports))

@@ -3,13 +3,10 @@
 
 (in-package #:aoc-2020-06)
 
-(defparameter +input+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day6")))
-(defparameter +example+ (uiop:read-file-lines (aoc-2020/utils:data-pathname "day6-example")))
-
-(defun empty-string-p (str) (zerop (length str)))
-
-(defun split-groups (input)
-  (split-on-empty-line input))
+(defparameter +input+ (aoc:read-data (aoc:data-pathname "day6" "txt")
+                                     :pre-process #'split-on-empty-line))
+(defparameter +example+ (aoc:read-data (aoc:data-pathname "day6-example" "txt")
+                                       :pre-process #'split-on-empty-line))
 
 (defun combine-group (group)
   (remove-duplicates (join-strings "" group)))
@@ -18,7 +15,7 @@
   (length (combine-group group)))
 
 (defun count-all-answers-in-groups (input)
-  (apply #'+ (mapcar #'count-all-answers (split-groups input))))
+  (apply #'+ (mapcar #'count-all-answers input)))
 
 (defun count-common-answers (group)
   (length
@@ -30,4 +27,4 @@
            :initial-value (list))))
 
 (defun count-common-answers-in-groups (input)
-  (apply #'+ (mapcar #'count-common-answers (split-groups input))))
+  (apply #'+ (mapcar #'count-common-answers input)))

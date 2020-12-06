@@ -4,7 +4,7 @@
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("split-sequence" "fiveam")
+  :depends-on ("aoc" "split-sequence" "fiveam")
 
   :pathname "2020"
   :serial t

@@ -10,8 +10,10 @@
           (list (mapcar #'parse-integer (split-sequence:split-sequence #\- range))
                 (char character 0)))))
 
-(defparameter +data-set+ (mapcar #'parse-password-info (uiop:read-file-lines (aoc-2020/utils:data-pathname "day2"))))
-(defparameter +short-data-set+ (mapcar #'parse-password-info (uiop:read-file-lines (aoc-2020/utils:data-pathname "day2-example"))))
+(defparameter +data-set+
+  (aoc:read-data (aoc:data-pathname "day2" "txt") :line-parser #'parse-password-info))
+(defparameter +short-data-set+
+  (aoc:read-data (aoc:data-pathname "day2-example" "txt") :line-parser #'parse-password-info))
 
 (defun find-all (item sequence &key from-end (test #'eql) (start 0) end count key)
   (remove-if-not #'(lambda (x) (funcall test x item)) sequence

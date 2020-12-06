@@ -3,9 +3,11 @@
 
 (in-package #:aoc-2020-01)
 
-(defparameter +data+ (mapcar #'parse-integer (uiop:read-file-lines (aoc-2020/utils:data-pathname "day1"))))
+(defparameter +data+
+  (aoc:read-data (aoc:data-pathname "day1" "txt") :line-parser #'parse-integer))
 
-(defparameter +short-data+ (mapcar #'parse-integer (uiop:read-file-lines (aoc-2020/utils:data-pathname "day1-example"))))
+(defparameter +short-data+
+  (aoc:read-data (aoc:data-pathname "day1-example" "txt") :line-parser #'parse-integer))
 
 (defun sums-to-p (target) (lambda (&rest ns) (= target (apply #'+ ns))))
 
