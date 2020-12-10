@@ -1,7 +1,8 @@
 (defpackage #:aoc-2020/utils
   (:use :cl)
   (:export :split-on-empty-line :join-strings
-           :today-data))
+           :today-data
+           :combo-pairs))
 
 (in-package #:aoc-2020/utils)
 
@@ -19,3 +20,8 @@
   (aoc:data-pathname
    (format nil "day~2,'0D~@[-~A~]" (aoc:current-day) modifier)
    "txt"))
+
+(defun combo-pairs (list)
+  "Returns every pair of items from LIST"
+  (loop for (a1 . r1) on list
+        nconc (loop for a2 in r1 collect (list a1 a2))))

@@ -20,13 +20,8 @@
                                    :line-parser #'parse-integer
                                    :post-process (partial #'make-xmas-cypher 5)))
 
-;; TODO: from day 1
-(defun combinations-2 (list)
-  (loop for (a1 . r1) on list
-        nconc (loop for a2 in r1 collect (list a1 a2))))
-
 (defun sums-of-two (numbers)
-  (mapcar #'(lambda (xy) (apply #'+ xy)) (combinations-2 numbers)))
+  (mapcar #'(lambda (xy) (apply #'+ xy)) (combo-pairs numbers)))
 
 (defun find-first-wrong (cypher)
   (let ((window-size (xmas-cypher-window cypher))
@@ -39,6 +34,9 @@
                (check-value (value-to-check) (checksum (first value-to-check)
                                                        (rest value-to-check))))
         (first (find nil (mapcar #'check-value values-to-check) :key #'second))))))
+
+(assert (= 127 (find-first-wrong +example+)))
+(assert (= 105950735 (find-first-wrong +input+)))
 
 (defun find-contigous-sum (target)
   (lambda (number-list) (labels ((%contingous-sum (nums sum acc)
