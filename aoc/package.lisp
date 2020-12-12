@@ -5,4 +5,5 @@
            #:current-year
            #:current-day
            #:data-pathname
-           #:read-data))
+           #:read-data
+           #:reload-year))

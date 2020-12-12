@@ -50,3 +50,13 @@ LINE-PARSER to each line and finally POST-PROCESS to all lines before returning.
   (funcall post-process
            (mapcar line-parser
                    (funcall pre-process (uiop:read-file-lines pathname)))))
+
+(defun reload-year (year)
+  (let* ((prefix (format nil "aoc-~4,'0D" year))
+         (scanner (cl-ppcre:create-scanner prefix :case-insensitive-mode t)))
+    (let ((year-packages (remove-if-not #'(lambda (p) (cl-ppcre:scan scanner (package-name p)))
+                                        (list-all-packages))))
+      (mapc #'(lambda (p) (mapc #'(lambda (from) (unuse-package p from)) year-packages))
+            year-packages)
+      (mapc #'delete-package year-packages))
+    (asdf:make prefix :force t)))
