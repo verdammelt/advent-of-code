@@ -2,7 +2,8 @@
   (:use :cl)
   (:export :split-on-empty-line :join-strings
            :today-data
-           :combo-pairs))
+           :combo-pairs
+           :partial))
 
 (in-package #:aoc-2020/utils)
 
@@ -25,3 +26,7 @@
   "Returns every pair of items from LIST"
   (loop for (a1 . r1) on list
         nconc (loop for a2 in r1 collect (list a1 a2))))
+
+(defun partial (fn &rest args)
+  (lambda (&rest other-args)
+    (apply fn (append args other-args))))

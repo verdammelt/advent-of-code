@@ -9,10 +9,6 @@
 (defun xmas-cypher-window (cypher) (first cypher))
 (defun xmas-cypher-input (cypher) (second cypher))
 
-(defun partial (fn &rest args)
-  (lambda (&rest other-args)
-    (apply fn (append args other-args))))
-
 (defparameter +input+ (read-data (today-data)
                                  :line-parser #'parse-integer
                                  :post-process (partial #'make-xmas-cypher 25)))
