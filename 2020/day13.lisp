@@ -5,14 +5,13 @@
 
 (defun parse-bus-info (lines)
   (destructuring-bind (target bus-ids) lines
-    (let ((ids ))
-      (list :target (parse-integer target)
-            :bus-ids
-            (let ((ids (mapcar #'(lambda (s) (parse-integer s :junk-allowed t))
-                               (split-sequence:split-sequence #\, bus-ids))))
-              (loop  for id in ids
-                     for idx below (length ids)
-                     when id collect (list id idx)))))))
+    (list :target (parse-integer target)
+          :bus-ids
+          (let ((ids (mapcar #'(lambda (s) (parse-integer s :junk-allowed t))
+                             (split-sequence:split-sequence #\, bus-ids))))
+            (loop  for id in ids
+                   for idx below (length ids)
+                   when id collect (list id idx))))))
 
 (defun target (info) (getf info :target))
 (defun bus-ids (info) (mapcar #'first (getf info :bus-ids)))
