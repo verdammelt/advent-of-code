@@ -95,7 +95,7 @@
 
          (possible-fields-per-field (apply #'mapcar #'list possible-fields-for-tickets))
 
-         (choices-for-fields (mapcar #'reduce-choices possible-fields-per-field))
+         (choices-for-fields (mapcar #'reduce-choices-for-field possible-fields-per-field))
 
          (solution (find-solution choices-for-fields))
 

@@ -3,7 +3,8 @@
   (:export :split-on-empty-line :join-strings
            :today-data
            :combo-pairs
-           :partial :rpartial))
+           :partial :rpartial
+           :flatten))
 
 (in-package #:aoc-2020/utils)
 
