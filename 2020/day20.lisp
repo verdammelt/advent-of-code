@@ -158,6 +158,3 @@ EDGE determines the edge of MATRIX1 to use."
                )))
         )
   )
-
-(defun part1 (input)
-)
