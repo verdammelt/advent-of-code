@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-08)
 
+(5am:def-suite :aoc-2020-08 :in :aoc-2020)
+
 (defun parse-op (line)
   (let ((op-and-offset (split-sequence:split-sequence #\Space line)))
     (cons (alexandria:make-keyword (string-upcase (first op-and-offset)))
@@ -117,8 +119,9 @@
                        (error "Expected and Earth-shattering Kaboom!"))
     (machine-instruction-loop (condition) (machine-condition-machine condition))))
 
-(assert (= 5 (machine-acc (run-until-loop (make-machine +example+)))))
-(assert (= 1451 (machine-acc (run-until-loop (make-machine +input+)))))
+(5am:def-test part1 (:suite :aoc-2020-08)
+  (5am:is (= 5 (machine-acc (run-until-loop (make-machine +example+)))))
+  (5am:is (= 1451 (machine-acc (run-until-loop (make-machine +input+))))))
 
 (defun instructions-executed (machine)
   (let ((tape (machine-tape machine))
@@ -146,5 +149,6 @@
                          (error "Now fix found for ~S" machine))
       (machine-instruction-out-of-bounds (condition) (machine-condition-machine condition)))))
 
-(assert (= 8 (machine-acc (try-to-fix (make-machine +example+)))))
-(assert (= 1160 (machine-acc (try-to-fix (make-machine +input+)))))
+(5am:def-test part2 (:suite :aoc-2020-08)
+  (5am:is (= 8 (machine-acc (try-to-fix (make-machine +example+)))))
+  (5am:is (= 1160 (machine-acc (try-to-fix (make-machine +input+))))))

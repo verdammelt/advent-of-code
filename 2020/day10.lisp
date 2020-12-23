@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-10)
 
+(5am:def-suite :aoc-2020-10 :in :aoc-2020)
+
 (defun outlet-joltage (jolts) (declare (ignore jolts)) 0)
 (defun device-joltage (jolts) (+ 3 (first (last jolts))))
 
@@ -37,22 +39,23 @@
     (reduce #'(lambda (dist diff) (acons diff (count diff diffs) dist))
             uniq-diffs :initial-value (list))))
 
-;; part I
-(let ((dist (diff-distribution +example+)))
-  (assert (= 7 (cdr (assoc 1 dist))))
-  (assert (= 5 (cdr (assoc 3 dist)))))
 
-(let ((dist (diff-distribution +example-longer+)))
-  (assert (= 22 (cdr (assoc 1 dist))))
-  (assert (= 10 (cdr (assoc 3 dist)))))
+(5am:def-test part1 (:suite :aoc-2020-10)
+  (let ((dist (diff-distribution +example+)))
+    (5am:is (= 7 (cdr (assoc 1 dist))))
+    (5am:is (= 5 (cdr (assoc 3 dist)))))
 
-(let ((dist (diff-distribution +input+)))
-  (assert (= 68 (cdr (assoc 1 dist))))
-  (assert (= 32 (cdr (assoc 3 dist))))
+  (let ((dist (diff-distribution +example-longer+)))
+    (5am:is (= 22 (cdr (assoc 1 dist))))
+    (5am:is (= 10 (cdr (assoc 3 dist)))))
 
-  ;; the answer to part 1
-  (assert (= 2176 (* (cdr (assoc 1 dist))
-                     (cdr (assoc 3 dist))))))
+  (let ((dist (diff-distribution +input+)))
+    (5am:is (= 68 (cdr (assoc 1 dist))))
+    (5am:is (= 32 (cdr (assoc 3 dist))))
+
+    ;; the answer to part 1
+    (5am:is (= 2176 (* (cdr (assoc 1 dist))
+                       (cdr (assoc 3 dist)))))))
 
 
 ;;
@@ -84,6 +87,7 @@
   (let ((sub-diffs (split-sequence:split-sequence 3 (pair-wise-diffs jolts))))
     (reduce #'* (mapcar #'tribonacci (mapcar #'length sub-diffs)))))
 
-(assert (= 8 (number-of-arrangements +example+)))
-(assert (= 19208 (number-of-arrangements +example-longer+)))
-(assert (= 18512297918464 (number-of-arrangements +input+)))
+(5am:def-test part2 (:suite :aoc-2020-10)
+  (5am:is (= 8 (number-of-arrangements +example+)))
+  (5am:is (= 19208 (number-of-arrangements +example-longer+)))
+  (5am:is (= 18512297918464 (number-of-arrangements +input+))))

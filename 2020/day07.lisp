@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-07)
 
+(5am:def-suite :aoc-2020-07 :in :aoc-2020)
+
 (defparameter +bag-regexp+ "(\\d*)[ ]*(\\w+ \\w+) bag")
 
 (defun find-all-bags (input)
@@ -41,8 +43,11 @@
                         (append containers new-containers))))))
     (containers (list bag) (list))))
 
-(assert (equal (who-can-contain :shiny-gold +example+)
-               '(:BRIGHT-WHITE :MUTED-YELLOW :LIGHT-RED :DARK-ORANGE)))
+(5am:def-test part1 (:suite :aoc-2020-07)
+  (5am:is (equal '(:BRIGHT-WHITE :MUTED-YELLOW :LIGHT-RED :DARK-ORANGE)
+                 (who-can-contain :shiny-gold +example+)))
+  ;; TODO test for +input+?
+  )
 
 (defun repeat (item n) (loop for i below n collect item))
 
@@ -56,5 +61,8 @@
                              (append contents all-bags))))))
     (contents (list bag) (list))))
 
-(assert (= 32 (length (required-contents :shiny-gold +example+))))
-(assert (= 126 (length (required-contents :shiny-gold +example-2+))))
+(5am:def-test part2 (:suite :aoc-2020-07)
+  (5am:is (= 32 (length (required-contents :shiny-gold +example+))))
+  (5am:is (= 126 (length (required-contents :shiny-gold +example-2+))))
+  ;; TODO test for +input+?
+  )

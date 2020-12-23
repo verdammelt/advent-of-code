@@ -2,6 +2,7 @@
   (:use :cl #:aoc-2020/utils #:aoc))
 
 (in-package #:aoc-2020-11)
+(5am:def-suite :aoc-2020-11 :in :aoc-2020)
 
 ;; 2d-array utilities
 (defun to-2d-array (lines)
@@ -119,9 +120,11 @@
 
 
 ;; part I
-(assert (= 37 (count-seats +occupied+ (apply-rules-until-fixpoint +example+ +neighbor-rules+))))
-(assert (= 2289 (count-seats +occupied+ (apply-rules-until-fixpoint +input+ +neighbor-rules+))))
+(5am:def-test part1 (:suite :aoc-2020-11)
+  (5am:is (= 37 (count-seats +occupied+ (apply-rules-until-fixpoint +example+ +neighbor-rules+))))
+  (5am:is (= 2289 (count-seats +occupied+ (apply-rules-until-fixpoint +input+ +neighbor-rules+)))))
 
 ;; part II
-(assert (= 26 (count-seats +occupied+ (apply-rules-until-fixpoint +example+ +visibility-rules+))))
-(assert (= 2059 (count-seats +occupied+ (apply-rules-until-fixpoint +input+ +visibility-rules+))))
+(5am:def-test part2 (:suite :aoc-2020-11)
+  (5am:is (= 26 (count-seats +occupied+ (apply-rules-until-fixpoint +example+ +visibility-rules+))))
+  (5am:is (= 2059 (count-seats +occupied+ (apply-rules-until-fixpoint +input+ +visibility-rules+)))))

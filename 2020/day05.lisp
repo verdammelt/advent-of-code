@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-05)
 
+(5am:def-suite :aoc-2020-05 :in :aoc-2020)
+
 (defun binary-partition (input left-char right-char)
   (do* ((idx 0 (1+ idx))
         (min 0)
@@ -13,8 +15,9 @@
       (cond ((char= (char input idx) left-char)  (decf max half-range))
             ((char= (char input idx) right-char) (incf min half-range))))))
 
-(assert (= 5 (binary-partition "RLR" #\L #\R)))
-(assert (= 44 (binary-partition "FBFBBFF" #\F #\B)))
+(5am:def-test binary-partition (:suite :aoc-2020-05)
+  (5am:is (= 5 (binary-partition "RLR" #\L #\R)))
+  (5am:is (= 44 (binary-partition "FBFBBFF" #\F #\B))))
 
 (defun seat-id (boarding-pass)
   (let ((row (binary-partition (subseq boarding-pass 0 7) #\F #\B))
@@ -22,9 +25,10 @@
 
     (+ (* row 8) column)))
 
-(assert (= 567 (seat-id "BFFFBBFRRR")))
-(assert (= 119 (seat-id "FFFBBBFRRR")))
-(assert (= 820 (seat-id "BBFFBBFRLL")))
+(5am:def-test seat-id (:suite :aoc-2020-05)
+  (5am:is (= 567 (seat-id "BFFFBBFRRR")))
+  (5am:is (= 119 (seat-id "FFFBBBFRRR")))
+  (5am:is (= 820 (seat-id "BBFFBBFRLL"))))
 
 (defparameter +input+ (aoc:read-data (aoc:data-pathname "day05" "txt")))
 
@@ -33,4 +37,5 @@
     (loop for seat from (first seat-ids) downto (first (last seat-ids))
           when (not (find seat seat-ids)) collect seat)))
 
-(assert (equal '(623) (empty-seats +input+)))
+(5am:def-test empty-seats (:suite :aoc-2020-05)
+  (5am:is (equal '(623) (empty-seats +input+))))

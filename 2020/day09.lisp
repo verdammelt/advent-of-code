@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-09)
 
+(5am:def-suite :aoc-2020-09 :in :aoc-2020)
+
 (defun make-xmas-cypher (window input)
   (list window input))
 
@@ -31,8 +33,9 @@
                                                        (rest value-to-check))))
         (first (find nil (mapcar #'check-value values-to-check) :key #'second))))))
 
-(assert (= 127 (find-first-wrong +example+)))
-(assert (= 105950735 (find-first-wrong +input+)))
+(5am:def-test part1 (:suite :aoc-2020-09)
+  (5am:is (= 127 (find-first-wrong +example+)))
+  (5am:is (= 105950735 (find-first-wrong +input+))))
 
 (defun find-contigous-sum (target)
   (lambda (number-list) (labels ((%contingous-sum (nums sum acc)
@@ -55,5 +58,6 @@
                (first sorted-range)
                (first (last sorted-range)))))))
 
-(assert (= 62 (find-weakness +example+)))
-(assert (= 13826915 (find-weakness +input+)))
+(5am:def-test part2 (:suite :aoc-2020-09)
+  (5am:is (= 62 (find-weakness +example+)))
+  (5am:is (= 13826915 (find-weakness +input+))))

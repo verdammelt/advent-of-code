@@ -2,6 +2,7 @@
   (:use :cl #:aoc-2020/utils #:aoc))
 
 (in-package #:aoc-2020-12)
+(5am:def-suite :aoc-2020-12 :in :aoc-2020)
 
 (defun manhattan-distance (xy1 xy2)
   (let ((x1 (first xy1)) (y1 (second xy1))
@@ -109,8 +110,9 @@
      (ferry-position (follow-instructions instructions
                                           (make-ferry starting-position :east))))))
 
-(assert (= 25 (part1 +example+)))
-(assert (= 1186 (part1 +input+)))
+(5am:def-test part1 (:suite :aoc-2020-12)
+  (5am:is (= 25 (part1 +example+)))
+  (5am:is (= 1186 (part1 +input+))))
 
 (defgeneric do-waypoint-command (command value ferry)
   (:method (command value ferry)
@@ -167,5 +169,6 @@
                                           (make-ferry position :east waypoint)
                                           #'do-waypoint-command)))))
 
-(assert (= 286 (part2 +example+)))
-(assert (= 47806 (part2 +input+)))
+(5am:def-test part2 (:suite :aoc-2020-12)
+  (5am:is (= 286 (part2 +example+)))
+  (5am:is (= 47806 (part2 +input+))))

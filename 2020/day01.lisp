@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-01)
 
+(5am:def-suite :aoc-2020-01 :in :aoc-2020)
+
 (defparameter +data+
   (aoc:read-data (aoc:data-pathname "day01" "txt") :line-parser #'parse-integer))
 
@@ -22,8 +24,17 @@
   (let ((pair (find-if (nums-sum-to 2020) (funcall combo-maker data))))
     (list pair (apply #'* pair))))
 
-(assert (= 514579 (second (combo-that-sums-to-2020 +short-data+ #'aoc-2020/utils:combo-pairs))))
-(assert (= 252724 (second (combo-that-sums-to-2020 +data+ #'aoc-2020/utils:combo-pairs))))
+(defun part1 (data)
+  (second (combo-that-sums-to-2020 data #'aoc-2020/utils:combo-pairs))  )
 
-(assert (= 241861950 (second (combo-that-sums-to-2020 +short-data+ #'combinations-3))))
-(assert (= 276912720 (second (combo-that-sums-to-2020 +data+ #'combinations-3))))
+
+(5am:def-test part1 (:suite :aoc-2020-01)
+  (5am:is (= 514579 (part1 +short-data+)))
+  (5am:is (= 252724 (part1 +data+))))
+
+(defun part2 (data)
+  (second (combo-that-sums-to-2020 data #'combinations-3))  )
+
+(5am:def-test part2 (:suite :aoc-2020-01)
+  (5am:is (= 241861950 (part2 +short-data+)))
+  (5am:is (= 276912720 (part2 +data+))))
