@@ -29,7 +29,8 @@
                              (:file "day17")
                              (:file "day18")
                              (:file "day19")
-                             (:file "day20")))
+                             (:file "day20")
+                             (:file "day21")))
                (:module "test" :pathname ""
                 :components ((:file "tests"))))
 
