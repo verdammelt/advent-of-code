@@ -8,6 +8,8 @@
 
 (in-package #:aoc-2020/utils)
 
+(5am:def-suite :aoc-2020)
+
 (defun empty-string-p (str) (zerop (length str)))
 
 (defun split-on-empty-line (lines)
