@@ -1,20 +1,10 @@
 (defpackage #:aoc-2020/test
   (:use :cl :5am)
-  (:shadow :run-all-tests)
-  (:export :run-all-tests))
+  (:export :run-tests))
 
 (in-package #:aoc-2020/test)
 
-(defun run-all-tests (&key (on-error nil))
-  (let ((results (run 'all-tests :print-names t)))
-    (if (and (eq on-error :signal)
-             (find-if #'5am::test-failure-p results))
-        (error "Test Failures")
-        results)))
+(def-suite :aoc-2020)
 
-(def-suite all-tests)
-(in-suite all-tests)
-
-(test dummy-test
-  (is (eq t t))
-  (is (eq 0 1)))
+(defun run-tests (&optional day)
+  (run! (alexandria:make-keyword (format nil "AOC-2020~@[-~2,'0D~]" day))))

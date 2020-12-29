@@ -9,7 +9,8 @@
   :pathname "2020"
   :serial t
   :components ((:module "code" :pathname ""
-                :components ((:file "utils")
+                :components ((:file "tests")
+                             (:file "utils")
                              (:file "day01")
                              (:file "day02")
                              (:file "day03")
@@ -32,10 +33,8 @@
                              (:file "day20")
                              (:file "day22")
                              (:file "day23")
-                             (:file "day24")))
-               (:module "test" :pathname ""
-                :components ((:file "tests"))))
+                             (:file "day24"))))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
-                    (uiop:symbol-call '#:aoc-2020/test '#:run-all-tests :on-error :signal)))
+                    (uiop:symbol-call '#:aoc-2020/test '#:run-tests)))
