@@ -42,6 +42,12 @@
                  :name name
                  :type type))
 
+(defun today-data-pathname (&optional modifier (type "txt"))
+  (aoc:data-pathname
+   (format nil "day~2,'0D~@[-~A~]" (aoc:current-day) modifier)
+   type))
+
+
 (defun read-data (pathname &key (line-parser #'identity)
                              (pre-process #'identity)
                              (post-process #'identity))

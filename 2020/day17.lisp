@@ -18,7 +18,7 @@
           (push (list x y 0) coords))))))
 
 (defun read-data (&optional label)
-  (aoc:read-data (today-data label)
+  (aoc:read-data (aoc:today-data-pathname label)
                  :post-process #'parse-world))
 
 (defparameter +example+ (read-data "example"))

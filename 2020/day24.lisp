@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-24
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-24)
 
@@ -24,7 +24,7 @@
             parsed))))
 
 (defun read-paths (&optional label)
-  (read-data (today-data label) :line-parser #'parse-path))
+  (read-data (today-data-pathname label) :line-parser #'parse-path))
 
 (defparameter +example+ (read-paths "example"))
 (defparameter +input+ (read-paths))

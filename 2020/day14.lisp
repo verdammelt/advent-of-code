@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-14
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-14)
 
@@ -26,11 +26,11 @@
         ((str-starts-with-p line "mem") (parse-mem-line line))
         (t (error "Unknown command input: ~S" line))))
 
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :line-parser #'parse-memory-command))
-(defparameter +example-2+ (read-data (today-data "example-2")
+(defparameter +example-2+ (read-data (today-data-pathname "example-2")
                                      :line-parser #'parse-memory-command))
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :line-parser #'parse-memory-command))
 
 (defclass machine ()
@@ -128,4 +128,4 @@ It may destructively modify its MACHINE parameter."
 (5am:def-test part2 (:suite :aoc-2020-14)
   (5am:is (= 208 (part2 +example-2+)))
   ; (5am:is (= xxx (part2 +input+)))
-  )
+)

@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-06
-  (:use :cl :aoc-2020/utils))
+  (:use :cl #:aoc-2020/utils))
 
 (in-package #:aoc-2020-06)
 

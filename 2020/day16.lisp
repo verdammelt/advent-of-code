@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-16
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc #:aoc-2020/utils))
 
 (in-package #:aoc-2020-16)
 
@@ -28,11 +28,11 @@
           (parse-ticket (second your-ticket))
           (mapcar #'parse-ticket (cdr nearby-tickets)))))
 
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :post-process #'parse-input))
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :post-process #'parse-input))
-(defparameter +example-2+ (read-data (today-data "example-2")
+(defparameter +example-2+ (read-data (today-data-pathname "example-2")
                                      :post-process #'parse-input))
 
 (defun input-fields (input) (first input))
@@ -42,7 +42,7 @@
 
 (defun value-valid-for-fields (fields)
   (lambda (value)
-    (remove-if-not #'(lambda (f) (funcall (field-validator f) value )) fields)))
+    (remove-if-not #'(lambda (f) (funcall (field-validator f) value)) fields)))
 
 (defun ticket-invalid-values (fields ticket)
   (remove-if (value-valid-for-fields fields) ticket))

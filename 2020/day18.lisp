@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-18
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-18)
 
@@ -16,7 +16,7 @@
            (evaluate (push (funcall op (evaluate arg1) (evaluate arg2)) more))))
         (t (error "Invalid expression: ~S" expr))))
 
-(defparameter +input+ (read-data (today-data) :line-parser #'parse))
+(defparameter +input+ (read-data (today-data-pathname) :line-parser #'parse))
 
 (defun part1 (input)
   (reduce #'+ (mapcar #'evaluate input)))

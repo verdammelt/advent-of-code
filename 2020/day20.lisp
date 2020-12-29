@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-20
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc #:aoc-2020/utils))
 
 (in-package #:aoc-2020-20)
 
@@ -11,7 +11,7 @@
     (list number (make-array (list (length (first data)) (length data)) :initial-contents data))))
 
 (defun read-data-file (&optional label)
-  (read-data (today-data label)
+  (read-data (today-data-pathname label)
              :post-process #'(lambda (lines) (mapcar #'parse-tile (split-on-empty-line lines)))))
 
 (defun make-tile (number matrix) (list number matrix))

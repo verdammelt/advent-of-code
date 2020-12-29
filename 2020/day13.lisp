@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-13
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-13)
 
@@ -17,8 +17,8 @@
 (defun bus-ids (info) (mapcar #'first (getf info :bus-ids)))
 (defun bus-ids-with-offset (info) (getf info :bus-ids))
 
-(defparameter +example+ (read-data (today-data "example") :post-process #'parse-bus-info))
-(defparameter +input+ (read-data (today-data) :post-process #'parse-bus-info))
+(defparameter +example+ (read-data (today-data-pathname "example") :post-process #'parse-bus-info))
+(defparameter +input+ (read-data (today-data-pathname) :post-process #'parse-bus-info))
 
 (defun exact-match-p (id target)
   (zerop (mod target id)))

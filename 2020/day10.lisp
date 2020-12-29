@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-10
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-10)
 
@@ -16,13 +16,13 @@
    (add-device-joltage
     (sort (copy-seq jolts) #'<))))
 
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :line-parser #'parse-integer
                                  :post-process #'post-process-jolts))
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :line-parser #'parse-integer
                                    :post-process #'post-process-jolts))
-(defparameter +example-longer+ (read-data (today-data "example-longer")
+(defparameter +example-longer+ (read-data (today-data-pathname "example-longer")
                                           :line-parser #'parse-integer
                                           :post-process #'post-process-jolts))
 

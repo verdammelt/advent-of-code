@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-07
-  (:use :cl :aoc-2020/utils :aoc))
+  (:use :cl :aoc))
 
 (in-package #:aoc-2020-07)
 
@@ -26,9 +26,9 @@
          (contains (mapcar #'parse-bag-amount (rest parsed-line))))
     (cons container contains)))
 
-(defparameter +input+ (read-data (today-data) :line-parser #'parse-rule))
-(defparameter +example+ (read-data (today-data "example") :line-parser #'parse-rule))
-(defparameter +example-2+ (read-data (today-data "example-2") :line-parser #'parse-rule))
+(defparameter +input+ (read-data (today-data-pathname) :line-parser #'parse-rule))
+(defparameter +example+ (read-data (today-data-pathname "example") :line-parser #'parse-rule))
+(defparameter +example-2+ (read-data (today-data-pathname "example-2") :line-parser #'parse-rule))
 
 (defun who-can-contain (bag rules)
   (labels ((can-contain-bag (bag)

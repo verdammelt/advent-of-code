@@ -11,10 +11,10 @@
 (defun xmas-cypher-window (cypher) (first cypher))
 (defun xmas-cypher-input (cypher) (second cypher))
 
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :line-parser #'parse-integer
                                  :post-process (partial #'make-xmas-cypher 25)))
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :line-parser #'parse-integer
                                    :post-process (partial #'make-xmas-cypher 5)))
 

@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-15
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-15)
 
@@ -7,7 +7,7 @@
 
 (defun parsed-data (&optional label)
   (flet ((split-on-comma (s) (split-sequence:split-sequence #\, s)))
-   (read-data (today-data label)
+   (read-data (today-data-pathname label)
               :pre-process (lambda (ss) (mapcan #'split-on-comma ss))
               :line-parser #'parse-integer)))
 

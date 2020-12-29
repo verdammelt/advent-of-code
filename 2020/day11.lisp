@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-11
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc #:aoc-2020/utils))
 
 (in-package #:aoc-2020-11)
 (5am:def-suite :aoc-2020-11 :in :aoc-2020)
@@ -113,9 +113,9 @@
 ;; Inputs
 ;;
 
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :post-process #'to-2d-array))
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :post-process #'to-2d-array))
 
 

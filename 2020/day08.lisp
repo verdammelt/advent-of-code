@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-08
-  (:use :cl :aoc :aoc-2020/utils))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-08)
 
@@ -13,10 +13,10 @@
 (defun list->vector (ops)
   (coerce ops 'vector))
 
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :line-parser #'parse-op
                                  :post-process #'list->vector))
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :line-parser #'parse-op
                                    :post-process #'list->vector))
 

@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-12
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc))
 
 (in-package #:aoc-2020-12)
 (5am:def-suite :aoc-2020-12 :in :aoc-2020)
@@ -27,9 +27,9 @@
      (cdr (assoc (char str 0) commands :test #'char=))
      (parse-integer (subseq str 1)))))
 
-(defparameter +example+ (read-data (today-data "example")
+(defparameter +example+ (read-data (today-data-pathname "example")
                                    :line-parser #'parse-navcomm))
-(defparameter +input+ (read-data (today-data)
+(defparameter +input+ (read-data (today-data-pathname)
                                  :line-parser #'parse-navcomm))
 
 (defclass ferry ()
@@ -73,7 +73,7 @@
 (defmethod do-command ((command (eql :east)) value ferry)
   (let ((position (ferry-position ferry)))
     (make-ferry (list (+ (first position) value) (second position))
-                (ferry-facing ferry)))  )
+                (ferry-facing ferry))))
 
 (defmethod do-command ((command (eql :south)) value ferry)
   (do-command :north (* -1 value) ferry))

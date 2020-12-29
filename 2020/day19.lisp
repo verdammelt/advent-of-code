@@ -1,5 +1,5 @@
 (defpackage #:aoc-2020-19
-  (:use :cl #:aoc-2020/utils #:aoc))
+  (:use :cl #:aoc #:aoc-2020/utils))
 
 (in-package #:aoc-2020-19)
 
@@ -25,7 +25,7 @@
 
 (defun read-today-data (&optional label)
   (destructuring-bind (rules messages)
-      (read-data (today-data label) :post-process #'split-on-empty-line)
+      (read-data (today-data-pathname label) :post-process #'split-on-empty-line)
     (list (mapcar #'parse-rule rules)
           (mapcar #'parse-message messages))))
 
