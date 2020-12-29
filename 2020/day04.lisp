@@ -7,18 +7,18 @@
   (mapcar #'(lambda (s) (split-sequence:split-sequence #\: s))
           (split-sequence:split-sequence #\Space passport)))
 
-(defun read-passport-data (name type)
+(defun read-passport-data (&optional modifier)
   (flet ((pre-process (lines)
            (mapcar #'(lambda (strs) (join-strings " " strs))
                    (split-on-empty-line lines))))
-    (aoc:read-data (aoc:data-pathname name type)
+    (aoc:read-data (aoc:today-data-pathname modifier)
                    :pre-process #'pre-process
                    :line-parser #'parse-passport)))
 
-(defparameter +input+ (read-passport-data "day04" "txt"))
-(defparameter +example+ (read-passport-data "day04-example" "txt"))
-(defparameter +invalid+ (read-passport-data "day04-invalid" "txt"))
-(defparameter +valid+ (read-passport-data "day04-valid" "txt"))
+(defparameter +input+ (read-passport-data))
+(defparameter +example+ (read-passport-data "example" ))
+(defparameter +invalid+ (read-passport-data "invalid"))
+(defparameter +valid+ (read-passport-data "valid"))
 
 (defun always-valid (str) (declare (ignore str)) t)
 

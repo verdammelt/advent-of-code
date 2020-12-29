@@ -6,10 +6,10 @@
 (5am:def-suite :aoc-2020-01 :in :aoc-2020)
 
 (defparameter +data+
-  (aoc:read-data (aoc:data-pathname "day01" "txt") :line-parser #'parse-integer))
+  (aoc:read-data (aoc:today-data-pathname) :line-parser #'parse-integer))
 
 (defparameter +short-data+
-  (aoc:read-data (aoc:data-pathname "day01-example" "txt") :line-parser #'parse-integer))
+  (aoc:read-data (aoc:today-data-pathname "example") :line-parser #'parse-integer))
 
 (defun sums-to-p (target) (lambda (&rest ns) (= target (apply #'+ ns))))
 

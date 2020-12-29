@@ -30,7 +30,7 @@
   (5am:is (= 119 (seat-id "FFFBBBFRRR")))
   (5am:is (= 820 (seat-id "BBFFBBFRLL"))))
 
-(defparameter +input+ (aoc:read-data (aoc:data-pathname "day05" "txt")))
+(defparameter +input+ (aoc:read-data (aoc:today-data-pathname)))
 
 (defun empty-seats (boarding-passes)
   (let ((seat-ids (sort (mapcar #'seat-id boarding-passes) #'>)))

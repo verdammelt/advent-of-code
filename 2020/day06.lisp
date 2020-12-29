@@ -3,9 +3,9 @@
 
 (in-package #:aoc-2020-06)
 
-(defparameter +input+ (aoc:read-data (aoc:data-pathname "day06" "txt")
+(defparameter +input+ (aoc:read-data (aoc:today-data-pathname)
                                      :pre-process #'split-on-empty-line))
-(defparameter +example+ (aoc:read-data (aoc:data-pathname "day06-example" "txt")
+(defparameter +example+ (aoc:read-data (aoc:today-data-pathname "example")
                                        :pre-process #'split-on-empty-line))
 
 (defun combine-group (group)

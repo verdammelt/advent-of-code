@@ -3,8 +3,8 @@
 
 (in-package #:aoc-2020-03)
 
-(defparameter +input+ (aoc:read-data (aoc:data-pathname "day03" "txt")))
-(defparameter +example+ (aoc:read-data (aoc:data-pathname "day03-example" "txt")))
+(defparameter +input+ (aoc:read-data (aoc:today-data-pathname)))
+(defparameter +example+ (aoc:read-data (aoc:today-data-pathname "example")))
 
 (defun slope-run (slope) (realpart slope))
 (defun slope-rise (slope) (imagpart slope))
