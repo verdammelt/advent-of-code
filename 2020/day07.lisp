@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-07)
 
-(5am:def-suite :aoc-2020-07 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defparameter +bag-regexp+ "(\\d*)[ ]*(\\w+ \\w+) bag")
 

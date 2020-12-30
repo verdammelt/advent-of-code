@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-01)
 
-(5am:def-suite :aoc-2020-01 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defparameter +data+
   (aoc:read-data (aoc:today-data-pathname) :line-parser #'parse-integer))

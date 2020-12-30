@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-02)
 
+(aoc:def-today-suite*)
+
 (defun parse-password-info (line)
   (destructuring-bind (range character password)
       (split-sequence:split-sequence #\Space line)
@@ -39,3 +41,11 @@
 (defun find-valid-passwords (data validity-checker)
   (let ((valid-passwords (find-all-if #'(lambda (item) (apply validity-checker item)) data)))
     (list (length valid-passwords) valid-passwords)))
+
+(5am:test part1
+  (5am:is (= 2 (first (find-valid-passwords +short-data-set+ #'sled-rental-password-validity-checker))))
+  (5am:is (= 422 (first (find-valid-passwords +data-set+ #'sled-rental-password-validity-checker)))))
+
+(5am:test part2
+  (5am:is (= 1 (first (find-valid-passwords +short-data-set+ #'corporate-password-validity-checker))))
+  (5am:is (= 451 (first (find-valid-passwords +data-set+ #'corporate-password-validity-checker)))))

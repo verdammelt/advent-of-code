@@ -66,3 +66,12 @@ LINE-PARSER to each line and finally POST-PROCESS to all lines before returning.
             year-packages)
       (mapc #'delete-package year-packages))
     (asdf:make prefix :force t)))
+
+(defun current-year-day-keyword ()
+  (alexandria:make-keyword (format nil "AOC-~4,'0D-~2,'0D" (current-year) (current-day))))
+
+(defun current-year-keyword ()
+  (alexandria:make-keyword (format nil "AOC-~4,'0D" (current-year))))
+
+(defmacro def-today-suite* ()
+  `(5am:def-suite* ,(current-year-day-keyword) :in ,(current-year-keyword)))

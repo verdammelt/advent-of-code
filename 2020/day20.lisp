@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-20)
 
-(5am:def-suite :aoc-2020-20 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-tile (tile)
   (let ((number (parse-integer (first tile) :start (length "Tile") :junk-allowed t))

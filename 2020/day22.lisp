@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-22)
 
-(5am:def-suite :aoc-2020-22 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-deck (lines)
   (mapcar #'parse-integer (cdr lines)))

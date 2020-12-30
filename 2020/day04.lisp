@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-04)
 
+(aoc:def-today-suite*)
+
 (defun parse-passport (passport)
   (mapcar #'(lambda (s) (split-sequence:split-sequence #\: s))
           (split-sequence:split-sequence #\Space passport)))
@@ -92,3 +94,18 @@
 
 (defun valid-passports (passports validator)
   (remove-if-not validator passports))
+
+(5am:test part1
+  (5am:is (= 2 (length (valid-passports
+                        +example+
+                        (has-all-fields (required-fields *fields*))))))
+  (5am:is (= 250 (length (valid-passports
+                          +input+
+                          (has-all-fields (required-fields *fields*)))))))
+
+(5am:test part2
+  (5am:is (= 158 (length (valid-passports
+                          +input+
+                          (compose-validators
+                           (has-all-fields (required-fields *fields*))
+                           (has-valid-fields *fields*)))))))

@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-14)
 
+(aoc:def-today-suite*)
+
 (defun str-starts-with-p (str prefix)
   (string= (subseq str 0 (length prefix)) prefix))
 
@@ -67,7 +69,6 @@ It may destructively modify its MACHINE parameter."
 (defun part1 (input)
   (memory-sum input #'execute-v1))
 
-(5am:def-suite* :aoc-2020-14)
 (5am:def-test part1 (:suite :aoc-2020-14)
   (5am:is (= 165 (part1 +example+)))
   (5am:is (= 5055782549997 (part1 +input+))))

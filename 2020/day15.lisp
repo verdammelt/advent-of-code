@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-15)
 
-(5am:def-suite :aoc-2020-15 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parsed-data (&optional label)
   (flet ((split-on-comma (s) (split-sequence:split-sequence #\, s)))

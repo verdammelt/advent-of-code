@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-18)
 
-(5am:def-suite :aoc-2020-18 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse (str)
   (read-from-string (format nil "(~A)" str)))

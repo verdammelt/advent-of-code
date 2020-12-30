@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-08)
 
-(5am:def-suite :aoc-2020-08 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-op (line)
   (let ((op-and-offset (split-sequence:split-sequence #\Space line)))

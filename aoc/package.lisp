@@ -7,4 +7,5 @@
            #:data-pathname
            #:today-data-pathname
            #:read-data
-           #:reload-year))
+           #:reload-year
+           #:def-today-suite*))

@@ -2,7 +2,7 @@
   (:use :cl #:aoc #:aoc-2020/utils))
 
 (in-package #:aoc-2020-11)
-(5am:def-suite :aoc-2020-11 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 ;; 2d-array utilities
 (defun to-2d-array (lines)

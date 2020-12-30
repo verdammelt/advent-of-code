@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-24)
 
-(5am:def-suite :aoc-2020-24 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-path (path)
   (with-input-from-string (stream (string-downcase path))

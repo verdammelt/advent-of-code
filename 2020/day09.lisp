@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-09)
 
-(5am:def-suite :aoc-2020-09 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun make-xmas-cypher (window input)
   (list window input))

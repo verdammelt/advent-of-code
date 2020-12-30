@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-19)
 
-(5am:def-suite :aoc-2020-19)
+(aoc:def-today-suite*)
 
 (defun parse-rule (rule)
   (destructuring-bind (num rule)

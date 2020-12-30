@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-06)
 
+(aoc:def-today-suite*)
+
 (defparameter +input+ (aoc:read-data (aoc:today-data-pathname)
                                      :pre-process #'split-on-empty-line))
 (defparameter +example+ (aoc:read-data (aoc:today-data-pathname "example")
@@ -17,6 +19,10 @@
 (defun count-all-answers-in-groups (input)
   (apply #'+ (mapcar #'count-all-answers input)))
 
+(5am:test part1
+  (5am:is (= 11 (count-all-answers-in-groups +example+)))
+  (5am:is (= 6735 (count-all-answers-in-groups +input+))))
+
 (defun count-common-answers (group)
   (length
    (reduce #'(lambda (result answer)
@@ -28,3 +34,7 @@
 
 (defun count-common-answers-in-groups (input)
   (apply #'+ (mapcar #'count-common-answers input)))
+
+(5am:test part2
+  (5am:is (= 6 (count-common-answers-in-groups +example+)))
+  (5am:is (= 3221 (count-common-answers-in-groups +input+))))

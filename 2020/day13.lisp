@@ -3,6 +3,8 @@
 
 (in-package #:aoc-2020-13)
 
+(aoc:def-today-suite*)
+
 (defun parse-bus-info (lines)
   (destructuring-bind (target bus-ids) lines
     (list :target (parse-integer target)
@@ -46,8 +48,6 @@
             (next-bus-after-target (buses-with-next-time-after-target input))
           (* id (- time (target input)))))))
 
-(5am:def-suite :aoc-2020)
-(5am:def-suite* :aoc-2020-13 :in :aoc-2020)
 (5am:def-test part1 (:suite :aoc-2020-13)
   (5am:is (= 295 (part1 +example+)))
   (5am:is (= 3882 (part1 +input+))))

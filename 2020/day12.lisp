@@ -2,7 +2,7 @@
   (:use :cl #:aoc))
 
 (in-package #:aoc-2020-12)
-(5am:def-suite :aoc-2020-12 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun manhattan-distance (xy1 xy2)
   (let ((x1 (first xy1)) (y1 (second xy1))

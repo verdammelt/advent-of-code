@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-17)
 
-(5am:def-suite :aoc-2020-17 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-world (lines)
   "parse the lines into active coordinates of a world."

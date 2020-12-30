@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-05)
 
-(5am:def-suite :aoc-2020-05 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun binary-partition (input left-char right-char)
   (do* ((idx 0 (1+ idx))

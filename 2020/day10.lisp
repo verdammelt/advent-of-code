@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-10)
 
-(5am:def-suite :aoc-2020-10 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun outlet-joltage (jolts) (declare (ignore jolts)) 0)
 (defun device-joltage (jolts) (+ 3 (first (last jolts))))

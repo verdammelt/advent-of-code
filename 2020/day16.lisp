@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-16)
 
-(5am:def-suite :aoc-2020-16 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defun parse-field-ranges (str)
   (cl-ppcre:register-groups-bind (field min1 max1 min2 max2)

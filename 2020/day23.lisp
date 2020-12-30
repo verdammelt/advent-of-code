@@ -3,7 +3,7 @@
 
 (in-package #:aoc-2020-23)
 
-(5am:def-suite :aoc-2020-23 :in :aoc-2020)
+(aoc:def-today-suite*)
 
 (defparameter +example+ "389125467")
 (defparameter +input+ "538914762")
