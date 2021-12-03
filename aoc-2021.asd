@@ -4,12 +4,13 @@
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("aoc")
+  :depends-on ("aoc" "split-sequence" "alexandria")
 
   :pathname "2021"
   :serial t
   :components ((:file "tests")
-               (:file "day01"))
+               (:file "day01")
+               (:file "day02"))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
