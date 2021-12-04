@@ -10,7 +10,8 @@
   :serial t
   :components ((:file "tests")
                (:file "day01")
-               (:file "day02"))
+               (:file "day02")
+               (:file "day03"))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
