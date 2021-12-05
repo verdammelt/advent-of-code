@@ -25,8 +25,10 @@
   (let ((columns (bingo-board-columns board)))
     (remove nil (apply #'concatenate 'list columns))))
 
+;; TODO: promote to aoc package (from here and 2020/utils)
 (defun empty-string-p (str) (zerop (length str)))
 
+;; TODO: promote to aoc package (from here and 2020/utils)
 (defun split-on-empty-line (lines)
   (split-sequence:split-sequence-if #'empty-string-p lines))
 
