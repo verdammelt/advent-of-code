@@ -1,27 +1,5 @@
 (in-package #:aoc)
 
-;; TODO: deprecated
-(defun read-data-lines (file)
-  (with-open-file (stream file :direction :input)
-    (uiop:slurp-stream-lines stream)))
-
-;; TODO: deprecated
-(defun day-data-file (year day)
-  (make-pathname :directory (list :relative (format nil "~D/inputs" year))
-                 :name (format nil "day-~D" day)
-                 :type "dat"))
-
-;; TODO: deprecated
-(defun parsed-day-data (year day parser)
-  (funcall parser (read-data-lines (day-data-file year day))))
-
-;; TODO: ?wanted?
-(defun perform-day-task (year day task &optional (parser #'identity))
-  (let ((result (funcall task (parsed-day-data year day parser))))
-    (format t ";; Performing task ~S for Day ~D-~2,'0D... " task year day)
-    (format t "~S~&" result)
-    result))
-
 (defun current-year ()
   (multiple-value-bind (match groups)
       (cl-ppcre:scan-to-strings "AOC-(\\d+)" (package-name *package*))
