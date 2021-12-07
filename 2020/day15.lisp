@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parsed-data (&optional label)
-  (flet ((split-on-comma (s) (split-sequence:split-sequence #\, s)))
+  (flet ((split-on-comma (s) (aoc:split-string-on-char #\, s)))
    (read-data (today-data-pathname label)
               :pre-process (lambda (ss) (mapcan #'split-on-comma ss))
               :line-parser #'parse-integer)))

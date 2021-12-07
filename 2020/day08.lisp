@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-op (line)
-  (let ((op-and-offset (split-sequence:split-sequence #\Space line)))
+  (let ((op-and-offset (aoc:split-string-on-char #\Space line)))
     (cons (alexandria:make-keyword (string-upcase (first op-and-offset)))
           (parse-integer (second op-and-offset)))))
 

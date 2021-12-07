@@ -10,7 +10,7 @@
 (defun empty-string-p (str) (zerop (length str)))
 
 (defun split-on-empty-line (lines)
-  (split-sequence:split-sequence-if #'empty-string-p lines))
+  (aoc:split-lines-on-empty-line lines))
 
 ;; stolen from STR:JOIN
 (defun join-strings (separator strings)

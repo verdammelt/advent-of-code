@@ -12,12 +12,12 @@
   "Parse a LINE of form: 'mask = <mask>'"
   (let ((value (map 'vector #'digit-char-p
                     (string-trim '(#\Space)
-                                 (second (split-sequence:split-sequence #\= line))))))
+                                 (second (aoc:split-string-on-char #\= line))))))
     (list :mask value)))
 
 (defun parse-mem-line (line)
   (let* ((parts (mapcar #'(lambda (s) (string-trim '(#\Space) s))
-                        (split-sequence:split-sequence #\= line)))
+                        (aoc:split-string-on-char #\= line)))
          (address (parse-integer (first parts) :start (length "mem[")
                                                :junk-allowed t))
          (value (parse-integer (second parts))))
