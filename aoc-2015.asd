@@ -4,7 +4,7 @@
   :author "Mark Simpson"
   :mailto "mark@defmethod.io"
 
-  :depends-on ("aoc" "split-sequence" "md5")
+  :depends-on ("aoc" "split-sequence" "md5" "fiveam")
 
   :pathname "2015"
   :components ((:module "base"
