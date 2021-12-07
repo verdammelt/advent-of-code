@@ -9,5 +9,6 @@
   :pathname "aoc"
   :serial t
   :components ((:file "package")
-               (:file "utils")
-               (:file "strings")))
+               (:file "strings")
+               (:file "systems")
+               (:file "utils")))

@@ -1,6 +1,18 @@
 (defpackage #:aoc
   (:use :cl)
   (:export
+   ;; strings
+   #:empty-string-p
+   #:split-lines-on-empty-line
+   #:split-string-on-char
+   #:split-string-on-chars
+
+   ;; systems
+   #:reload-year
+   #:load-systems
+   #:test-systems
+
+   ;; utils
    #:parsed-day-data
    #:perform-day-task
    #:current-year
@@ -8,11 +20,5 @@
    #:data-pathname
    #:today-data-pathname
    #:read-data
-   #:reload-year
    #:def-today-suite*
-
-   ;; strings
-   #:empty-string-p
-   #:split-lines-on-empty-line
-   #:split-string-on-char
-   #:split-string-on-chars))
+   ))
