@@ -5,12 +5,8 @@
 
 (aoc:def-today-suite*)
 
-;; FIXME: promote to util for this year (at least).
-(defun split-string-on-chars (str char-bag)
-  (split-sequence:split-sequence-if #'(lambda (c) (member c char-bag)) str :remove-empty-subseqs t))
-
 (defun parse-lanternfish-ages (str)
-  (mapcar #'parse-integer (split-string-on-chars str '(#\,))))
+  (mapcar #'parse-integer (aoc:split-string-on-chars '(#\,) str)))
 
 (defun read-data (file) (aoc:read-data file
                                        :line-parser #'parse-lanternfish-ages

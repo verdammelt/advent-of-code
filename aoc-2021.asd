@@ -4,7 +4,7 @@
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("aoc" "split-sequence" "alexandria")
+  :depends-on ("aoc" "alexandria")
 
   :pathname "2021"
   :serial t

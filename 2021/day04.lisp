@@ -25,27 +25,17 @@
   (let ((columns (bingo-board-columns board)))
     (remove nil (apply #'concatenate 'list columns))))
 
-;; TODO: promote to aoc package (from here and 2020/utils)
-(defun empty-string-p (str) (zerop (length str)))
-
-;; TODO: promote to aoc package (from here and 2020/utils)
-(defun split-on-empty-line (lines)
-  (split-sequence:split-sequence-if #'empty-string-p lines))
-
-(defun split-on-char (char line)
-  (split-sequence:split-sequence char line :remove-empty-subseqs t))
-
 (defun transpose (columns)
   (loop for i below (length (first columns))
         collect (mapcar #'(lambda (col) (nth i col)) columns)))
 
 (defun parse-board (raw-board-data)
-  (let* ((columns (mapcar #'(lambda (s) (mapcar #'parse-integer (split-on-char #\Space s))) raw-board-data))
+  (let* ((columns (mapcar #'(lambda (s) (mapcar #'parse-integer (aoc:split-string-on-char #\Space s))) raw-board-data))
          (rows (transpose columns)))
     (make-bingo-board :columns columns :rows rows)))
 
 (defun parse-bingo-subsystem (raw-data)
-  (let ((numbers (mapcar #'parse-integer (split-on-char #\, (caar raw-data))))
+  (let ((numbers (mapcar #'parse-integer (aoc:split-string-on-char #\, (caar raw-data))))
         (boards (mapcar #'parse-board (rest raw-data))))
     (make-bingo-subsytem :numbers numbers :boards boards)))
 
@@ -53,7 +43,7 @@
   (aoc:read-data file
                  :post-process #'(lambda (data)
                                    (parse-bingo-subsystem
-                                    (split-on-empty-line data)))))
+                                    (aoc:split-lines-on-empty-line data)))))
 
 (defparameter +example+
   (read-data (aoc:today-data-pathname "example")))

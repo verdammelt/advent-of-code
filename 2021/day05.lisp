@@ -5,11 +5,8 @@
 
 (aoc:def-today-suite*)
 
-(defun split-string-on-chars (str char-bag)
-  (split-sequence:split-sequence-if #'(lambda (c) (member c char-bag)) str :remove-empty-subseqs t))
-
 (defun parse-point (str)
-  (mapcar #'parse-integer (split-string-on-chars str '(#\,))))
+  (mapcar #'parse-integer (aoc:split-string-on-chars '(#\,) str)))
 
 (defun make-point (x y) (list x y))
 (defun point-x (point) (first point))
@@ -24,7 +21,7 @@
               (+ (point-y p1) (point-y p2))))
 
 (defun parse-line (str)
-  (let ((pairs-of-points (split-string-on-chars str '(#\- #\> #\Space))))
+  (let ((pairs-of-points (aoc:split-string-on-chars '(#\- #\> #\Space) str)))
     (mapcar #'parse-point pairs-of-points)))
 
 (defun line-start (line) (first line))
