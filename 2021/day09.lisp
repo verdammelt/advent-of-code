@@ -60,7 +60,7 @@ the MAP returns MOST-POSITIVE-FIXNUM."
                        when (aref low-point-map y x)
                          collect (list x y)))))
 
-;; TODO: promote to helper (days 7, 9) (and perhaps product below)
+;; TODO: promote to helper (days 7, 9, 10) (and perhaps product below)
 (defun sum (nums) (reduce #'+ nums))
 
 (defun part1 (map)
