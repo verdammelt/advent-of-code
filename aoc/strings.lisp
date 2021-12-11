@@ -11,3 +11,7 @@
 
 (defun split-lines-on-empty-line (lines)
   (split-sequence:split-sequence-if #'empty-string-p lines))
+
+(defun number-string->list-of-digits (str)
+  "/e.g/ \"1234\" -> '(1 2 3 4)"
+  (map 'list #'digit-char-p str))

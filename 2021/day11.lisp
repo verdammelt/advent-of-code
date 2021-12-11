@@ -5,19 +5,10 @@
 
 (aoc:def-today-suite*)
 
-;; TODO: promote to utility (also in day09 with differnt name)
-(defun number-string->list-of-digits (str)
-  (mapcar #'digit-char-p (coerce str 'list)))
-
-;; TODO: promote to utility (also in day09 with differnt name)
-(defun lists->array (lists)
-  (make-array (list (length lists) (length (first lists)))
-              :initial-contents lists))
-
 (defun read-data (file)
   (aoc:read-data file
-                 :line-parser #'number-string->list-of-digits
-                 :post-process #'lists->array))
+                 :line-parser #'aoc:number-string->list-of-digits
+                 :post-process #'aoc:lists->2d-array))
 
 (defun read-step-output (type step)
   (read-data (aoc:today-data-pathname (format nil "~A-step-~3,'0D" type step))))

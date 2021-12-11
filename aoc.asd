@@ -9,6 +9,7 @@
   :pathname "aoc"
   :serial t
   :components ((:file "package")
+               (:file "arrays")
                (:file "math")
                (:file "strings")
                (:file "systems")

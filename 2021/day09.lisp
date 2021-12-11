@@ -5,14 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun parse-heights (line)
-  (mapcar #'digit-char-p (coerce line 'list)))
-
-(defun make-height-map (data)
-  "Create an array from DATA. Each line in DATA is a ROW."
-  (make-array (list (length data) (length (first data)))
-              :initial-contents data))
-
 (defun get-height (map x y)
   "Return the height in MAP at X Y coordinate. If X or Y are outside the bounds of
 the MAP returns MOST-POSITIVE-FIXNUM."
@@ -21,13 +13,6 @@ the MAP returns MOST-POSITIVE-FIXNUM."
             (>= x max-x) (>= y max-y ))
         most-positive-fixnum
         (aref map y x))))
-
-(defun map-height-map (fn map)
-  (let* ((new-map (make-array (array-dimensions map) :initial-element nil)))
-    (loop for y from 0 below (array-dimension map 0)
-          do (loop for x from 0 below (array-dimension map 1)
-                   do (setf (aref new-map y x) (funcall fn map x y))))
-    new-map))
 
 (defun get-neighbor-coords (x y)
   (list (list (1+ x) y)
@@ -43,8 +28,8 @@ the MAP returns MOST-POSITIVE-FIXNUM."
 
 (defun read-data (file)
   (aoc:read-data file
-                 :line-parser #'parse-heights
-                 :post-process #'make-height-map))
+                 :line-parser #'aoc:number-string->list-of-digits
+                 :post-process #'aoc:lists->2d-array))
 
 (defparameter +example+
   (read-data (aoc:today-data-pathname "example")))
@@ -53,7 +38,7 @@ the MAP returns MOST-POSITIVE-FIXNUM."
   (read-data (aoc:today-data-pathname)))
 
 (defun find-low-points (map)
-  (let ((low-point-map (map-height-map #'smaller-than-neighbors-p map)))
+  (let ((low-point-map (aoc:map-array #'smaller-than-neighbors-p map)))
     (loop
           for x below (array-dimension map 1)
           append (loop for y below (array-dimension map 0)

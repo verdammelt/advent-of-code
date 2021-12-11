@@ -1,6 +1,10 @@
 (defpackage #:aoc
   (:use :cl)
   (:export
+   ;; arrays
+   #:lists->2d-array
+   #:map-array
+
    ;; math
    #:sum
    #:product
@@ -10,6 +14,7 @@
    #:split-lines-on-empty-line
    #:split-string-on-char
    #:split-string-on-chars
+   #:number-string->list-of-digits
 
    ;; systems
    #:reload-year
