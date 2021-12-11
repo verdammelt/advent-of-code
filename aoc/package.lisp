@@ -1,6 +1,10 @@
 (defpackage #:aoc
   (:use :cl)
   (:export
+   ;; math
+   #:sum
+   #:product
+
    ;; strings
    #:empty-string-p
    #:split-lines-on-empty-line

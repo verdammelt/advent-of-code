@@ -27,8 +27,6 @@
         (nth (/ (1+ length) 2) sorted)
         (nth (/ length 2) sorted))))
 
-(defun sum (nums) (reduce #'+ nums))
-
 (defun sum-1-to-n (n) (/ (* n (1+ n)) 2))
 
 (defun diff-from-target (target) (lambda (n) (abs (- n target))))
@@ -36,7 +34,7 @@
 (defun fuel-cost (compute-target compute-fuel-cost-per-distance)
   (lambda (crabs)
     (flet ((from-target (target)
-             (sum (mapcar compute-fuel-cost-per-distance
+             (aoc:sum (mapcar compute-fuel-cost-per-distance
                           (mapcar (diff-from-target target) crabs)))))
       (let ((target (funcall compute-target crabs)))
         (if (integerp target)

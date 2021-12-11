@@ -72,10 +72,8 @@
 (defun incomplete-left-overs (checker-output)
   (caddr (assoc :result checker-output)))
 
-(defun sum (nums) (reduce #'+ nums))
-
 (defun part1 (input)
-  (sum
+  (aoc:sum
    (mapcar #'syntax-error-score
            (mapcar #'corrupt-char
                    (remove-if-not #'corrupt-result-p
