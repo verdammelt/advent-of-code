@@ -89,6 +89,8 @@
 
 ;; (defun part2 (input) :to-be-implemented)
 
-;; (5am:def-test part2 (:suite :aoc-2021-08)
-;;   (5am:is (= :answer (part2 +example+)))
-;;   (5am:is (= :answer (part2 +part1+))))
+(5am:def-test part2 (:suite :aoc-2021-08)
+  (5am:skip ":aoc-2021-08.2 not implemented")
+  ;; (5am:is (= :answer (part2 +example+)))
+  ;; (5am:is (= :answer (part2 +part1+)))
+  )
