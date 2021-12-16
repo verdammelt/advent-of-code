@@ -74,7 +74,16 @@
   (5am:is (= 1588 (part1 +example+)))
   (5am:is (= 3048 (part1 +input+))))
 
-(defun part2 (input) (declare (ignore input)) 0)
+(defun part2 (input)
+  ;; part 2 is "just" part1 with 40 steps instead of 10 - but that just makes
+  ;; ridiculously long strings so we can't do it that way...
+
+  ;; thought: what if instead of creating the strings - we keep track of counts
+  ;; of pairs. applying a rule to a pair creates two more pairs if a rule is
+  ;; applied to it...
+
+  (declare (ignore input)) 0
+)
 
 (5am:def-test part2 (:suite :aoc-2021-14)
   (5am:skip ":aoc-2021-14.2 not implemented")
