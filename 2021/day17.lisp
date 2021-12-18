@@ -9,8 +9,12 @@
   (let ((coords
           (remove nil (mapcar #'(lambda (s) (parse-integer s :junk-allowed t))
                               (aoc:split-string-on-chars '(#\Space #\= #\. #\,) s)))))
-    (list (subseq coords 0 2)
-          (subseq coords 2))))
+    (pairlis '(:min-x :max-x :min-y :max-y) coords)))
+
+(defun min-x (target) (cdr (assoc :min-x target)))
+(defun max-x (target) (cdr (assoc :max-x target)))
+(defun min-y (target) (cdr (assoc :min-y target)))
+(defun max-y (target) (cdr (assoc :max-y target)))
 
 (defun read-data (file)
   (aoc:read-data file
@@ -50,16 +54,12 @@
                (apply-gravity (coord-y (probe-velocity p))))))
 
 (defun past-target-p (location target)
-  (or (> (coord-x location) (apply #'max (first target)))
-      (< (coord-y location) (apply #'min (second target)))))
+  (or (> (coord-x location) (max-x target))
+      (< (coord-y location) (min-y target))))
 
 (defun in-target-p (location target)
-  (and (<= (first (first target))
-           (coord-x location)
-           (second (first target)))
-       (<= (first (second target))
-           (coord-y location)
-           (second (second target)))))
+  (and (<= (min-x target) (coord-x location) (max-x target))
+       (<= (min-y target) (coord-y location) (max-y target))))
 
 (defun will-land-in-target-p (probe target)
   (cond ((past-target-p (probe-location probe) target) nil)
@@ -68,17 +68,12 @@
 
 (defun gauss-sum (n) (/ (* n (1+ n)) 2))
 
-;; TODO: Can the brute force methods in part1 and part2 be made better? perhaps
-;; analyzing the x,y boundaries for velocity instead of 0-1000... I feel that X
-;; can be bounded by the right edge of the target area - but how to upper bind
-;; y? (here trial and error shows that 105 is ok for the inputs...) Is it
-;; (ABS min-y)?
 (defun find-all-target-velocities (target)
-  "!!!BRUTE FORCE!!!"
+  "!!!(minimally) BRUTE FORCE!!! Checks for velocities in the range x = [0,maxx] and y=[miny,-miny]"
   (flet ((start-probe (vel-x vel-y) (make-probe (make-coord 0 0)
                                                 (make-coord vel-x vel-y))))
-    (loop for x from 0 to (second (first target))
-          append (loop for y from (first (second target)) to 105
+    (loop for x from 0 to (max-x target)
+          append (loop for y from (min-y target) to (abs (min-y target))
                        for probe = (start-probe x y) then (start-probe x y)
                        when (will-land-in-target-p probe target)
                          collect probe)
