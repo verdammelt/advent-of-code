@@ -30,7 +30,8 @@
                (:file "day19")
                (:file "day20")
                (:file "day21")
-               (:file "day22"))
+               (:file "day22")
+               (:file "day23"))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
