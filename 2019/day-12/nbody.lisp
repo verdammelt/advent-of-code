@@ -85,7 +85,7 @@
      finally (return new-moons)))
 
 ;;; ---------- part I ----------
-(assert (= 7722 (total-energy (n-time-steps 1000 (load-data "./input.txt")))))
+(assert (= 9743 (total-energy (n-time-steps 1000 (load-data "./input.txt")))))
 
 (defun find-cycle (initial)
   (declare (optimize (speed 3) (debug 0) (safety 0)))
@@ -136,4 +136,4 @@
     (sb-ext:gc :full t)
     (time (funcall cycle-finder data))))
 
-;;; Answer: 292653556339368
+(assert (= 288684633706728 (run-the-test "./input.txt" #'from-reddit)))

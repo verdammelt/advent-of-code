@@ -102,7 +102,7 @@
           (,(make-asteroid 1 2) 35)
           (,(make-asteroid 6 3) 41)
           (,(make-asteroid 11 13) 210)
-          (,(make-asteroid 22 25) 286)))
+          (,(make-asteroid 26 29) 303)))
 
 ;;; ---------- part II ----------
 
@@ -152,6 +152,4 @@
        (base (first (best-asteroid-for-base asters)))
        (order (order-of-vaporization base asters))
        (200th (nth 199 order)))
-  (unless (= (+ (* (x 200th) 100) (y 200th))
-             504)
-    (error "part II failed to find correct 200th asteriod vaporized")))
+  (assert (= 408 (+ (* (x 200th) 100) (y 200th)))))

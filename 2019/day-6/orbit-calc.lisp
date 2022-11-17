@@ -23,7 +23,7 @@
 (defun load-orbits (datafile)
   "LOAD-ORBITS reads the data file and returns a orbit representation"
   (labels ((split (s) (string-utils:split s #\)))
-           (slurp (file) (mapcar #'split (file-utils:read-lines file))))
+           (slurp (file) (mapcar #'split (file-utils:read-lines (file-utils:file-in-day file 6)))))
     (let* ((orbit-pairs (slurp datafile)))
       (reduce #'(lambda (orbits pair)
                   (add-orbit orbits (first pair) (second pair)))
@@ -42,8 +42,10 @@
              (if (not (orbiting orbits obj)) count
                  (counter (orbiting orbits obj) (1+ count)))))
     (loop for key being the hash-key of orbits
-       sum (counter key 0))))
+          sum (counter key 0))))
 
+(assert (= 42 (orbit-count (load-orbits "./orbit-test.txt"))))
+(assert (= 453028 (orbit-count (load-orbits "./orbits.txt"))))
 
 (defun orbit-checksum (orbits)
   "CHECKSUM is calcuated by summing up the direct and indirect orbits in ORBITS"
@@ -57,3 +59,6 @@
 
 (defun num-orbit-transfers (orbits from to)
   (- (length (orbit-transfers orbits from to)) 2))
+
+(assert (= 4 (num-orbit-transfers (load-orbits "./orbit-test-2.txt") "YOU" "SAN")))
+(assert (= 562 (num-orbit-transfers (load-orbits "./orbits.txt") "YOU" "SAN")))

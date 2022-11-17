@@ -23,7 +23,7 @@
          (csv->number-list
                        "3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0")
          :phase-sequence (csv->number-list "4,3,2,1,0")
-         :expected 42310)
+         :expected 43210)
    (list :program
          (csv->number-list
           "3,23,3,24,1002,24,10,24,1002,23,-1,23, 101,5,23,23,1,24,23,23,4,23,99,0,0")
@@ -110,6 +110,13 @@
                               phase-settings)))
       (run-to-completion amplifiers "0"))))
 
+(dolist (p *test-programs*)
+  (assert (= (getf p :expected)
+             (parse-integer
+              (run-program-on-amplifiers-with-phases
+               (getf p :program)
+               (getf p :phase-sequence))))))
+
 (defun find-best-output (program &optional (base-phase 0))
   (flet ((get-phases-output (phases)
            (list phases
@@ -119,4 +126,6 @@
      (sort (mapcar #'get-phases-output (all-phase-setting-choices base-phase))
            #'> :key #'second))))
 
-; => (:part1 34686 :part2 36384144)
+                                        ; => (:part1 34686 :part2 36384144)
+(assert (= 79723 (second (find-best-output *amplifier-controller-software*))))
+(assert (= 70602018 (second (find-best-output *amplifier-controller-software* 5))))

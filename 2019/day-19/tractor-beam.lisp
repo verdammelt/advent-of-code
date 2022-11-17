@@ -1,9 +1,14 @@
 (defpackage #:tractor-beam
   (:use :common-lisp)
-  (:import-from :computer :load-program)
   (:export))
 
 (in-package #:tractor-beam)
+
+(defun load-program (file)
+  (mapcar #'parse-integer
+          (string-utils:split
+           (car (file-utils:read-lines (file-utils:file-in-day file 19)))
+           #\,)))
 
 (defun check-xy (program x y)
   (with-output-to-string (output)
@@ -23,7 +28,6 @@
           (setf (aref map y x) map-value))))
     map))
 
-;;; part 1 correc answer: 171
 (defun count-beam-pulling (map)
   (loop for idx from 0 below (array-total-size map)
      count (char= (row-major-aref map idx) #\#)))
@@ -32,7 +36,10 @@
   (loop for x from 0 below (array-dimension map 1)
      do (loop for y from 0 below (array-dimension map 0)
            do (format output "~C" (aref map y x))
-           finally (terpri output))))
+              finally (terpri output))))
+
+;; part i
+(assert (= 213 (count-beam-pulling (scan-area (load-program "./input.txt") 50 50))))
 
 ;; -------------------- part ii --------------------
 
@@ -50,8 +57,6 @@ The square is defined as having a lower-left corner at x, y."
   (do ((x start-x (1+ x)))
       ((beam-active-p program x y) x)))
 
-;; wrong: 9851356
-;; right: 9741242
 (defun part2 (file size &optional (step 1) start-y)
   (let ((program (load-program file)))
     (do* ((y (or start-y (1- size)) (+ y step))
@@ -59,3 +64,5 @@ The square is defined as having a lower-left corner at x, y."
              (first-x-with-active-beam program y x)))
          ((square-fits-p program x y (1- size))
           (+ (* 10000 x) (1+ (- y size)))))))
+
+(assert (= 7830987 (part2 "./input.txt" 100)))

@@ -1,6 +1,8 @@
 (defpackage :day5
   (:use :common-lisp))
 
+(in-package :day5)
+
 ;; (load "../computer")
 
 ;;; from day 2
@@ -22,14 +24,26 @@
 (defparameter *program-input* (read-input (file-utils:file-in-day "./input.txt" 5)))
 
 (defun day5-part1 ()
-  "correct answer is: 7692125"
-  (with-input-from-string (input "1")
-    (computer:compute *program-input* :input-stream input)))
+  (first
+   (remove-if #'zerop
+              (mapcar #'parse-integer
+                      (string-utils:split
+                       (string-trim '(#\Space)
+                                    (with-output-to-string (output)
+                                      (with-input-from-string (input "1")
+                                        (computer:compute *program-input* :input-stream input
+                                                                          :output-stream output))))
+                       #\Space)))))
+
+(assert (= 7988899 (day5-part1)))
 
 (defun day5-part2 ()
-  "correct ansewr is: 14340395"
-  (with-output-to-string (output)
-    (with-input-from-string (input "5")
-      (computer:compute *program-input*
-                        :input-stream input
-                        :output-stream output))))
+  (parse-integer
+   (string-trim '(#\Space)
+                (with-output-to-string (output)
+                  (with-input-from-string (input "5")
+                    (computer:compute *program-input*
+                                      :input-stream input
+                                      :output-stream output))))))
+
+(assert (= 13758663 (day5-part2)))

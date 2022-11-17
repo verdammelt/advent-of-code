@@ -15,11 +15,12 @@
 (defparameter *test-programs*
     (list
      (list :program (csv->numbers "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99")
-           :expected "input program")
+           :expected #'(lambda (actual)
+                         (assert (string= actual "109 1 204 -1 1001 100 1 100 1008 100 16 101 1006 101 0 99"))))
      (list :program (csv->numbers "1102,34915192,34915192,7,4,7,99,0")
-           :expected "16 digit number")
+           :expected #'(lambda (actual) (assert (= 16 (length actual)))))
      (list :program (csv->numbers "104,1125899906842624,99")
-           :expected "1125899906842624")))
+           :expected #'(lambda (actual) (assert (string= "1125899906842624" actual))))))
 
 (defparameter *boost-program*
   (mapcar #'parse-integer
@@ -28,10 +29,19 @@
            #\,)))
 
 (defun boost (&optional (program *boost-program*) (input "1"))
-  (computer:get-output
-   (computer:compute program
-                     :input-stream (make-string-input-stream input)
-                     :output-stream (make-string-output-stream))))
+  (string-trim '(#\Space)
+               (computer:get-output
+                (computer:compute program
+                                  :input-stream (make-string-input-stream input)
+                                  :output-stream (make-string-output-stream)))))
+
+(dolist (p *test-programs*)
+  (let ((program (getf p :program))
+        (expected (getf p :expected)))
+    (funcall expected (boost program))))
+
+(assert (string= "2377080455" (boost)))
+(assert (string= "74917" (boost *boost-program* "2")))
 
 ;; todo
 ;; * parameter mode 2 - addressing from 'global' reference base setting (initial 0)

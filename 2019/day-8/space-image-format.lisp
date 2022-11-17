@@ -14,7 +14,7 @@
        :collect (subseq data (* i per-layer) (* (1+ i) per-layer)))))
 
 (defun read-image-data (file)
-  (first (file-utils:read-lines file)))
+  (first (file-utils:read-lines (file-utils:file-in-day file 8))))
 
 (defun checksum (dimensions file)
   (let* ((data (read-image-data file))
@@ -48,18 +48,22 @@
          (final-layer (flatten-layers layers))
          (image (layer->image final-layer dimensions))
          (colored-image (color-image image '((#\1 . #\#) (#\0 . #\Space)))))
-    (format t "~&~{~A~%~}" colored-image)))
+    (format nil "~&~{~A~%~}" colored-image)))
 
 (defun render (dimensions file)
   (render-data dimensions (read-image-data file)))
 
-;; part 1 answer = 2413
+;; part 1
+(assert (= 1452 (checksum '(25 6) "./input.txt")))
+
 ;; part 2 answer:
-;;
-;; ###   ##  ###  #### ###
-;; #  # #  # #  #    # #  #
-;; ###  #    #  #   #  ###
-;; #  # #    ###   #   #  #
-;; #  # #  # #    #    #  #
-;; ###   ##  #    #### ###
-;;
+(assert (string=
+         (format nil "~{~A~%~}"
+                 '("###  #  # ###  #### #  # "
+                   "#  # #  # #  # #    #  # "
+                   "#  # #### #  # ###  #  # "
+                   "###  #  # ###  #    #  # "
+                   "#    #  # #    #    #  # "
+                   "#    #  # #    ####  ##  "))
+
+         (render '(25 6) "./input.txt")))

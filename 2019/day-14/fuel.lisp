@@ -50,7 +50,7 @@
     (reduce #'store-equation
             (mapcar (compose #'reverse #'parse-terms #'split-terms
                              #'cleanup-eq #'split-equals #'prepare)
-                    (file-utils:read-lines file))
+                    (file-utils:read-lines (file-utils:file-in-day file 14)))
             :initial-value (make-hash-table))))
 
 (defun collect-terms (eq)
@@ -88,3 +88,6 @@
 (defun how-much-ore (equations &optional (target-fuel 1))
   (let ((fuel-equation (gethash :fuel equations)))
     (reduce-to-ore (multiply-equation-by fuel-equation target-fuel) equations)))
+
+;; problem not completed
+;; (assert (= 31 (caadr (how-much-ore (load-equations "./example-31.txt")))))

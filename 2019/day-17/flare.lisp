@@ -13,7 +13,7 @@
 (defun load-program (file)
   (mapcar #'parse-integer
           (funcall (split-on #\,)
-           (first (file-utils:read-lines file)))))
+           (first (file-utils:read-lines (file-utils:file-in-day file 17))))))
 
 (defun make-map (output)
   (let* ((raw-data (map 'vector #'code-char
@@ -32,4 +32,10 @@
     (make-map output)))
 
 (defun print-map (map &optional (stream nil))
-  (format stream "~%~{~A~}" (mapcar #'code-char map)))
+  (format stream "~{~A~%~}"
+          (mapcar #'(lambda (cs) (concatenate 'string cs))
+                  (destructuring-bind (row col) (array-dimensions map)
+                    (loop for r below row
+                          collect (loop for c below col collect (aref map r c)))))))
+
+;;; incomplete.

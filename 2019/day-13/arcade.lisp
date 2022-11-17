@@ -11,7 +11,9 @@
 
 (defun load-program (file)
   (mapcar #'parse-integer
-          (string-utils:split (first (file-utils:read-lines file)) #\,)))
+          (string-utils:split
+           (first (file-utils:read-lines (file-utils:file-in-day file 13)))
+           #\,)))
 
 (defun triples (seq)
   (labels ((grab (n seq acc)
@@ -98,6 +100,9 @@
   (let ((program (load-program game-file)))
     (when free-play (setf (nth 0 program) 2))
     (computer:run-program (make-instance 'arcade :program program))))
+
+;; part 1
+;; 414 (can't assert as program assumes input and hangs.
 
 (defun max-score (game-file)
   (let* ((screen (triples

@@ -3,7 +3,7 @@
 
 (in-package :secure-container)
 
-(defparameter *puzzle-input* '(138307 . 654504))
+(defparameter *puzzle-input* '(156218 . 652527))
 
 (defun pairs-of (seq) (map 'list #'cons seq (subseq seq 1)))
 
@@ -25,19 +25,24 @@
   (let ((pairs (pairs-of guess)))
     (notany #'(lambda (pair) (char> (car pair) (cdr pair))) pairs)))
 
-(defun check-guess (guess)
+(defun check-guess-1 (guess)
   (and (= (length guess) 6)
-       ;; (has-equal-pair-p guess)
+       (has-equal-pair-p guess)
+       (never-decreasing-p guess)))
+
+(defun check-guess-2 (guess)
+  (and (= (length guess) 6)
        (two-but-not-three-equal-p guess)
        (never-decreasing-p guess)))
 
 (defun format-guess (guess)
   (format nil "~6,'0d" guess))
 
-(defun guess-password (input-range)
+(defun guess-password (input-range check-guess)
   (loop with (low . high) = input-range
         for guess from low to high
-        when (check-guess (format-guess guess))
+        when (funcall check-guess (format-guess guess))
           collect guess))
 
-;; part I correct answer: 1855
+(assert (= 1694 (length (guess-password *puzzle-input* #'check-guess-1))))
+(assert (= 1148 (length (guess-password *puzzle-input* #'check-guess-2))))

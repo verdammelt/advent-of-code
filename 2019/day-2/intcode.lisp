@@ -9,20 +9,21 @@
 
 (defun read-input (file)
   (mapcar #'parse-integer
-          (mapcar #'(lambda (s) (string-utils:split s #\,))
-                  (file-utils:read-lines file))))
+          (string-utils:split
+           (car (file-utils:read-lines (file-utils:file-in-day file 2)))
+           #\,)))
 
-(defun modify-memory (memory updates)
-  (dolist (update updates memory)
-    (setf (address memory (first update)) (second update))))
+(defun modify-memory (memory one-two)
+  (setf (subseq memory 1 3) one-two)
+  memory)
 
-;; correct answer: 4945026
 (defun 1202-error (input-file)
-  (peek
-   (compute
-    (modify-memory (read-input input-file)
-                   '((1 12) (2 2))))
+  (computer:peek
+   (computer:compute
+    (modify-memory (read-input input-file) '(12 2)))
    0))
+
+(assert (= 8017076 (1202-error "./input.txt")))
 
 ;; target from exercise = 19690720
 ;; solution: (52 96)
@@ -30,10 +31,17 @@
   (let ((possibilities
           (loop for noun from 0 upto 99
                 append (loop for verb from 0 upto 99
-                             collect (list (list 1 noun) (list 2 verb))))))
+                             collect (list noun verb)))))
     (loop for possibility in possibilities
           for memory = (modify-memory (copy-seq raw-input) possibility)
-          for computer = (compute memory)
+          for computer = (computer:compute memory)
           ;; do (format t "Testing ~A ~&" possibility)
-          when (= target (peek computer 0))
-            do (return (mapcar #'second possibility)))))
+          when (= target (computer:peek computer 0))
+            do (return possibility))))
+
+(defun combine-noun-verb (noun-verb)
+  (format nil "~{~2,'0D~}" noun-verb))
+
+(assert (equal "3146"
+               (combine-noun-verb
+                (what-noun-verb-causes (read-input "./input.txt") 19690720))))

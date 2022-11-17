@@ -100,7 +100,4 @@
     (flet ((calc-fn (coord) (funcall distance-fn coord paths)))
       (calc-fn (nearest-cross crosses (function calc-fn))))))
 
-#|
-(find-nearest-cross *raw-input* #'manhattan-distance) ;; => 227
-|#
-(assert (= 227 (find-nearest-cross *raw-input* #'manhattan-distance)))
+(assert (= 248 (find-nearest-cross *raw-input* #'manhattan-distance)))
