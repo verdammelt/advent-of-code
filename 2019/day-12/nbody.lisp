@@ -1,6 +1,6 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils")
-  (load "../string-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils")
+;;   (load "../string-utils"))
 
 (defpackage :nbody
   (:use :common-lisp)
@@ -46,7 +46,7 @@
              (make-zero-coord)))
 
 (defun load-data (file)
-  (mapcar #'parse-moon (file-utils:read-lines file)))
+  (mapcar #'parse-moon (file-utils:read-lines (file-utils:file-in-day file 12))))
 
 (defun gravity-between (loc1 loc2)
   (list :x (signum (- (coord-x loc2) (coord-x loc1)))

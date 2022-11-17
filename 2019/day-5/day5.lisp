@@ -1,7 +1,7 @@
 (defpackage :day5
   (:use :common-lisp))
 
-(load "../computer")
+;; (load "../computer")
 
 ;;; from day 2
 ;;; TODO find place for this utility
@@ -19,7 +19,7 @@
   (with-open-file (stream file :direction :input)
     (mapcar #'parse-integer (split-string (read-line stream) #\,))))
 
-(defparameter *program-input* (read-input "./input.txt"))
+(defparameter *program-input* (read-input (file-utils:file-in-day "./input.txt" 5)))
 
 (defun day5-part1 ()
   "correct answer is: 7692125"

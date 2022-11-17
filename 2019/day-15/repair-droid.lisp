@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils")
-  (load "../string-utils")
-  (load "../computer"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils")
+;;   (load "../string-utils")
+;;   (load "../computer"))
 
 (defpackage :repair-droid
   (:use :common-lisp)

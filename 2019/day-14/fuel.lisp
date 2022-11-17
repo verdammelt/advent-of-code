@@ -1,6 +1,6 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils")
-  (load "../string-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils")
+;;   (load "../string-utils"))
 
 (defpackage :fuel
   (:use :common-lisp)

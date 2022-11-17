@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils")
-  (load "../string-utils")
-  (load "../computer"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils")
+;;   (load "../string-utils")
+;;   (load "../computer"))
 
 (defpackage :boost
   (:use :common-lisp)
@@ -24,7 +24,7 @@
 (defparameter *boost-program*
   (mapcar #'parse-integer
           (string-utils:split
-           (first (file-utils:read-lines "./input.txt"))
+           (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 9)))
            #\,)))
 
 (defun boost (&optional (program *boost-program*) (input "1"))

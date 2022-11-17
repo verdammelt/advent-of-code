@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../computer")
-  (load "../string-utils")
-  (load "../file-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../computer")
+;;   (load "../string-utils")
+;;   (load "../file-utils"))
 
 (defpackage :flare
   (:use :common-lisp))

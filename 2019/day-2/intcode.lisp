@@ -1,6 +1,6 @@
-(load "../file-utils")
-(load "../string-utils")
-(load "../computer")
+;; (load "../file-utils")
+;; (load "../string-utils")
+;; (load "../computer")
 
 (defpackage :intcode
   (:use :common-lisp))

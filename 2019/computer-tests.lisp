@@ -1,5 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "./computer"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "./computer"))
 
 (in-package #:computer)
 

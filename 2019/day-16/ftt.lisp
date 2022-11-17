@@ -1,5 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils.fasl"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils.fasl"))
 
 (defpackage :ftt
   (:use :common-lisp)

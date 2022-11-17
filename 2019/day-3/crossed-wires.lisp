@@ -13,8 +13,8 @@
 ;;; distance: 135
 ;;;
 
-(load "../file-utils")
-(load "../string-utils")
+;; (load "../file-utils")
+;; (load "../string-utils")
 
 (defpackage :crossed-wires
   (:use :common-lisp)
@@ -24,7 +24,7 @@
 
 (defun parse-lines (lines) (mapcar #'(lambda (s) (string-utils:split s #\,)) lines))
 
-(defparameter *raw-input* (parse-lines (file-utils:read-lines "./input.txt")))
+(defparameter *raw-input* (parse-lines (file-utils:read-lines (file-utils:file-in-day "./input.txt" 3))))
 
 (defparameter *origin* '(0 . 0))
 
@@ -103,3 +103,4 @@
 #|
 (find-nearest-cross *raw-input* #'manhattan-distance) ;; => 227
 |#
+(assert (= 227 (find-nearest-cross *raw-input* #'manhattan-distance)))

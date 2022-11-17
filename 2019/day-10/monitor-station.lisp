@@ -1,5 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils"))
 
 (defpackage :monitor-station
   (:use :common-lisp)
@@ -38,7 +38,7 @@
                   :key #'first)))
 
 (defun load-map (file)
-  (find-asteroids (file-utils:read-lines file)))
+  (find-asteroids (file-utils:read-lines (file-utils:file-in-day file 10))))
 
 ;;; ---------- TEST & PUZZLE DATA ----------
 

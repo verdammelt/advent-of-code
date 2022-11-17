@@ -1,4 +1,4 @@
-(load "../file-utils")
+;; (load "../file-utils")
 
 (defpackage :fuel-counter
   (:use :common-lisp))

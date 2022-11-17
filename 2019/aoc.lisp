@@ -1,8 +1,8 @@
-(defpackage :aoc
+(defpackage :aoc-2019/utils
   (:use :common-lisp)
   (:export :init-day :remove-day))
 
-(in-package :aoc)
+(in-package :aoc-2019/utils)
 
 (defconstant +this-year+
   (nth 5 (multiple-value-list (decode-universal-time (get-universal-time)))))

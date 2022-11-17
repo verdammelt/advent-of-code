@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils")
-  (load "../string-utils")
-  (load "../computer"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils")
+;;   (load "../string-utils")
+;;   (load "../computer"))
 
 ; (delete-package (find-package :amplification-curcuit))
 (defpackage :amplification-curcuit
@@ -15,7 +15,7 @@
   (mapcar #'parse-integer (string-utils:split str #\,)))
 
 (defparameter *amplifier-controller-software*
-  (csv->number-list (first (file-utils:read-lines "./input.txt"))))
+  (csv->number-list (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 7)))))
 
 (defparameter *test-programs*
   (list

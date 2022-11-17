@@ -1,5 +1,5 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../file-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../file-utils"))
 
 (defpackage :space-image-format
   (:use :common-lisp)

@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../computer")
-  (load "../file-utils")
-  (load "../string-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../computer")
+;;   (load "../file-utils")
+;;   (load "../string-utils"))
 
 (defpackage :arcade
   (:use :common-lisp)

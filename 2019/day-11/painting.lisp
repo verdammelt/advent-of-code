@@ -1,7 +1,7 @@
-(eval-when (:compile-toplevel :load-toplevel :execute)
-  (load "../computer")
-  (load "../string-utils")
-  (load "../file-utils"))
+;; (eval-when (:compile-toplevel :load-toplevel :execute)
+;;   (load "../computer")
+;;   (load "../string-utils")
+;;   (load "../file-utils"))
 
 (defpackage :painting
   (:use :cl)
@@ -12,7 +12,7 @@
 (defparameter *program*
   (mapcar #'parse-integer
           (string-utils:split
-           (first (file-utils:read-lines "./input.txt"))
+           (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 11)))
            #\,)))
 
 (defun make-point (x y) (cons x y))
