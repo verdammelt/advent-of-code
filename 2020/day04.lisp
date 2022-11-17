@@ -6,8 +6,8 @@
 (aoc:def-today-suite*)
 
 (defun parse-passport (passport)
-  (mapcar #'(lambda (s) (split-sequence:split-sequence #\: s))
-          (split-sequence:split-sequence #\Space passport)))
+  (mapcar #'(lambda (s) (aoc:split-string-on-char #\: s))
+          (aoc:split-string-on-char #\Space passport)))
 
 (defun read-passport-data (&optional modifier)
   (flet ((pre-process (lines)

@@ -19,7 +19,7 @@
 (defun field-description (f) (third f))
 
 (defun parse-ticket (str)
-  (mapcar #'parse-integer (split-sequence:split-sequence #\, str)))
+  (mapcar #'parse-integer (aoc:split-string-on-char #\, str)))
 
 (defun parse-input (lines)
   (destructuring-bind (field-ranges your-ticket nearby-tickets)

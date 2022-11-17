@@ -7,9 +7,9 @@
 
 (defun parse-password-info (line)
   (destructuring-bind (range character password)
-      (split-sequence:split-sequence #\Space line)
+      (aoc:split-string-on-char #\Space line)
     (list password
-          (list (mapcar #'parse-integer (split-sequence:split-sequence #\- range))
+          (list (mapcar #'parse-integer (aoc:split-string-on-char #\- range))
                 (char character 0)))))
 
 (defparameter +data-set+

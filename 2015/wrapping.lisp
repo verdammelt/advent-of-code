@@ -20,7 +20,7 @@
 
 (defun parse-to-dimensions (lines)
   (loop for line in lines
-     collect (mapcar #'parse-integer (split-sequence:split-sequence #\x line))))
+     collect (mapcar #'parse-integer (aoc:split-string-on-char #\x line))))
 
 (defun total-square-feet (inputs)
   (apply #'+ (mapcar #'square-feet-of-paper inputs)))

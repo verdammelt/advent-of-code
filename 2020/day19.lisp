@@ -7,11 +7,11 @@
 
 (defun parse-rule (rule)
   (destructuring-bind (num rule)
-      (split-sequence:split-sequence #\: rule)
+      (aoc:split-string-on-char #\: rule)
     (let ((num (parse-integer num))
           (rule (string-trim '(#\Space) rule)))
       (destructuring-bind (choice-a &optional choice-b)
-          (split-sequence:split-sequence #\| rule)
+          (aoc:split-string-on-char #\| rule)
         (flet ((parse-rule-list (liststr)
                  (read-from-string (format nil "(~A)" liststr))))
           (cond (choice-b
