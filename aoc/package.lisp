@@ -22,12 +22,8 @@
    #:test-systems
 
    ;; utils
-   #:parsed-day-data
-   #:perform-day-task
-   #:current-year
-   #:current-day
-   #:data-pathname
    #:today-data-pathname
+   #:download-puzzle-input
    #:read-data
    #:def-today-suite*
    ))
