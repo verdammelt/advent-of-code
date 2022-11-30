@@ -32,15 +32,16 @@ LINE-PARSER to each line and finally POST-PROCESS to all lines before returning.
            (mapcar line-parser
                    (funcall pre-process (uiop:read-file-lines pathname)))))
 
-(defparameter *session-cookie* nil)
+(defvar *session-cookie*)
+(defvar *user-agent*)
 
 (defun download-puzzle-input (year day &key (if-exists :error))
-  (unless *session-cookie* (error "*session-cookie* must be set"))
   (let ((url (format nil "https://adventofcode.com/~D/day/~D/input" year day))
         (pathname (data-file-pathname year day)))
-    (uiop:with-output-file (output pathname :if-exists if-exists)
-      (uiop:run-program (format nil "wget -q -O - --header \"Cookie: session=~A\" ~A"
-                                *session-cookie* url)
+    (ensure-directories-exist pathname :verbose t)
+    (uiop:with-output-file (output pathname :if-exists if-exists :if-does-not-exist :create)
+      (uiop:run-program (format nil "wget -U \"~A\"-q -O - --header \"Cookie: session=~A\" ~A"
+                                *user-agent* *session-cookie* url)
                         :output output))))
 
 (defun current-year-day-keyword ()
