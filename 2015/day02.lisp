@@ -1,4 +1,17 @@
-(in-package :aoc-2015)
+(defpackage #:aoc-2015-02
+  (:use :cl))
+
+(in-package #:aoc-2015-02)
+
+(aoc:def-today-suite*)
+
+(defun parse-line (line)
+  (mapcar #'parse-integer (aoc:split-string-on-char #\x line)))
+
+(defun read-data (file) (aoc:read-data file :line-parser #'parse-line))
+
+(defparameter +input+
+  (read-data (aoc:today-data-pathname)))
 
 (defun surface-area (l w h)
   (+ (* 2 l w)
@@ -18,19 +31,17 @@
   (+ (apply #'surface-area dimensions)
      (a-little-extra dimensions)))
 
-(defun parse-to-dimensions (lines)
-  (loop for line in lines
-     collect (mapcar #'parse-integer (aoc:split-string-on-char #\x line))))
-
 (defun total-square-feet (inputs)
   (apply #'+ (mapcar #'square-feet-of-paper inputs)))
 
-(let ((test-data '((("2x3x4") . 58)
-                   (("1x1x10") . 43)
-                   (("2x3x4" "1x1x10") . #.(+ 58 43)))))
-  (loop for (lines . sqft-paper) in test-data
-     do (assert (= (total-square-feet (parse-to-dimensions lines))
-                   sqft-paper))))
+(defun part1 (input) (total-square-feet input))
+
+(5am:def-test part1 (:suite :aoc-2015-02)
+  (5am:is (= 58 (part1 '((2 3 4)))))
+  (5am:is (= 43 (part1 '((1 1 10)))))
+  (5am:is (=  #.(+ 58 43) (part1 '((2 3 4) (1 1 10)))))
+
+  (5am:is (= 1588178 (part1 +input+))))
 
 (defun smallest-perimeter (dimensions)
   (* 2 (apply #'+ (smallest-side-dimensions dimensions))))
@@ -45,9 +56,10 @@
 (defun total-ribbon-size (inputs)
   (apply #'+ (mapcar #'ribbon-length inputs)))
 
-(let ((test-data '((("2x3x4") . 34)
-                   (("1x1x10") . 14)
-                   (("2x3x4" "1x1x10") . #.(+ 34 14)))))
-  (loop for (lines . ribbon-size) in test-data
-        do (assert (= (total-ribbon-size (parse-to-dimensions lines))
-                      ribbon-size))))
+(defun part2 (input) (total-ribbon-size input))
+
+(5am:def-test part2 (:suite :aoc-2015-02)
+  (5am:is (= 34 (part2 '((2 3 4)))))
+  (5am:is (= 14 (part2 '((1 1 10)))))
+  (5am:is (= #.(+ 34 14) (part2 '((2 3 4) (1 1 10)))))
+  (5am:is (= 3783758 (part2 +input+))))

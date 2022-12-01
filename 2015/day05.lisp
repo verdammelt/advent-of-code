@@ -1,6 +1,14 @@
-(in-package #:aoc-2015)
+(defpackage #:aoc-2015-05
+  (:use :cl))
 
-(defun parse-list (lines) lines)
+(in-package #:aoc-2015-05)
+
+(aoc:def-today-suite*)
+
+(defun read-data (file) (aoc:read-data file))
+
+(defparameter +input+
+  (read-data (aoc:today-data-pathname)))
 
 (defun vowel-p (c)
   (member c '(#\a #\e #\i #\o #\u) :test 'char=))
@@ -25,13 +33,18 @@
        (has-doubled-letter string)
        (not (has-verboten-words-p string))))
 
-(let ((inputs '("ugknbfddgicrmopn" "aaa" "jchzalrnumimnmhp"
-                "haegwjzuvuyypxyu" "dvszwmarrgswjxmb"))
-      (naughty-list '("jchzalrnumimnmhp" "haegwjzuvuyypxyu" "dvszwmarrgswjxmb")))
-  (assert (equal naughty-list (remove-if #'is-nice-p inputs))))
-
 (defun count-if-nice (strings)
   (count-if #'is-nice-p strings))
+
+(defun part1 (input) (count-if-nice input))
+
+(5am:def-test part1 (:suite :aoc-2015-05)
+  (let ((inputs '("ugknbfddgicrmopn" "aaa" "jchzalrnumimnmhp"
+                "haegwjzuvuyypxyu" "dvszwmarrgswjxmb"))
+      (naughty-list '("jchzalrnumimnmhp" "haegwjzuvuyypxyu" "dvszwmarrgswjxmb")))
+  (5am:is (equal naughty-list (remove-if #'is-nice-p inputs))))
+
+  (5am:is (= 255 (part1 +input+))))
 
 (defun group-by (seq &key (key #'identity) (hash-test #'eql))
   (let ((hash (make-hash-table :test hash-test)))
@@ -87,11 +100,16 @@
 (defun count-if-nice-2 (strings)
   (count-if #'new-is-nice-p strings))
 
-(let ((inputs '("qjhvhtzxzqqjkmpb" "xxyxx" "uurcxstgmygtbstg" "ieodomkazucvgmuy"))
-      (nice-list '("qjhvhtzxzqqjkmpb" "xxyxx"))
-      (naughty-list '("uurcxstgmygtbstg" "ieodomkazucvgmuy")))
+(defun part2 (input) (count-if-nice-2 input))
 
-  (assert (new-is-nice-p "xyxy"))
+(5am:def-test part2 (:suite :aoc-2015-05)
+  (let ((inputs '("qjhvhtzxzqqjkmpb" "xxyxx" "uurcxstgmygtbstg" "ieodomkazucvgmuy"))
+        (nice-list '("qjhvhtzxzqqjkmpb" "xxyxx"))
+        (naughty-list '("uurcxstgmygtbstg" "ieodomkazucvgmuy")))
 
-  (assert (equal naughty-list (remove-if #'new-is-nice-p inputs)))
-  (assert (equal nice-list (remove-if-not #'new-is-nice-p inputs))))
+    (5am:is (new-is-nice-p "xyxy"))
+
+    (5am:is (equal naughty-list (remove-if #'new-is-nice-p inputs)))
+    (5am:is (equal nice-list (remove-if-not #'new-is-nice-p inputs))))
+
+  (5am:is (= 55 (part2 +input+))))

@@ -2,17 +2,15 @@
   :description ""
   :version "0.0.0"
   :author "Mark Simpson"
-  :mailto "mark@defmethod.io"
+  :mailto "verdammelt@gmail.com"
 
   :depends-on ("aoc" "md5" "fiveam")
 
   :pathname "2015"
-  :components ((:module "base"
-                        :pathname ""
-                        :components ((:file "package")
-                                     (:file "apartment" :depends-on ("package"))
-                                     (:file "wrapping" :depends-on ("package"))
-                                     (:file "delivery" :depends-on ("package"))
-                                     (:file "adventcoin" :depends-on ("package"))
-                                     (:file "naughty-nice" :depends-on ("package"))))
-               (:file "solution-tests" :depends-on ("base"))))
+  :components ((:file "tests")
+               (:file "day01") (:file "day02") (:file "day03") (:file "day04")
+               (:file "day05") (:file "day06"))
+
+  :perform (test-op (o c)
+                    (declare (ignore o c))
+                    (uiop:symbol-call '#:aoc-2015/test '#:run-tests)))
