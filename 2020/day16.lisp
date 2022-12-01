@@ -23,7 +23,7 @@
 
 (defun parse-input (lines)
   (destructuring-bind (field-ranges your-ticket nearby-tickets)
-      (split-on-empty-line lines)
+      (aoc:split-lines-on-empty-line lines)
     (list (mapcar #'parse-field-ranges field-ranges)
           (parse-ticket (second your-ticket))
           (mapcar #'parse-ticket (cdr nearby-tickets)))))

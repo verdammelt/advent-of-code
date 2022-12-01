@@ -10,7 +10,7 @@
 
 (defun read-data-file (&optional label)
   (mapcar #'parse-deck
-          (read-data (today-data-pathname label) :post-process #'split-on-empty-line)))
+          (read-data (today-data-pathname label) :post-process #'aoc:split-lines-on-empty-line)))
 
 (defparameter +example+ (read-data-file "example"))
 (defparameter +input+ (read-data-file))

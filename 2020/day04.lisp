@@ -12,7 +12,7 @@
 (defun read-passport-data (&optional modifier)
   (flet ((pre-process (lines)
            (mapcar #'(lambda (strs) (join-strings " " strs))
-                   (split-on-empty-line lines))))
+                   (aoc:split-lines-on-empty-line lines))))
     (aoc:read-data (aoc:today-data-pathname modifier)
                    :pre-process #'pre-process
                    :line-parser #'parse-passport)))

@@ -6,9 +6,9 @@
 (aoc:def-today-suite*)
 
 (defparameter +input+ (aoc:read-data (aoc:today-data-pathname)
-                                     :pre-process #'split-on-empty-line))
+                                     :pre-process #'aoc:split-lines-on-empty-line))
 (defparameter +example+ (aoc:read-data (aoc:today-data-pathname "example")
-                                       :pre-process #'split-on-empty-line))
+                                       :pre-process #'aoc:split-lines-on-empty-line))
 
 (defun combine-group (group)
   (remove-duplicates (join-strings "" group)))

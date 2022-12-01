@@ -1,16 +1,11 @@
 (defpackage #:aoc-2020/utils
   (:use :cl)
-  (:export :split-on-empty-line :join-strings
+  (:export :join-strings
            :combo-pairs
            :partial :rpartial
            :flatten))
 
 (in-package #:aoc-2020/utils)
-
-(defun empty-string-p (str) (zerop (length str)))
-
-(defun split-on-empty-line (lines)
-  (aoc:split-lines-on-empty-line lines))
 
 ;; stolen from STR:JOIN
 (defun join-strings (separator strings)

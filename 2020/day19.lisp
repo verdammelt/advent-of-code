@@ -25,7 +25,7 @@
 
 (defun read-today-data (&optional label)
   (destructuring-bind (rules messages)
-      (read-data (today-data-pathname label) :post-process #'split-on-empty-line)
+      (read-data (today-data-pathname label) :post-process #'aoc:split-lines-on-empty-line)
     (list (mapcar #'parse-rule rules)
           (mapcar #'parse-message messages))))
 

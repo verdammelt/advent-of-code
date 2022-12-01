@@ -12,7 +12,7 @@
 
 (defun read-data-file (&optional label)
   (read-data (today-data-pathname label)
-             :post-process #'(lambda (lines) (mapcar #'parse-tile (split-on-empty-line lines)))))
+             :post-process #'(lambda (lines) (mapcar #'parse-tile (aoc:split-lines-on-empty-line lines)))))
 
 (defun make-tile (number matrix) (list number matrix))
 (defun tile-number (tile) (first tile))

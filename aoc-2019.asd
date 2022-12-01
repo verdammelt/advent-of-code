@@ -1,3 +1,4 @@
+;; TODO: "modernize" 2019 exercises
 (defsystem "aoc-2019"
   :description ""
   :version "0.0.0"
