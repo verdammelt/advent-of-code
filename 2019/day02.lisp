@@ -1,17 +1,13 @@
-;; (load "../file-utils")
-;; (load "../string-utils")
-;; (load "../computer")
+(defpackage #:aoc-2019-02
+  (:use :cl))
 
-(defpackage :intcode
-  (:use :common-lisp))
+(in-package #:aoc-2019-02)
 
-(in-package :intcode)
+(aoc:def-today-suite*)
 
 (defun read-input (file)
   (mapcar #'parse-integer
-          (string-utils:split
-           (car (file-utils:read-lines (file-utils:file-in-day file 2)))
-           #\,)))
+          (aoc:split-string-on-char #\, (car (aoc:read-data file)))))
 
 (defun modify-memory (memory one-two)
   (setf (subseq memory 1 3) one-two)
@@ -23,7 +19,8 @@
     (modify-memory (read-input input-file) '(12 2)))
    0))
 
-(assert (= 8017076 (1202-error "./input.txt")))
+(5am:def-test part1 (:suite :aoc-2019-02)
+  (5am:is (= 8017076 (1202-error (aoc:today-data-pathname)))))
 
 ;; target from exercise = 19690720
 ;; solution: (52 96)
@@ -42,6 +39,8 @@
 (defun combine-noun-verb (noun-verb)
   (format nil "~{~2,'0D~}" noun-verb))
 
-(assert (equal "3146"
-               (combine-noun-verb
-                (what-noun-verb-causes (read-input "./input.txt") 19690720))))
+(5am:def-test part2 (:suite :aoc-2019-02)
+  (5am:is (equal "3146"
+                 (combine-noun-verb
+                  (what-noun-verb-causes (read-input (aoc:today-data-pathname))
+                                         19690720)))))

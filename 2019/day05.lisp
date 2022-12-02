@@ -1,9 +1,9 @@
-(defpackage :day5
-  (:use :common-lisp))
+(defpackage #:aoc-2019-05
+  (:use :cl))
 
-(in-package :day5)
+(in-package #:aoc-2019-05)
 
-;; (load "../computer")
+(aoc:def-today-suite*)
 
 ;;; from day 2
 ;;; TODO find place for this utility
@@ -21,21 +21,22 @@
   (with-open-file (stream file :direction :input)
     (mapcar #'parse-integer (split-string (read-line stream) #\,))))
 
-(defparameter *program-input* (read-input (file-utils:file-in-day "./input.txt" 5)))
+(defparameter *program-input* (read-input (aoc:today-data-pathname)))
 
 (defun day5-part1 ()
   (first
    (remove-if #'zerop
               (mapcar #'parse-integer
-                      (string-utils:split
+                      (aoc:split-string-on-char
+                       #\Space
                        (string-trim '(#\Space)
                                     (with-output-to-string (output)
                                       (with-input-from-string (input "1")
                                         (computer:compute *program-input* :input-stream input
-                                                                          :output-stream output))))
-                       #\Space)))))
+                                                                          :output-stream output)))))))))
 
-(assert (= 7988899 (day5-part1)))
+(5am:def-test part1 (:suite :aoc-2019-05)
+  (5am:is (= 7988899 (day5-part1))))
 
 (defun day5-part2 ()
   (parse-integer
@@ -46,4 +47,5 @@
                                       :input-stream input
                                       :output-stream output))))))
 
-(assert (= 13758663 (day5-part2)))
+(5am:def-test part2 (:suite :aoc-2019-05)
+  (5am:is (= 13758663 (day5-part2))))

@@ -1,19 +1,15 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../computer")
-;;   (load "../string-utils")
-;;   (load "../file-utils"))
+(defpackage #:aoc-2019-11
+  (:use :cl))
 
-(defpackage :painting
-  (:use :cl)
-  (:export :monet :how-much-painting))
+(in-package #:aoc-2019-11)
 
-(in-package :painting)
+(aoc:def-today-suite*)
 
 (defparameter *program*
   (mapcar #'parse-integer
-          (string-utils:split
-           (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 11)))
-           #\,)))
+          (aoc:split-string-on-char
+           #\,
+           (first (aoc:read-data (aoc:today-data-pathname))))))
 
 (defun make-point (x y) (cons x y))
 (defun x (point) (car point))
@@ -122,7 +118,8 @@
   (hash-table-count (slot-value (monet :program program) 'canvas)))
 
 ;; part I
-(assert (= (how-much-painting) 2276))
+(5am:def-test part1 (:suite :aoc-2019-11)
+  (5am:is (= 2276 (how-much-painting))))
 
 ;; ---------- part II ----------
 
@@ -169,15 +166,16 @@
                   (format t "~&"))
          :finally (format-line (second dimensions)))))
 
-(assert (string=
-         (format nil "~{~A~%~}"
-                 '("-------------------------------------------"
-                   "..##..###..#....###....##.####..##..#..#..."
-                   ".#..#.#..#.#....#..#....#....#.#..#.#..#..."
-                   ".#....###..#....#..#....#...#..#....#..#..."
-                   ".#....#..#.#....###.....#..#...#....#..#..."
-                   ".#..#.#..#.#....#....#..#.#....#..#.#..#..."
-                   "..##..###..####.#.....##..####..##...##...."
-                   "-------------------------------------------")
-                 ) ;; CBLPJZCU
-                 (with-output-to-string (*standard-output*) (render (monet :starting-color :white)))))
+(5am:def-test part2 (:suite :aoc-2019-11)
+  (5am:is (string=
+           (format nil "~{~A~%~}"
+                   '("-------------------------------------------"
+                     "..##..###..#....###....##.####..##..#..#..."
+                     ".#..#.#..#.#....#..#....#....#.#..#.#..#..."
+                     ".#....###..#....#..#....#...#..#....#..#..."
+                     ".#....#..#.#....###.....#..#...#....#..#..."
+                     ".#..#.#..#.#....#....#..#.#....#..#.#..#..."
+                     "..##..###..####.#.....##..####..##...##...."
+                     "-------------------------------------------")
+                   ) ;; CBLPJZCU
+           (with-output-to-string (*standard-output*) (render (monet :starting-color :white))))))

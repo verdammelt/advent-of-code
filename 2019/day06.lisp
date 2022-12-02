@@ -1,11 +1,9 @@
-;; (load "../file-utils")
-;; (load "../string-utils")
+(defpackage #:aoc-2019-06
+  (:use :cl))
 
-(defpackage :orbit-calc
-  (:use :common-lisp)
-  (:export :checksum))
+(in-package #:aoc-2019-06)
 
-(in-package :orbit-calc)
+(aoc:def-today-suite*)
 
 ;; orbit data is a hashtable of child -> parent
 (defun add-orbit (orbits com sat)
@@ -22,8 +20,8 @@
 
 (defun load-orbits (datafile)
   "LOAD-ORBITS reads the data file and returns a orbit representation"
-  (labels ((split (s) (string-utils:split s #\)))
-           (slurp (file) (mapcar #'split (file-utils:read-lines (file-utils:file-in-day file 6)))))
+  (labels ((split (s) (aoc:split-string-on-char #\) s))
+           (slurp (file) (mapcar #'split (aoc:read-data file))))
     (let* ((orbit-pairs (slurp datafile)))
       (reduce #'(lambda (orbits pair)
                   (add-orbit orbits (first pair) (second pair)))
@@ -44,8 +42,9 @@
     (loop for key being the hash-key of orbits
           sum (counter key 0))))
 
-(assert (= 42 (orbit-count (load-orbits "./orbit-test.txt"))))
-(assert (= 453028 (orbit-count (load-orbits "./orbits.txt"))))
+(5am:def-test part1 (:suite :aoc-2019-06)
+  (5am:is (= 42 (orbit-count (load-orbits (aoc:today-data-pathname "test")))))
+  (5am:is (= 453028 (orbit-count (load-orbits (aoc:today-data-pathname))))))
 
 (defun orbit-checksum (orbits)
   "CHECKSUM is calcuated by summing up the direct and indirect orbits in ORBITS"
@@ -60,5 +59,6 @@
 (defun num-orbit-transfers (orbits from to)
   (- (length (orbit-transfers orbits from to)) 2))
 
-(assert (= 4 (num-orbit-transfers (load-orbits "./orbit-test-2.txt") "YOU" "SAN")))
-(assert (= 562 (num-orbit-transfers (load-orbits "./orbits.txt") "YOU" "SAN")))
+(5am:def-test part2 (:suite :aoc-2019-06)
+  (5am:is (= 4 (num-orbit-transfers (load-orbits (aoc:today-data-pathname "test-2")) "YOU" "SAN")))
+  (5am:is (= 562 (num-orbit-transfers (load-orbits (aoc:today-data-pathname)) "YOU" "SAN"))))

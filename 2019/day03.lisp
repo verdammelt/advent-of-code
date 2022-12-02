@@ -1,3 +1,11 @@
+(defpackage #:aoc-2019-03
+  (:use :cl)
+  (:shadow :step))
+
+(in-package #:aoc-2019-03)
+
+(aoc:def-today-suite*)
+
 ;;;
 ;;; examples:
 ;;; wire 1: ("R8" "U5" "L5" "D3")
@@ -13,18 +21,9 @@
 ;;; distance: 135
 ;;;
 
-;; (load "../file-utils")
-;; (load "../string-utils")
+(defun parse-lines (lines) (mapcar #'(lambda (s) (aoc:split-string-on-char #\, s)) lines))
 
-(defpackage :crossed-wires
-  (:use :common-lisp)
-  (:shadow :step))
-
-(in-package :crossed-wires)
-
-(defun parse-lines (lines) (mapcar #'(lambda (s) (string-utils:split s #\,)) lines))
-
-(defparameter *raw-input* (parse-lines (file-utils:read-lines (file-utils:file-in-day "./input.txt" 3))))
+(defparameter *raw-input* (parse-lines (aoc:read-data (aoc:today-data-pathname))))
 
 (defparameter *origin* '(0 . 0))
 
@@ -100,4 +99,7 @@
     (flet ((calc-fn (coord) (funcall distance-fn coord paths)))
       (calc-fn (nearest-cross crosses (function calc-fn))))))
 
-(assert (= 248 (find-nearest-cross *raw-input* #'manhattan-distance)))
+(5am:def-test part1 (:suite :aoc-2019-03)
+  (5am:is (= 248 (find-nearest-cross *raw-input* #'manhattan-distance))))
+
+;; TODO: complete 2019.03

@@ -1,21 +1,15 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils")
-;;   (load "../string-utils")
-;;   (load "../computer"))
+(defpackage #:aoc-2019-07
+  (:use :cl))
 
-; (delete-package (find-package :amplification-curcuit))
-(defpackage :amplification-curcuit
-  (:use :common-lisp)
-  (:export :find-best-output
-           :*amplifier-controller-software*))
+(in-package #:aoc-2019-07)
 
-(in-package :amplification-curcuit)
+(aoc:def-today-suite*)
 
 (defun csv->number-list (str)
-  (mapcar #'parse-integer (string-utils:split str #\,)))
+  (mapcar #'parse-integer (aoc:split-string-on-char #\, str)))
 
 (defparameter *amplifier-controller-software*
-  (csv->number-list (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 7)))))
+  (csv->number-list (first (aoc:read-data (aoc:today-data-pathname)))))
 
 (defparameter *test-programs*
   (list
@@ -110,12 +104,13 @@
                               phase-settings)))
       (run-to-completion amplifiers "0"))))
 
-(dolist (p *test-programs*)
-  (assert (= (getf p :expected)
-             (parse-integer
-              (run-program-on-amplifiers-with-phases
-               (getf p :program)
-               (getf p :phase-sequence))))))
+(5am:def-test run-program-on-amplifiers-with-phases (:suite :aoc-2019-07)
+  (dolist (p *test-programs*)
+    (5am:is (= (getf p :expected)
+               (parse-integer
+                (run-program-on-amplifiers-with-phases
+                 (getf p :program)
+                 (getf p :phase-sequence)))))))
 
 (defun find-best-output (program &optional (base-phase 0))
   (flet ((get-phases-output (phases)
@@ -126,6 +121,7 @@
      (sort (mapcar #'get-phases-output (all-phase-setting-choices base-phase))
            #'> :key #'second))))
 
-                                        ; => (:part1 34686 :part2 36384144)
-(assert (= 79723 (second (find-best-output *amplifier-controller-software*))))
-(assert (= 70602018 (second (find-best-output *amplifier-controller-software* 5))))
+(5am:def-test part1 (:suite :aoc-2019-07)
+  (5am:is (= 79723 (second (find-best-output *amplifier-controller-software*)))))
+(5am:def-test part2 (:suite :aoc-2019-07)
+  (5am:is (= 70602018 (second (find-best-output *amplifier-controller-software* 5)))))

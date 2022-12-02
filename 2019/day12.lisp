@@ -1,12 +1,9 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils")
-;;   (load "../string-utils"))
+(defpackage #:aoc-2019-12
+  (:use :cl))
 
-(defpackage :nbody
-  (:use :common-lisp)
-  (:export :load-data))
+(in-package #:aoc-2019-12)
 
-(in-package :nbody)
+(aoc:def-today-suite*)
 
 ;;; ---------- coordinates (x, y, z) ----------
 (defun make-coord (coords)
@@ -35,9 +32,9 @@
 (defun parse-coord (data)
   (labels ((unwrap (str) (string-trim '(#\< #\>) str))
            (trim-space (str) (string-trim '(#\Space) str))
-           (split (str) (mapcar #'trim-space (string-utils:split str #\,)))
+           (split (str) (mapcar #'trim-space (aoc:split-string-on-char #\, str)))
            (keyword (str) (intern (string-upcase str) :keyword))
-           (pair (str) (destructuring-bind (key value) (string-utils:split str #\=)
+           (pair (str) (destructuring-bind (key value) (aoc:split-string-on-char #\= str)
                          (list (keyword key) (parse-integer value)))))
     (mapcar #'pair (split (unwrap data)))))
 
@@ -46,7 +43,7 @@
              (make-zero-coord)))
 
 (defun load-data (file)
-  (mapcar #'parse-moon (file-utils:read-lines (file-utils:file-in-day file 12))))
+  (mapcar #'parse-moon (aoc:read-data file)))
 
 (defun gravity-between (loc1 loc2)
   (list :x (signum (- (coord-x loc2) (coord-x loc1)))
@@ -85,7 +82,8 @@
      finally (return new-moons)))
 
 ;;; ---------- part I ----------
-(assert (= 9743 (total-energy (n-time-steps 1000 (load-data "./input.txt")))))
+(5am:def-test part1 (:suite :aoc-2019-12)
+  (5am:is (= 9743 (total-energy (n-time-steps 1000 (load-data (aoc:today-data-pathname)))))))
 
 (defun find-cycle (initial)
   (declare (optimize (speed 3) (debug 0) (safety 0)))
@@ -134,6 +132,7 @@
 (defun run-the-test (datafile cycle-finder)
   (let ((data (load-data datafile)))
     (sb-ext:gc :full t)
-    (time (funcall cycle-finder data))))
+    (funcall cycle-finder data)))
 
-(assert (= 288684633706728 (run-the-test "./input.txt" #'from-reddit)))
+(5am:def-test part2 (:suite :aoc-2019-12)
+  (5am:is (= 288684633706728 (run-the-test (aoc:today-data-pathname) #'from-reddit))))

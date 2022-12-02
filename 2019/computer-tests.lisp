@@ -3,108 +3,90 @@
 
 (in-package #:computer)
 
+(5am:def-suite* :aoc-2019/intcode :in :aoc-2019)
+
 ;;;
 ;;; tests
 ;;;
-;; add
-(assert (= (peek (compute '(1 5 6 0 99 2 2)) 0) 4))
-;; mul
-(assert (= (peek (compute '(2 5 6 0 99 2 3)) 0) 6))
-;; immediate mode (first parameter)
-(assert (= (peek (compute '(101 2 6 0 99 X 2)) 0) 4))
-;; immediate mode (second parameter)
-(assert (= (peek (compute '(1001 5 2 0 99 2 X)) 0) 4))
-;; immediate mode (all parameters)
-(assert (= (peek (compute '(1101 2 2 0 99)) 0) 4))
-;; example program (will terminate because 99 written to next PC
-(assert (eq (slot-value (compute '(1002 4 3 4 33)) 'state) :halt))
-;; input
-(with-input-from-string (input-stream "666")
-  (assert (= (peek (compute '(3 0 99)
-                            :input-stream input-stream)
-                   0)
-             666)))
-;; output
-(assert (string= (with-output-to-string (output-stream)
-                   (compute '(1101 2 3 0 4 0 99)
-                            :output-stream output-stream))
-                 (format nil "5 ")))
-;; example program (input/output)
-(let ((expected "13"))
-  (assert (string= (with-output-to-string (output-stream)
-                     (with-input-from-string (input-stream expected)
+(5am:def-test add (:suite :aoc-2019/intcode)
+  (5am:is (= 4 (peek (compute '(1 5 6 0 99 2 2)) 0))))
+
+(5am:def-test mul (:suite :aoc-2019/intcode)
+  (5am:is (= 6 (peek (compute '(2 5 6 0 99 2 3)) 0))))
+
+(5am:def-test immediate-mode-first-parameter (:suite :aoc-2019/intcode)
+  (5am:is (= 4 (peek (compute '(101 2 6 0 99 X 2)) 0))))
+
+(5am:def-test immediate-mode-second-parameter (:suite :aoc-2019/intcode)
+  (5am:is (= 4 (peek (compute '(1001 5 2 0 99 2 X)) 0))))
+
+(5am:def-test immediate-mode-all-parameters (:suite :aoc-2019/intcode)
+  (5am:is (= 4 (peek (compute '(1101 2 2 0 99)) 0))))
+
+(5am:def-test example-program (:suite :aoc-2019/intcode)
+  ;; (will terminate because 99 written to next PC)
+  (5am:is (eq :halt (slot-value (compute '(1002 4 3 4 33)) 'state))))
+
+(5am:def-test input (:suite :aoc-2019/intcode)
+  (5am:is (= 666
+             (with-input-from-string (input-stream "666")
+               (peek (compute '(3 0 99)
+                              :input-stream input-stream)
+                     0)))))
+
+(5am:def-test output (:suite :aoc-2019/intcode)
+  (5am:is (string= "5 "
+                   (with-output-to-string (output-stream)
+                     (compute '(1101 2 3 0 4 0 99)
+                              :output-stream output-stream)))))
+
+(5am:def-test input/output (:suite :aoc-2019/intcode)
+  (5am:is (string= "13 "
+                   (with-output-to-string (output-stream)
+                     (with-input-from-string (input-stream "13")
                        (compute '(3 0 4 0 999)
                                 :input-stream input-stream
-                                :output-stream output-stream)))
-                   (format nil "~A " expected))))
+                                :output-stream output-stream))))))
 
-;; equals (positional)
-(with-input-from-string (input "8 ")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 9 8 9 10 9 4 9 99 -1 8)
-                              :input-stream input :output-stream output))
-                   (format nil "1 "))))
-(with-input-from-string  (input "9")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 9 8 9 10 9 4 9 99 -1 8)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
-;; equal (immediate)
-(with-input-from-string (input "8")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 3 1108 -1 8 3 4 3 99)
-                              :input-stream input :output-stream output))
-                   (format nil "1 "))))
-(with-input-from-string (input "9")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 3 1108 -1 8 3 4 3 99)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
+(defun run-compute (program input)
+  "Run the PROGRAM on the INPUT and return the programs OUTPUT."
+  (string-trim
+   '(#\Space)
+   (with-output-to-string (output-stream)
+     (with-input-from-string (input-stream input)
+       (compute program :input-stream input-stream :output-stream output-stream)))))
 
-;; less-than (position)
-(with-input-from-string (input "7")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 9 7 9 10 9 4 9 99 -1 8)
-                              :input-stream input :output-stream output))
-                   (format nil "1 "))))
-(with-input-from-string (input "9")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 9 7 9 10 9 4 9 99 -1 8)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
-;; less-than (immediate)
-(with-input-from-string (input "7")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 3 1107 -1 8 3 4 3 99)
-                              :input-stream input :output-stream output))
-                   (format nil "1 "))))
-(with-input-from-string (input "9")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 3 1107 -1 8 3 4 3 99)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
-;; less-than (testing equal case)
-(with-input-from-string (input "8")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 9 7 9 10 9 4 9 99 -1 8)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
-(with-input-from-string (input "8")
-  (assert (string= (with-output-to-string (output)
-                     (compute '(3 3 1107 -1 8 3 4 3 99)
-                              :input-stream input :output-stream output))
-                   (format nil "0 "))))
+(5am:def-test equals-positional (:suite :aoc-2019/intcode)
+  (let ((program '(3 9 8 9 10 9 4 9 99 -1 8)))
+    (5am:is (string= "1" (run-compute program "8 ")))
+    (5am:is (string= "0" (run-compute program "9")))))
+
+(5am:def-test equals-immediate (:suite :aoc-2019/intcode)
+  (let ((program '(3 3 1108 -1 8 3 4 3 99)))
+    (5am:is (string= "1" (run-compute program "8")))
+    (5am:is (string= "0" (run-compute program "9")))))
+
+(5am:def-test less-than-position (:suite :aoc-2019/intcode)
+  (let ((program '(3 9 7 9 10 9 4 9 99 -1 8)))
+    (5am:is (string= "1" (run-compute program "7")))
+    (5am:is (string= "0" (run-compute program "9")))))
+
+(5am:def-test less-than-immediate (:suite :aoc-2019/intcode)
+  (let ((program '(3 3 1107 -1 8 3 4 3 99)))
+    (5am:is (string= "1" (run-compute program "7")))
+    (5am:is (string= "0" (run-compute program "9")))))
+
+(5am:def-test less-than-equal-case (:suite :aoc-2019/intcode)
+  (5am:is (string= "0" (run-compute '(3 9 7 9 10 9 4 9 99 -1 8) "8")))
+  (5am:is (string= "0" (run-compute '(3 3 1107 -1 8 3 4 3 99) "8"))))
 
 ;;; big example
-(let ((memory '(3 21 1008 21 8 20 1005 20 22 107 8 21 20 1006 20 31
-                1106 0 36 98 0 0 1002 21 125 20 4 20 1105 1 46 104
-                999 1105 1 46 1101 1000 1 20 4 20 1105 1 46 98 99)))
-  (flet ((run-test (input-str expected)
-           (with-input-from-string (input input-str)
-             (assert (string= (with-output-to-string (output)
-                                (compute memory
-                                         :input-stream input :output-stream output))
-                              (format nil "~A " expected))))))
-    (run-test "7" "999")
-    (run-test "8" "1000")
-    (run-test "9" "1001")))
+(5am:def-test big-examples (:suite :aoc-2019/intcode)
+  (let ((program '(3 21 1008 21 8 20 1005 20 22 107 8 21 20 1006 20 31
+                   1106 0 36 98 0 0 1002 21 125 20 4 20 1105 1 46 104
+                   999 1105 1 46 1101 1000 1 20 4 20 1105 1 46 98 99)))
+    (flet ((run-test (input expected)
+             (5am:is (string= expected (run-compute program input)))))
+      (run-test "7" "999")
+      (run-test "8" "1000")
+      (run-test "9" "1001"))))

@@ -15,6 +15,7 @@
     (asdf:test-system sys :force force)))
 
 (defun reload-year (year)
+  "Reload the system for YEAR. Removes any packages matching AOC-<YEAR>"
   (let* ((prefix (format nil "aoc-~4,'0D" year))
          (scanner (cl-ppcre:create-scanner prefix :case-insensitive-mode t)))
     (let ((year-packages (remove-if-not #'(lambda (p) (cl-ppcre:scan scanner (package-name p)))

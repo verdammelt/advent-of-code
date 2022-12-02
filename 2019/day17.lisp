@@ -1,19 +1,14 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../computer")
-;;   (load "../string-utils")
-;;   (load "../file-utils"))
-
 (defpackage :flare
   (:use :common-lisp))
 
 (in-package :flare)
 
-(defun split-on (char) (lambda (str) (string-utils:split str char)))
+(defun split-on (char) (lambda (str) (aoc:split-string-on-char char str)))
 
 (defun load-program (file)
   (mapcar #'parse-integer
           (funcall (split-on #\,)
-           (first (file-utils:read-lines (file-utils:file-in-day file 17))))))
+           (first (aoc:read-data file)))))
 
 (defun make-map (output)
   (let* ((raw-data (map 'vector #'code-char
@@ -39,3 +34,5 @@
                           collect (loop for c below col collect (aref map r c)))))))
 
 ;;; incomplete.
+
+;; TODO: complete 2019.17

@@ -1,7 +1,9 @@
-(defpackage :secure-container
-  (:use :common-lisp))
+(defpackage #:aoc-2019-04
+  (:use :cl))
 
-(in-package :secure-container)
+(in-package #:aoc-2019-04)
+
+(aoc:def-today-suite*)
 
 (defparameter *puzzle-input* '(156218 . 652527))
 
@@ -44,5 +46,7 @@
         when (funcall check-guess (format-guess guess))
           collect guess))
 
-(assert (= 1694 (length (guess-password *puzzle-input* #'check-guess-1))))
-(assert (= 1148 (length (guess-password *puzzle-input* #'check-guess-2))))
+(5am:def-test part1 (:suite :aoc-2019-04)
+  (5am:is (= 1694 (length (guess-password *puzzle-input* #'check-guess-1)))))
+(5am:def-test part2 (:suite :aoc-2019-04)
+  (5am:is (= 1148 (length (guess-password *puzzle-input* #'check-guess-2)))))

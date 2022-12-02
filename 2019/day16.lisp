@@ -1,11 +1,9 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils.fasl"))
+(defpackage #:aoc-2019-16
+  (:use :cl))
 
-(defpackage :ftt
-  (:use :common-lisp)
-  (:export :load-signals :run-n-phases :write-signal))
+(in-package #:aoc-2019-16)
 
-(in-package :ftt)
+(aoc:def-today-suite*)
 
 (defparameter *base-pattern* '(0 1 0 -1))
 
@@ -38,7 +36,7 @@
                             (mapcar #'(lambda (i p) (mapcar #'* i p)) inputs patterns))))))
 
 (defun load-signal (file)
-  (mapcar #'digit-char-p (coerce (first (file-utils:read-lines (file-utils:file-in-day file 16))) 'list)))
+  (mapcar #'digit-char-p (coerce (first (aoc:read-data file)) 'list)))
 
 (defun run-n-phases (signal-data num-phases)
   (loop
@@ -67,11 +65,25 @@
   (format stream "~{~D~}" signal-data))
 
 ;; part 1
-(assert (= 24176176 (compute-message (load-signal "./example-after-100-24176176.txt") :forced-offset 0 :repeat-count 1)))
-(assert (= 52432133 (compute-message (load-signal "./example-after-100-52432133.txt") :forced-offset 0 :repeat-count 1)))
-(assert (= 73745418 (compute-message (load-signal "./example-after-100-73745418.txt") :forced-offset 0 :repeat-count 1)))
-(assert (= 32002835 (compute-message (load-signal "./input.txt") :forced-offset 0 :repeat-count 1)))
+(5am:def-test part1 (:suite :aoc-2019-16)
+  (5am:is (= 24176176
+             (compute-message
+              (load-signal (aoc:today-data-pathname "example-after-100-24176176"))
+              :forced-offset 0 :repeat-count 1)))
+  (5am:is (= 52432133
+             (compute-message
+              (load-signal (aoc:today-data-pathname "example-after-100-52432133"))
+              :forced-offset 0 :repeat-count 1)))
+  (5am:is (= 73745418
+             (compute-message
+              (load-signal (aoc:today-data-pathname "example-after-100-73745418"))
+              :forced-offset 0 :repeat-count 1)))
+  (5am:is (= 32002835
+             (compute-message
+              (load-signal (aoc:today-data-pathname))
+              :forced-offset 0 :repeat-count 1))))
 
 ;; part 2
 ;; incomplete - above does not terminate quick enough.
-;; (assert (= 84462026 (compute-message (load-signal "./example-with-offset-84462026.txt"))))
+;; TODO: complete 2019.16
+;; (5am:is (= 84462026 (compute-message (load-signal "./example-with-offset-84462026.txt"))))

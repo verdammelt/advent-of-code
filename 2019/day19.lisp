@@ -1,14 +1,13 @@
-(defpackage #:tractor-beam
-  (:use :common-lisp)
-  (:export))
+(defpackage #:aoc-2019-19
+  (:use :cl))
 
-(in-package #:tractor-beam)
+(in-package #:aoc-2019-19)
+
+(aoc:def-today-suite*)
 
 (defun load-program (file)
   (mapcar #'parse-integer
-          (string-utils:split
-           (car (file-utils:read-lines (file-utils:file-in-day file 19)))
-           #\,)))
+          (aoc:split-string-on-char #\, (car (aoc:read-data file)))))
 
 (defun check-xy (program x y)
   (with-output-to-string (output)
@@ -38,8 +37,8 @@
            do (format output "~C" (aref map y x))
               finally (terpri output))))
 
-;; part i
-(assert (= 213 (count-beam-pulling (scan-area (load-program "./input.txt") 50 50))))
+(5am:def-test part1 (:suite :aoc-2019-19)
+  (5am:is (= 213 (count-beam-pulling (scan-area (load-program (aoc:today-data-pathname)) 50 50)))))
 
 ;; -------------------- part ii --------------------
 
@@ -65,4 +64,5 @@ The square is defined as having a lower-left corner at x, y."
          ((square-fits-p program x y (1- size))
           (+ (* 10000 x) (1+ (- y size)))))))
 
-(assert (= 7830987 (part2 "./input.txt" 100)))
+(5am:def-test part2 (:suite :aoc-2019-19)
+  (5am:is (= 7830987 (part2 (aoc:today-data-pathname) 100))))

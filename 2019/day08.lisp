@@ -1,11 +1,9 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils"))
+(defpackage #:aoc-2019-08
+  (:use :cl))
 
-(defpackage :space-image-format
-  (:use :common-lisp)
-  (:export :checksum :render))
+(in-package #:aoc-2019-08)
 
-(in-package :space-image-format)
+(aoc:def-today-suite*)
 
 (defun split-into-layers (dimensions data)
   (let* ((per-layer (apply #'* dimensions))
@@ -14,7 +12,7 @@
        :collect (subseq data (* i per-layer) (* (1+ i) per-layer)))))
 
 (defun read-image-data (file)
-  (first (file-utils:read-lines (file-utils:file-in-day file 8))))
+  (first (aoc:read-data file)))
 
 (defun checksum (dimensions file)
   (let* ((data (read-image-data file))
@@ -53,17 +51,17 @@
 (defun render (dimensions file)
   (render-data dimensions (read-image-data file)))
 
-;; part 1
-(assert (= 1452 (checksum '(25 6) "./input.txt")))
+(5am:def-test part1 (:suite :aoc-2019-08)
+  (5am:is (= 1452 (checksum '(25 6) (aoc:today-data-pathname)))))
 
-;; part 2 answer:
-(assert (string=
-         (format nil "~{~A~%~}"
-                 '("###  #  # ###  #### #  # "
-                   "#  # #  # #  # #    #  # "
-                   "#  # #### #  # ###  #  # "
-                   "###  #  # ###  #    #  # "
-                   "#    #  # #    #    #  # "
-                   "#    #  # #    ####  ##  "))
+(5am:def-test part2 (:suite :aoc-2019-08)
+  (5am:is (string=
+           (format nil "~{~A~%~}"
+                   '("###  #  # ###  #### #  # "
+                     "#  # #  # #  # #    #  # "
+                     "#  # #### #  # ###  #  # "
+                     "###  #  # ###  #    #  # "
+                     "#    #  # #    #    #  # "
+                     "#    #  # #    ####  ##  "))
 
-         (render '(25 6) "./input.txt")))
+           (render '(25 6) (aoc:today-data-pathname)))))

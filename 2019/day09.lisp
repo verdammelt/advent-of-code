@@ -1,32 +1,28 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils")
-;;   (load "../string-utils")
-;;   (load "../computer"))
+(defpackage #:aoc-2019-09
+  (:use :cl))
 
-(defpackage :boost
-  (:use :common-lisp)
-  (:export :boost))
+(in-package #:aoc-2019-09)
 
-(in-package :boost)
+(aoc:def-today-suite*)
 
 (defun csv->numbers (csv)
-  (mapcar #'parse-integer (string-utils:split csv #\,)))
+  (mapcar #'parse-integer (aoc:split-string-on-char #\, csv)))
 
 (defparameter *test-programs*
     (list
      (list :program (csv->numbers "109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99")
            :expected #'(lambda (actual)
-                         (assert (string= actual "109 1 204 -1 1001 100 1 100 1008 100 16 101 1006 101 0 99"))))
+                         (5am:is (string= actual "109 1 204 -1 1001 100 1 100 1008 100 16 101 1006 101 0 99"))))
      (list :program (csv->numbers "1102,34915192,34915192,7,4,7,99,0")
-           :expected #'(lambda (actual) (assert (= 16 (length actual)))))
+           :expected #'(lambda (actual) (5am:is (= 16 (length actual)))))
      (list :program (csv->numbers "104,1125899906842624,99")
-           :expected #'(lambda (actual) (assert (string= "1125899906842624" actual))))))
+           :expected #'(lambda (actual) (5am:is (string= "1125899906842624" actual))))))
 
 (defparameter *boost-program*
   (mapcar #'parse-integer
-          (string-utils:split
-           (first (file-utils:read-lines (file-utils:file-in-day "./input.txt" 9)))
-           #\,)))
+          (aoc:split-string-on-char
+           #\,
+           (first (aoc:read-data (aoc:today-data-pathname))))))
 
 (defun boost (&optional (program *boost-program*) (input "1"))
   (string-trim '(#\Space)
@@ -35,15 +31,19 @@
                                   :input-stream (make-string-input-stream input)
                                   :output-stream (make-string-output-stream)))))
 
-(dolist (p *test-programs*)
-  (let ((program (getf p :program))
-        (expected (getf p :expected)))
-    (funcall expected (boost program))))
+(5am:def-test boost-examples (:suite :aoc-2019-09)
+  (dolist (p *test-programs*)
+    (let ((program (getf p :program))
+          (expected (getf p :expected)))
+      (funcall expected (boost program)))))
 
-(assert (string= "2377080455" (boost)))
-(assert (string= "74917" (boost *boost-program* "2")))
+(5am:def-test part1 (:suite :aoc-2019-09)
+  (5am:is (string= "2377080455" (boost))))
 
-;; todo
+(5am:def-test part2 (:suite :aoc-2019-09)
+  (5am:is (string= "74917" (boost *boost-program* "2"))))
+
+;; TODO: possible todo list -->
 ;; * parameter mode 2 - addressing from 'global' reference base setting (initial 0)
 ;; * opcode 9 - setting reference base from parameter
 ;; x computers need more memory than length of program (maybe allocate as needed?)

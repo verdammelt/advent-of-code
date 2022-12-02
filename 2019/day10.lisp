@@ -1,11 +1,9 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils"))
+(defpackage #:aoc-2019-10
+  (:use :cl))
 
-(defpackage :monitor-station
-  (:use :common-lisp)
-  (:export))
+(in-package #:aoc-2019-10)
 
-(in-package :monitor-station)
+(aoc:def-today-suite*)
 
 ;;; ---------- ASTEROID ----------
 
@@ -38,14 +36,14 @@
                   :key #'first)))
 
 (defun load-map (file)
-  (find-asteroids (file-utils:read-lines (file-utils:file-in-day file 10))))
+  (find-asteroids (aoc:read-data file)))
 
 ;;; ---------- TEST & PUZZLE DATA ----------
 
 (defparameter *maps*
   (mapcar #'load-map
-          '("./test-1.txt" "./test-2.txt" "./test-3.txt" "./test-4.txt" "./test-5.txt"
-            "./input.txt")))
+          (append (mapcar #'aoc:today-data-pathname '("test-1" "test-2" "test-3" "test-4" "test-5"))
+                  (list (aoc:today-data-pathname)))))
 
 
 ;;; ---------- SLOPES & DISTANCE ----------
@@ -88,21 +86,23 @@
         (count1 (second actual))
         (a2 (first expected))
         (count2 (second expected)))
-    (unless (asteroid-equal a1 a2)
-      (error "#~D Asteroids do not match (actual: ~A expected: ~A)"
-             test-num a1 a2))
-    (unless (= count1 count2)
-      (error "#~D Counts do not match (actual: ~A expected: ~A)"
-             test-num count1 count2))))
-(mapcar #'answer-equal
-        '(1 2 3 4 5 6)
-        (mapcar #'best-asteroid-for-base *maps*)
-        `((,(make-asteroid 3 4) 8)
-          (,(make-asteroid 5 8) 33)
-          (,(make-asteroid 1 2) 35)
-          (,(make-asteroid 6 3) 41)
-          (,(make-asteroid 11 13) 210)
-          (,(make-asteroid 26 29) 303)))
+    (5am:is (asteroid-equal a1 a2)
+            (format nil "#~D Asteroids do not match (actual: ~A expected: ~A)"
+                    test-num a1 a2))
+    (5am:is (= count1 count2)
+            (format nil "#~D Counts do not match (actual: ~A expected: ~A)"
+                    test-num count1 count2))))
+
+(5am:def-test part1 (:suite :aoc-2019-10)
+  (mapcar #'answer-equal
+          '(1 2 3 4 5 6)
+          (mapcar #'best-asteroid-for-base *maps*)
+          `((,(make-asteroid 3 4) 8)
+            (,(make-asteroid 5 8) 33)
+            (,(make-asteroid 1 2) 35)
+            (,(make-asteroid 6 3) 41)
+            (,(make-asteroid 11 13) 210)
+            (,(make-asteroid 26 29) 303))))
 
 ;;; ---------- part II ----------
 
@@ -122,34 +122,36 @@
     (vaporize-in-order clockwise-asteroids (list))))
 
 ;;; ---------- part II test ----------
-(let* ((expectations
-        `((1 ,(make-asteroid 11 12))
-          (2 ,(make-asteroid 12 1))
-          (3 ,(make-asteroid 12 2))
-          (10 ,(make-asteroid 12 8))
-          (20 ,(make-asteroid 16 0))
-          (50 ,(make-asteroid 16 9))
-          (100 ,(make-asteroid 10 16))
-          (199 ,(make-asteroid 9 6))
-          (200 ,(make-asteroid 8 2))
-          (201 ,(make-asteroid 10 9))
-          ;(299 ,(make-asteroid 11 1)) ;; this one doesn't work!?
-          ))
-       (asters (fifth *maps*))
-       (base (first (best-asteroid-for-base asters)))
-       (order (order-of-vaporization base asters)))
-  (mapcar #'(lambda (expected)
-              (let* ((nth (car expected))
-                     (a1 (cadr expected))
-                     (a2 (nth (1- nth) order)))
-                (unless (asteroid-equal a1 a2)
-                  (error "#~D does not match expected: ~A found ~A"
-                         nth a1 a2))))
-          expectations))
+(5am:def-test part2.1 (:suite :aoc-2019-10)
+  (let* ((expectations
+           `((1 ,(make-asteroid 11 12))
+             (2 ,(make-asteroid 12 1))
+             (3 ,(make-asteroid 12 2))
+             (10 ,(make-asteroid 12 8))
+             (20 ,(make-asteroid 16 0))
+             (50 ,(make-asteroid 16 9))
+             (100 ,(make-asteroid 10 16))
+             (199 ,(make-asteroid 9 6))
+             (200 ,(make-asteroid 8 2))
+             (201 ,(make-asteroid 10 9))
+             ;; (299 ,(make-asteroid 11 1)) ;; this one doesn't work!?
+             ))
+         (asters (fifth *maps*))
+         (base (first (best-asteroid-for-base asters)))
+         (order (order-of-vaporization base asters)))
+    (mapcar #'(lambda (expected)
+                (let* ((nth (car expected))
+                       (a1 (cadr expected))
+                       (a2 (nth (1- nth) order)))
+                  (5am:is (asteroid-equal a1 a2)
+                          (format nil "#~D does not match expected: ~A found ~A"
+                                  nth a1 a2))))
+            expectations)))
 
 ;; ---------- answering part II ----------
-(let* ((asters (sixth *maps*))
-       (base (first (best-asteroid-for-base asters)))
-       (order (order-of-vaporization base asters))
-       (200th (nth 199 order)))
-  (assert (= 408 (+ (* (x 200th) 100) (y 200th)))))
+(5am:def-test part2.2 (:suite :aoc-2019-10)
+  (let* ((asters (sixth *maps*))
+         (base (first (best-asteroid-for-base asters)))
+         (order (order-of-vaporization base asters))
+         (200th (nth 199 order)))
+    (5am:is (= 408 (+ (* (x 200th) 100) (y 200th))))))

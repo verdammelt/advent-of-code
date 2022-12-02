@@ -1,13 +1,9 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../file-utils")
-;;   (load "../string-utils"))
+(defpackage #:aoc-2019-14
+  (:use :cl))
 
-(defpackage :fuel
-  (:use :common-lisp)
-  (:export :load-equations
-           :how-much-ore))
+(in-package #:aoc-2019-14)
 
-(in-package :fuel)
+(aoc:def-today-suite*)
 
 (defun compose (&rest fns)
   (lambda (input)
@@ -35,10 +31,10 @@
 (defun load-equations (file)
   (labels ((prepare (eq) (remove #\> eq))
            (eq-delimeter-p (c) (member c '(#\= #\,) :test #'char=))
-           (split-equals (eq) (string-utils:split-if eq #'eq-delimeter-p))
+           (split-equals (eq) (aoc:split-string-on-char #'eq-delimeter-p eq))
            (cleanup-str (s) (string-trim '(#\Space) s))
            (cleanup-eq (eq) (mapcar #'cleanup-str eq))
-           (split-terms (eq) (mapcar #'(lambda (s) (string-utils:split s #\Space)) eq))
+           (split-terms (eq) (mapcar #'(lambda (s) (aoc:split-string-on-char #\Space s)) eq))
            (parse-term (term) (make-term (parse-integer (term-amount term))
                                          (mk-keyword (term-chemical term))))
            (parse-terms (eq) (mapcar #'parse-term eq))
@@ -50,7 +46,7 @@
     (reduce #'store-equation
             (mapcar (compose #'reverse #'parse-terms #'split-terms
                              #'cleanup-eq #'split-equals #'prepare)
-                    (file-utils:read-lines (file-utils:file-in-day file 14)))
+                    (aoc:read-data file))
             :initial-value (make-hash-table))))
 
 (defun collect-terms (eq)
@@ -89,5 +85,6 @@
   (let ((fuel-equation (gethash :fuel equations)))
     (reduce-to-ore (multiply-equation-by fuel-equation target-fuel) equations)))
 
+;; TODO: complete 2019.14
 ;; problem not completed
-;; (assert (= 31 (caadr (how-much-ore (load-equations "./example-31.txt")))))
+;; (5am:is (= 31 (caadr (how-much-ore (load-equations "./example-31.txt")))))

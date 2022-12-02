@@ -1,19 +1,16 @@
-;; (eval-when (:compile-toplevel :load-toplevel :execute)
-;;   (load "../computer")
-;;   (load "../file-utils")
-;;   (load "../string-utils"))
+(defpackage #:aoc-2019-13
+  (:use :cl))
 
-(defpackage :arcade
-  (:use :common-lisp)
-  (:export :play))
+(in-package #:aoc-2019-13)
 
-(in-package :arcade)
+(aoc:def-today-suite*)
+
 
 (defun load-program (file)
   (mapcar #'parse-integer
-          (string-utils:split
-           (first (file-utils:read-lines (file-utils:file-in-day file 13)))
-           #\,)))
+          (aoc:split-string-on-char
+           #\,
+           (first (aoc:read-data file)))))
 
 (defun triples (seq)
   (labels ((grab (n seq acc)
@@ -23,7 +20,7 @@
     (nreverse (grab 3 seq (list)))))
 
 (defun parse-output (output)
-  (mapcar #'parse-integer (string-utils:split (string-trim '(#\Space) output) #\Space)))
+  (mapcar #'parse-integer (aoc:split-string-on-char #\Space (string-trim '(#\Space) output))))
 
 (defclass arcade ()
   ((game :reader game)
@@ -102,7 +99,8 @@
     (computer:run-program (make-instance 'arcade :program program))))
 
 ;; part 1
-;; 414 (can't assert as program assumes input and hangs.
+;; 414 (can't write automated test as program assumes input and hangs.)
+;; TODO: find way to write automated tests for this.
 
 (defun max-score (game-file)
   (let* ((screen (triples
