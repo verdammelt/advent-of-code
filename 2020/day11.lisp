@@ -5,11 +5,6 @@
 (aoc:def-today-suite*)
 
 ;; 2d-array utilities
-(defun to-2d-array (lines)
-  (let ((width (length (first lines)))
-        (height (length lines)))
-    (make-array (list height width) :initial-contents lines)))
-
 (defun map-2d-array (matrix fn)
   (loop with new-matrix = (make-array (array-dimensions matrix) :initial-element #\Null)
         for h below (array-dimension matrix 0)
@@ -114,9 +109,9 @@
 ;;
 
 (defparameter +input+ (read-data (today-data-pathname)
-                                 :post-process #'to-2d-array))
+                                 :post-process #'aoc:lists->2d-array))
 (defparameter +example+ (read-data (today-data-pathname "example")
-                                   :post-process #'to-2d-array))
+                                   :post-process #'aoc:lists->2d-array))
 
 
 ;; part I
