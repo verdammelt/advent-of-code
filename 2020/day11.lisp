@@ -44,7 +44,7 @@
 
 (defun count-seats (seat waiting-area)
   (let ((count 0))
-    (aoc:map-array #'(lambda (m w h) (when (char= seat (aref m h w))
+    (aoc:map-2d-array #'(lambda (m w h) (when (char= seat (aref m h w))
                                   (incf count)))
                   waiting-area)
     count))
@@ -84,7 +84,7 @@
   (funcall (cdr (assoc (aref waiting-area x y) rules)) waiting-area x y))
 
 (defun apply-rules (waiting-area rules)
-  (aoc:map-array #'(lambda (m w h)
+  (aoc:map-2d-array #'(lambda (m w h)
                      (apply-rules-to-cell rules m h w))
                  waiting-area
                  ;; (partial #'apply-rules-to-cell rules)

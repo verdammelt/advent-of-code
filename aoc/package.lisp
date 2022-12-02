@@ -3,7 +3,7 @@
   (:export
    ;; arrays
    #:lists->2d-array
-   #:map-array
+   #:map-2d-array
 
    ;; math
    #:sum
