@@ -4,15 +4,6 @@
 (in-package #:aoc-2020-11)
 (aoc:def-today-suite*)
 
-;; 2d-array utilities
-(defun map-2d-array (matrix fn)
-  (loop with new-matrix = (make-array (array-dimensions matrix) :initial-element #\Null)
-        for h below (array-dimension matrix 0)
-        do (loop for w below (array-dimension matrix 1)
-                 do (setf (aref new-matrix h w)
-                          (funcall fn matrix h w)))
-        finally (return new-matrix)))
-
 (defun valid-coordinate (m x y)
   (and (not (minusp x))
        (not (minusp y))
@@ -35,7 +26,7 @@
                          (mapcar #'(lambda (dir) (look-toward x y dir)) +directions+))))
 
 ;; waiting-area utilities
-(defconstant +nil+ #\Null)
+(defconstant +nil+ nil)
 (defconstant +empty+ #\L)
 (defconstant +occupied+ #\#)
 (defconstant +floor+ #\.)
@@ -53,9 +44,9 @@
 
 (defun count-seats (seat waiting-area)
   (let ((count 0))
-    (map-2d-array waiting-area
-                  #'(lambda (m h w) (when (char= seat (aref m h w))
-                                 (incf count))))
+    (aoc:map-array #'(lambda (m w h) (when (char= seat (aref m h w))
+                                  (incf count)))
+                  waiting-area)
     count))
 
 (defun valid-waiting-area-p (waiting-area)
@@ -93,7 +84,11 @@
   (funcall (cdr (assoc (aref waiting-area x y) rules)) waiting-area x y))
 
 (defun apply-rules (waiting-area rules)
-  (map-2d-array waiting-area (partial #'apply-rules-to-cell rules)))
+  (aoc:map-array #'(lambda (m w h)
+                     (apply-rules-to-cell rules m h w))
+                 waiting-area
+                 ;; (partial #'apply-rules-to-cell rules)
+                 ))
 
 (defun apply-rules-until-fixpoint (waiting-area rules)
   (do* ((old-area waiting-area)
