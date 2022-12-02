@@ -9,7 +9,7 @@
   :pathname "2022"
   :serial t
   :components ((:file "tests")
-               (:file "day01"))
+               (:file "day01") (:file "day02"))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
