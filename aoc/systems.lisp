@@ -7,7 +7,7 @@
 
 (defun load-systems (&key force)
   (dolist (sys (all-systems))
-    (if force (asdf:load-system sys)
+    (if force (asdf:load-system sys :force t)
         (ql:quickload sys))))
 
 (defun test-systems (&key force)

@@ -7,7 +7,6 @@
   :depends-on ("uiop" "cl-ppcre" "split-sequence" "fiveam")
 
   :pathname "aoc"
-  :serial t
   :components ((:file "package")
                (:file "arrays")
                (:file "math")

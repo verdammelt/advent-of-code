@@ -7,9 +7,10 @@
   :depends-on ("aoc")
 
   :pathname "2022"
-  :serial t
-  :components ((:file "tests")
-               (:file "day01") (:file "day02"))
+  :components ((:module "utils" :pathname ""
+                :components ((:file "tests")))
+               (:module "problems" :pathname "" :depends-on ("utils")
+                :components ((:file "day01") (:file "day02"))))
 
   :perform (test-op (o c)
                     (declare (ignore o c))

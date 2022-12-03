@@ -7,14 +7,17 @@
   :depends-on ("aoc" "split-sequence" "fiveam")
 
   :pathname "2020"
-  :serial t
-  :components ((:file "tests") (:file "utils")
-               (:file "day01") (:file "day02") (:file "day03") (:file "day04")
-               (:file "day05") (:file "day06") (:file "day07") (:file "day08")
-               (:file "day09") (:file "day10") (:file "day11") (:file "day12")
-               (:file "day13") (:file "day14") (:file "day15") (:file "day16")
-               (:file "day17") (:file "day18") (:file "day19") (:file "day20")
-               (:file "day22") (:file "day23") (:file "day24"))
+  :components ((:module "utils" :pathname ""
+                :components ((:file "tests") (:file "utils")))
+               (:module "problems" :pathname "" :depends-on ("utils")
+                :components ((:file "day01") (:file "day02") (:file "day03")
+                             (:file "day04") (:file "day05") (:file "day06")
+                             (:file "day07") (:file "day08") (:file "day09")
+                             (:file "day10") (:file "day11") (:file "day12")
+                             (:file "day13") (:file "day14") (:file "day15")
+                             (:file "day16") (:file "day17") (:file "day18")
+                             (:file "day19") (:file "day20") (:file "day22")
+                             (:file "day23") (:file "day24"))))
 
   :perform (test-op (o c)
                     (declare (ignore o c))

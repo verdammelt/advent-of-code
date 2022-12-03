@@ -7,14 +7,12 @@
   :depends-on ("aoc")
 
   :pathname "2019"
-  :serial t
-  :components ((:file "tests")
+  :components ((:module "utils" :pathname ""
+                :components ((:file "tests")))
                (:module "intcode" :pathname ""
                 :serial t
-                :components ((:file "computer")
-                             (:file "computer-tests")))
-               (:module "code" :pathname ""
-                :depends-on ("intcode")
+                :components ((:file "computer") (:file "computer-tests")))
+               (:module "code" :pathname "" :depends-on ("utils" "intcode")
                 :components ((:file "day01") (:file "day02") (:file "day03")
                              (:file "day04") (:file "day05") (:file "day06")
                              (:file "day07") (:file "day08") (:file "day09")
