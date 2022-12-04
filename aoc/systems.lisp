@@ -14,6 +14,13 @@
   (dolist (sys (all-systems))
     (asdf:test-system sys :force force)))
 
+(defun test-system (year &optional day)
+  "Load the system for YEAR and run the tests (for a specific DAY if specified)."
+  (let* ((year-symbol (format nil "aoc-~4,'0D" year))
+         (test-package (string-upcase (format nil "~A/test" year-symbol))))
+    (asdf:load-system year-symbol)
+    (funcall (find-symbol "RUN-TESTS" test-package) day)))
+
 (defun reload-year (year)
   "Reload the system for YEAR. Removes any packages matching AOC-<YEAR>"
   (let* ((prefix (format nil "aoc-~4,'0D" year))

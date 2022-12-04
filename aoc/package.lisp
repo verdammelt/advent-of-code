@@ -20,6 +20,7 @@
    #:reload-year
    #:load-systems
    #:test-systems
+   #:test-system
 
    ;; utils
    #:today-data-pathname
