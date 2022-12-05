@@ -5,17 +5,15 @@
 
 (aoc:def-today-suite*)
 
-(defun keywordize (str) (intern (string-upcase str) :keyword))
-
 (defun make-value (x) x) ;; TODO: remove this
 
 (defun number-or-keyword (str)
   (let ((number (parse-integer str :junk-allowed t)))
-    (or number (keywordize str))))
+    (or number (aoc:keywordize str))))
 
 (defun parse-target (target)
   "TARGET is of the form '> WIRE'. So simply return WIRE as a keyword"
-  (keywordize (subseq target 2)))
+  (aoc:keywordize (subseq target 2)))
 
 (defun parse-input (input)
   "Parse the INPUT string. It could be a single value or a function call in the
@@ -23,13 +21,13 @@ form 'WIRE OP WIRE'"
   (let ((parts (aoc:split-string-on-char #\Space input)))
     (ecase (length parts)
       (1 (make-value (number-or-keyword (first parts))))                   ;; VALUE
-      (2 (list (keywordize (first parts)) (keywordize (second parts)))) ;; NOT
-      (3 (let ((op (keywordize (second parts)))                         ;; OTHER
+      (2 (list (aoc:keywordize (first parts)) (aoc:keywordize (second parts)))) ;; NOT
+      (3 (let ((op (aoc:keywordize (second parts)))                         ;; OTHER
                (args (list (first parts) (third parts))))
            (append (list op) (ecase op
-                               (:lshift (list (keywordize (first args))
+                               (:lshift (list (aoc:keywordize (first args))
                                               (parse-integer (second args))))
-                               (:rshift (list (keywordize (first args))
+                               (:rshift (list (aoc:keywordize (first args))
                                               (parse-integer (second args))))
                                (:and (list (number-or-keyword (first args))
                                            (number-or-keyword (second args))))

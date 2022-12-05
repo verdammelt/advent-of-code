@@ -16,6 +16,9 @@
    #:split-string-on-chars
    #:number-string->list-of-digits
 
+   ;; symbols
+   #:keywordize
+
    ;; systems
    #:reload-year
    #:load-systems

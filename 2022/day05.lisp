@@ -5,8 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun keywordize (str) (intern (string-upcase str) :keyword))
-
 (defun parse-crates (crates)
   (let ((crates-data (reverse (butlast crates)))
         (column-data (first (last crates))))
@@ -23,7 +21,7 @@
 (defun parse-instruction (instruction)
   (let ((parts (aoc:split-string-on-char #\Space instruction)))
     (flet ((number-or-keyword (str) (or (parse-integer str :junk-allowed t)
-                                        (keywordize str))))
+                                        (aoc:keywordize str))))
       (mapcar #'number-or-keyword parts))))
 
 (defun parse-instructions (instructions)

@@ -10,13 +10,12 @@
 CMD VAR or CMD VAR VAR-OR-NUM"
   (destructuring-bind (cmd a &optional b)
       (aoc:split-string-on-char #\Space str)
-    (labels ((keywordize (x) (alexandria:make-keyword (string-upcase x)))
-             (handle-optional-var-or-num (x)
+    (labels ((handle-optional-var-or-num (x)
                (cond ((null x) x)
                      ((ignore-errors (parse-integer x))
                       (parse-integer x))
-                     (t (keywordize x)))))
-      (list (keywordize cmd) (keywordize a) (handle-optional-var-or-num b)))))
+                     (t (aoc:keywordize x)))))
+      (list (aoc:keywordize cmd) (aoc:keywordize a) (handle-optional-var-or-num b)))))
 
 (defun read-data (file)
   (aoc:read-data file :line-parser #'parse-alu-command))

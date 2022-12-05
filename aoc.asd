@@ -11,5 +11,6 @@
                (:file "arrays")
                (:file "math")
                (:file "strings")
+               (:file "symbols")
                (:file "systems")
                (:file "utils")))

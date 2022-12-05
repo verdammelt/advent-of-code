@@ -5,9 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun keywordize (str)
-  (intern (string-upcase str) :keyword))
-
 (defun make-route (from to cost)
   ;; (list from to cost)
   (cons (list from to) cost)
@@ -34,8 +31,8 @@
 
 (defun process-edge-string (str)
   (let ((parts (aoc:split-string-on-char #\Space str)))
-    (make-route (keywordize (first parts))
-                (keywordize (third parts))
+    (make-route (aoc:keywordize (first parts))
+                (aoc:keywordize (third parts))
                 (parse-integer (fifth parts)))))
 
 (defun read-data (file) (aoc:read-data file
