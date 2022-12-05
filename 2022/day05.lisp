@@ -40,6 +40,9 @@
 (defparameter +input+
   (read-data (aoc:today-data-pathname)))
 
+(defparameter +extra+
+  (read-data (aoc:today-data-pathname "extra")))
+
 (defun top-of-stacks (stacks)
   (coerce (mapcar #'first stacks) 'string))
 
@@ -78,7 +81,8 @@ NOTE: can only more one crate at a time."
 
 (5am:def-test part1 (:suite :aoc-2022-05)
   (5am:is (string= "CMZ" (part1 +example+)))
-  (5am:is (string= "BZLVHBWQF" (part1 +input+))))
+  (5am:is (string= "BZLVHBWQF" (part1 +input+)))
+  (5am:is (string= "CHRISTMAS" (part1 +extra+))))
 
 (defun move-many-crates (stacks num from to)
   (let ((stks (copy-tree stacks)))
@@ -101,4 +105,5 @@ NOTE: can move multiple crates at a time"
 
 (5am:def-test part2 (:suite :aoc-2022-05)
   (5am:is (string= "MCD" (part2 +example+)))
-  (5am:is (string= "TDGJQTZSL" (part2 +input+))))
+  (5am:is (string= "TDGJQTZSL" (part2 +input+)))
+  (5am:is (string= "GREETINGS" (part2 +extra+))))
