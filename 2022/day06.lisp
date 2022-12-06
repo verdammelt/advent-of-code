@@ -22,8 +22,10 @@
 (defun find-marker (signal count)
   "A marker is found when COUNT characters of SIGNAL are all different"
   (loop for n below (- (length signal) count)
-        when (all-different-p (subseq signal n (+ n count)))
-          do (return (list (+ count n) (subseq signal n (+ n count)))))  )
+        for end = (+ n count)
+        for window = (subseq signal n end)
+        until (all-different-p window)
+        finally (return  (list end window))))
 
 (defun find-start-of-packet-marker (signal)
   (find-marker signal 4))
