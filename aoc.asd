@@ -8,9 +8,29 @@
 
   :pathname "aoc"
   :components ((:file "package")
-               (:file "arrays")
-               (:file "math")
-               (:file "strings")
-               (:file "symbols")
-               (:file "systems")
-               (:file "utils")))
+               (:module "utils" :pathname "" :depends-on ("package")
+                :components ((:file "arrays")
+                             (:file "math")
+                             (:file "strings")
+                             (:file "symbols")
+                             (:file "systems")
+                             (:file "utils")))
+               (:module "algorithms" :depends-on ("package")
+                :components ((:file "dijkstra"))))
+
+  :in-order-to ((test-op (test-op "aoc/test"))))
+
+(defsystem "aoc/test"
+  :defsystem-depends-on ("fiveam-asdf")
+  :class fiveam-tester-system
+  :depends-on ("fiveam" "aoc")
+
+  :test-package :aoc-tests
+  :test-names (:aoc-tests)
+
+  :pathname "aoc/tests"
+  :components ((module "base" :pathname ""
+                              :components ((:file "package") (:file "suite")))
+               (module "utils")
+               (module "algorithms" :depends-on ("base")
+                       :components ((:file "dijkstra")))))

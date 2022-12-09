@@ -30,4 +30,7 @@
    #:download-puzzle-input
    #:read-data
    #:def-today-suite*
+
+   ;; dijkstra
+   #:dijkstra
    ))
