@@ -9,7 +9,7 @@
 with the results. FN is a function that takes 3 arguments: the ARRAY, the ROW
 coordinate and the COLUMN coordinate."
   (let* ((new-array (make-array (array-dimensions array) :initial-element nil)))
-    (loop for y from 0 below (array-dimension array 0)
-          do (loop for x from 0 below (array-dimension array 1)
-                   do (setf (aref new-array y x) (funcall fn array x y))))
+    (loop for row from 0 below (array-dimension array 0)
+          do (loop for col from 0 below (array-dimension array 1)
+                   do (setf (aref new-array row col) (funcall fn array row col))))
     new-array))
