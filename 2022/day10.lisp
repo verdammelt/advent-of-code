@@ -88,7 +88,7 @@
 
 (defun draw-on-crt (crt output)
   (loop for i below (array-total-size crt)
-        for (_cycle x) = (get-cycle output (1+ i))
+        for (_cycle x) = (get-x-at-cycle output (1+ i))
         when (pixel-on-p (mod i (array-dimension crt 1)) x)
           do (setf (row-major-aref crt i) #\#)))
 

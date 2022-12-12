@@ -145,4 +145,4 @@
 
 (5am:def-test part2 (:suite :aoc-2022-11)
   (5am:is (= 2713310158 (part2 +example+)))
-  (5am:is (= -1 (part2 +input+))))
+  (5am:is (= 25738411485 (part2 +input+))))
