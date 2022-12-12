@@ -20,6 +20,7 @@
 
   :in-order-to ((test-op (test-op "aoc/test"))))
 
+(load-system "fiveam-asdf")
 (defsystem "aoc/test"
   :defsystem-depends-on ("fiveam-asdf")
   :class fiveam-tester-system
