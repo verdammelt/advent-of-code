@@ -5,7 +5,7 @@
 
 (aoc:def-today-suite*)
 
-(defun make-value (x) x) ;; TODO: remove this
+(defun make-value (x) x) ;; TODO: remove this noop function
 
 (defun number-or-keyword (str)
   (let ((number (parse-integer str :junk-allowed t)))
