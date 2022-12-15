@@ -5,8 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun make-value (x) x) ;; TODO: remove this noop function
-
 (defun number-or-keyword (str)
   (let ((number (parse-integer str :junk-allowed t)))
     (or number (aoc:keywordize str))))
@@ -20,7 +18,7 @@
 form 'WIRE OP WIRE'"
   (let ((parts (aoc:split-string-on-char #\Space input)))
     (ecase (length parts)
-      (1 (make-value (number-or-keyword (first parts))))                   ;; VALUE
+      (1 (number-or-keyword (first parts)))                   ;; VALUE
       (2 (list (aoc:keywordize (first parts)) (aoc:keywordize (second parts)))) ;; NOT
       (3 (let ((op (aoc:keywordize (second parts)))                         ;; OTHER
                (args (list (first parts) (third parts))))
@@ -71,7 +69,7 @@ form 'WIRE OP WIRE'"
 (defun dump-circuit (circuit)
   (let ((wires (list)))
     (maphash #'(lambda (k v) (let ((value (if (is-value-p v) (mod v (expt 2 16)) v)))
-                          (push (cons k value) wires))) (wires circuit))
+                               (push (cons k value) wires))) (wires circuit))
     (sort wires #'string< :key #'(lambda (w) (symbol-name (car w))))))
 
 (defun circuit-complete (circuit)
@@ -98,20 +96,20 @@ form 'WIRE OP WIRE'"
 (defmethod resolve ((op (eql :and)) args circuit)
   (let ((values (mapcar #'(lambda (w) (get-value w circuit)) args)))
     (when (every #'is-value-p values)
-      (make-value (apply #'logand values)))))
+      (apply #'logand values))))
 (defmethod resolve ((op (eql :or)) args circuit)
   (let ((values (mapcar #'(lambda (w) (get-value w circuit)) args)))
     (when (every #'is-value-p values)
-      (make-value (apply #'logior values)))))
+      (apply #'logior values))))
 (defmethod resolve ((op (eql :lshift)) args circuit)
   (let ((value (get-value (first args) circuit)))
-    (when value (make-value (ash value (second args))))))
+    (when value (ash value (second args)))))
 (defmethod resolve ((op (eql :rshift)) args circuit)
   (let ((value (get-value (first args) circuit)))
-    (when value (make-value (ash value (* -1 (second args)))))))
+    (when value (ash value (* -1 (second args))))))
 (defmethod resolve ((op (eql :not)) args circuit)
   (let ((value (get-value (first args) circuit)))
-    (when value (make-value (lognot value)))))
+    (when value (lognot value))))
 
 (defun part1 (input &optional (limit nil))
   (do ((circuit (load-circuit (make-instance 'circuit) input))
