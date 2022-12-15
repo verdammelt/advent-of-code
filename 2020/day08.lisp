@@ -48,11 +48,10 @@
 (defun make-machine (tape)
   (make-instance 'machine :tape tape))
 
-;; TODO: isn't this how i do this sort of required argument????
-;; (defmethod initialize-instance :after ((machine machine) &rest initargs &key &allow-other-keys)
-;;   (declare (ignore initargs))
-;;   (unless (slot-boundp machine 'tape)
-;;     (error "MACHINE must be given a TAPE when constructed")))
+(defmethod initialize-instance :after ((machine machine) &rest initargs &key &allow-other-keys)
+  (declare (ignore initargs))
+  (unless (slot-boundp machine 'tape)
+    (error "MACHINE must be given a TAPE when constructed")))
 
 (defmethod print-object ((machine machine) stream)
   (print-unreadable-object (machine stream :type t)
