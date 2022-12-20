@@ -74,16 +74,32 @@ neighbors of NODE"
                (remove-if-not #'(lambda (node) (char= #\a (apply #'get-node graph node)))
                               (all-vertexes graph)))
 
-;; TODO: can it be sped up for +input+? takes ~3 minutes!
+(defun rev-neighbors (graph node)
+  "GRAPH is a 2d array and NODE is a list of (row, col). Evaluates to all valid
+neighbors of NODE (in the 'reverse' order)"
+  (destructuring-bind (row col) node
+    (let ((here (get-node graph row col))
+          (up (list (1- row) col))
+          (down (list (1+ row) col))
+          (left (list row (1- col)))
+          (right (list row (1+ col))))
+      (flet ((valid-neighbor-p (there) (let ((cost (get-cost (apply #'get-node graph there) here)))
+                                         (and cost (< cost 2)))))
+        (remove-if-not #'valid-neighbor-p (list up down left right))))))
+
 (defun part2 (input)
   (multiple-value-bind (_start end map) (extract-start-end input)
     (declare (ignore _start))
-    (do ((starts (all-vertexes-with-a map) (rest starts))
-         (min most-positive-fixnum))
-        ((null starts) min)
-      (let ((length (aoc:dijkstra map (first starts) end #'neighbors #'cost #'all-vertexes)))
-        (when length (setf min (min length min)))))))
+    (multiple-value-bind (dists _prevs)
+        (aoc:dijkstra map end nil #'rev-neighbors #'cost #'all-vertexes)
+      (declare (ignore _prevs))
+
+      (do ((starts (all-vertexes-with-a map) (rest starts))
+           (min most-positive-fixnum))
+          ((null starts) min)
+        (let ((dist (gethash (first starts) dists most-positive-fixnum)))
+          (setf min (min dist min)))))))
 
 (5am:def-test part2 (:suite :aoc-2022-12)
   (5am:is (= 29 (part2 +example+)))
-  (5am:skip "(5am:is (= 345 (part2 +input+))) ;; [2022.12] because it takes ~~3 min"))
+  (5am:is (= 345 (part2 +input+))))
