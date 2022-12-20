@@ -2,7 +2,17 @@
 
 ;; TODO: expand to also be useful to get all paths with their distances from start.
 (defun dijkstra (graph start end neighbors cost all-vertexes)
-  "Find the shortest path between START and END on GRAPH.
+  "Find the shortest path between START and END on GRAPH. If END is NIL then
+find all shortest paths.
+
+What this function returns differs depending on if END is NIL or not.
+
+If END is not NIL the function returns two values 1) the distance from START to END
+and 2) a list which is a path of nodes from START to END.
+
+If END is NIL the function returns two values 1) a hash table mapping nodes to
+their distance from START and 2) a hash-table mapping node to a list which is a
+path of nodes from START to that node.
 
 NEIGHBORS is a function that takes the GRAPH and a node and returns a list of
 nodes accessible on GRAPH from NODE.
@@ -30,11 +40,18 @@ the GRAPH."
              (plus-costs (x y) (if (and x y) (+ x y) nil)))
       (loop while (plusp (length queue))
             for u = (pop-least)
-            when (equalp u end)
-              do (return (values (gethash u dist) (path-to u)))
+            when (equalp u end) do (return)
             do (loop for v in (funcall neighbors graph u)
                      do (let ((alt (plus-costs (gethash u dist)
                                                (funcall cost graph u v))))
                           (when (less-than alt (gethash v dist))
                             (setf (gethash v dist) alt)
-                            (setf (gethash v prev) u))))))))
+                            (setf (gethash v prev) u)))))
+      (if end
+          (values (gethash end dist) (path-to end))
+          (let ((paths (make-hash-table :test #'equalp)))
+            (maphash #'(lambda (node prev-node)
+                         (declare (ignore prev-node))
+                         (setf (gethash node paths) (path-to node)))
+                     prev)
+            (values dist paths))))))
