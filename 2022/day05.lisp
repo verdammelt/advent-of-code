@@ -20,9 +20,7 @@
 
 (defun parse-instruction (instruction)
   (let ((parts (aoc:split-string-on-char #\Space instruction)))
-    (flet ((number-or-keyword (str) (or (parse-integer str :junk-allowed t)
-                                        (aoc:keywordize str))))
-      (mapcar #'number-or-keyword parts))))
+    (mapcar #'aoc:number-or-keyword parts)))
 
 (defun parse-instructions (instructions)
   (mapcar #'parse-instruction instructions))
