@@ -5,10 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun number-or-keyword (str)
-  (let ((number (parse-integer str :junk-allowed t)))
-    (or number (aoc:keywordize str))))
-
 (defun parse-target (target)
   "TARGET is of the form '> WIRE'. So simply return WIRE as a keyword"
   (aoc:keywordize (subseq target 2)))
@@ -18,7 +14,7 @@
 form 'WIRE OP WIRE'"
   (let ((parts (aoc:split-string-on-char #\Space input)))
     (ecase (length parts)
-      (1 (number-or-keyword (first parts)))                   ;; VALUE
+      (1 (aoc:number-or-keyword (first parts)))                   ;; VALUE
       (2 (list (aoc:keywordize (first parts)) (aoc:keywordize (second parts)))) ;; NOT
       (3 (let ((op (aoc:keywordize (second parts)))                         ;; OTHER
                (args (list (first parts) (third parts))))
@@ -27,10 +23,10 @@ form 'WIRE OP WIRE'"
                                               (parse-integer (second args))))
                                (:rshift (list (aoc:keywordize (first args))
                                               (parse-integer (second args))))
-                               (:and (list (number-or-keyword (first args))
-                                           (number-or-keyword (second args))))
-                               (:or (list (number-or-keyword (first args))
-                                          (number-or-keyword (second args)))))))))))
+                               (:and (list (aoc:number-or-keyword (first args))
+                                           (aoc:number-or-keyword (second args))))
+                               (:or (list (aoc:number-or-keyword (first args))
+                                          (aoc:number-or-keyword (second args)))))))))))
 
 (defun parse-connection (str)
   (destructuring-bind (input target) (aoc:split-string-on-char #\- (string-upcase str))

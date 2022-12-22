@@ -30,8 +30,9 @@
   :test-names (:aoc-tests)
 
   :pathname "aoc/tests"
-  :components ((module "base" :pathname ""
+  :components ((:module "base" :pathname ""
                               :components ((:file "package") (:file "suite")))
-               (module "utils")
-               (module "algorithms" :depends-on ("base")
+               (:module "utils" :depends-on ("base")
+                        :components ((:file "symbols")))
+               (:module "algorithms" :depends-on ("base")
                        :components ((:file "dijkstra")))))

@@ -5,10 +5,6 @@
 
 (aoc:def-today-suite*)
 
-(defun number-or-keyword (str)
-  (handler-case (parse-integer str)
-    (error () (aoc:keywordize str))))
-
 (defun make-operation (symbol)
   (ecase symbol
     (:+ #'+)
@@ -25,7 +21,7 @@
 
 (defun parse-monkey (str)
   (apply #'make-monkey
-         (mapcar #'number-or-keyword
+         (mapcar #'aoc:number-or-keyword
                  (aoc:split-string-on-chars '(#\: #\Space) str))))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-monkey))

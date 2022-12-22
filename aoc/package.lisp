@@ -18,6 +18,7 @@
 
    ;; symbols
    #:keywordize
+   #:number-or-keyword
 
    ;; systems
    #:reload-year
