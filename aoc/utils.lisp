@@ -40,9 +40,11 @@ LINE-PARSER to each line and finally POST-PROCESS to all lines before returning.
         (pathname (data-file-pathname year day)))
     (ensure-directories-exist pathname :verbose t)
     (uiop:with-output-file (output pathname :if-exists if-exists :if-does-not-exist :create)
-      (uiop:run-program (format nil "wget -U \"~A\"-q -O - --header \"Cookie: session=~A\" ~A"
-                                *user-agent* *session-cookie* url)
-                        :output output))))
+      (write-string
+       (dex:get url :headers `(("User-Agent" . aoc::*user-agent*)
+                               ("Cookie" . ,(format nil "session=~A" aoc::*session-cookie*))))
+       output))
+    pathname))
 
 (defun current-year-day-keyword ()
   (alexandria:make-keyword (format nil "AOC-~4,'0D-~2,'0D" (current-year) (current-day))))

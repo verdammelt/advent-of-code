@@ -4,7 +4,7 @@
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("uiop" "cl-ppcre" "split-sequence" "fiveam")
+  :depends-on ("uiop" "cl-ppcre" "split-sequence" "dexador" "fiveam")
 
   :pathname "aoc"
   :components ((:file "package")
