@@ -31,8 +31,7 @@
 (defun parse-fold (fold)
   (destructuring-bind (label (axis idx)) fold
     (declare (ignore label))
-      (list (alexandria:make-keyword (string-upcase axis))
-            (parse-integer idx))))
+    (list (aoc:keywordize axis) (parse-integer idx))))
 
 (defun collate-data (data)
   (destructuring-bind (coords folds) (split-sequence:split-sequence nil data)

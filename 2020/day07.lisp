@@ -12,7 +12,7 @@
           (cl-ppcre:all-matches-as-strings +bag-regexp+ input)))
 
 (defun make-bag (desc)
-  (alexandria:make-keyword (string-upcase (substitute #\- #\Space desc))))
+  (aoc:keywordize (substitute #\- #\Space desc)))
 
 (defun parse-bag-amount (desc)
   (let ((amount (elt desc 0))

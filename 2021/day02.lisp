@@ -8,7 +8,7 @@
 (defun parse-command (line)
   (destructuring-bind (command-string number)
       (aoc:split-string-on-char #\Space line)
-    (list (alexandria:make-keyword (string-upcase command-string))
+    (list (aoc:keywordize command-string)
           (parse-integer number))))
 
 (defun read-data (file)

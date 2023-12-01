@@ -10,7 +10,7 @@
     (destructuring-bind (command from through to)
         (if (string= "TURN" (car instr)) (cdr instr) instr)
       (declare (ignore through))
-      (list (alexandria:make-keyword command)
+      (list (aoc:keywordize command)
             (mapcar #'parse-integer (aoc:split-string-on-char #\, from))
             (mapcar #'parse-integer (aoc:split-string-on-char #\, to))))))
 

@@ -7,7 +7,7 @@
 
 (defun parse-op (line)
   (let ((op-and-offset (aoc:split-string-on-char #\Space line)))
-    (cons (alexandria:make-keyword (string-upcase (first op-and-offset)))
+    (cons (aoc:keywordize (first op-and-offset))
           (parse-integer (second op-and-offset)))))
 
 (defun list->vector (ops)
