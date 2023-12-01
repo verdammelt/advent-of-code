@@ -38,7 +38,10 @@ the MAP returns MOST-POSITIVE-FIXNUM."
   (read-data (aoc:today-data-pathname)))
 
 (defun find-low-points (map)
-  (let ((low-point-map (aoc:map-2d-array #'smaller-than-neighbors-p map)))
+  (let ((low-point-map
+          (aoc:map-2d-array
+           #'(lambda (array row col) (smaller-than-neighbors-p array col row))
+           map)))
     (loop
           for x below (array-dimension map 1)
           append (loop for y below (array-dimension map 0)

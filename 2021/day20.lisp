@@ -59,7 +59,7 @@
   (flet ((lookup (array x y)
            (let ((enhance-idx (neighbors-to-number (9-neighbors array x y default))))
              (enhance-lookup enhance enhance-idx))))
-    (aoc:map-2d-array #'lookup (enlarge-image image default))))
+    (aoc:map-2d-array #'(lambda (array row col) (lookup array col row)) (enlarge-image image default))))
 
 (defun 2darray->strings (array)
   (loop for y from 0 below (array-dimension array 0)
