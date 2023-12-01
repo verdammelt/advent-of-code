@@ -85,6 +85,7 @@
   (declare (ignore input)) 0
 )
 
+;; TODO: complete 2021-14.2
 (5am:def-test part2 (:suite :aoc-2021-14)
   (5am:skip ":aoc-2021-14.2 not implemented")
   ;; (5am:is (= -1 (part2 +example+)))

@@ -96,6 +96,7 @@
 (defun part2 (input)
   (perform-reboot-commands input (make-hash-table :test #'equal)))
 
+;; TODO: complete 2021-22.2
 (5am:def-test part2 (:suite :aoc-2021-22)
   (5am:skip ":aoc-2021-22.2 not implemented")
   ;; (5am:is (= -1 (part2 +example+)))

@@ -191,6 +191,7 @@ be in reverse order with latest move first.")
 
 (defun part2 (input) (declare (ignore input)) 0)
 
+;; TODO: complete 2022-22.2
 (5am:def-test part2 (:suite :aoc-2022-22)
   (5am:skip ":aoc-2022-22.2 not implemented")
   ;; (5am:is (= -1 (part2 +input+)))

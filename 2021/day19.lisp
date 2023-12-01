@@ -67,6 +67,7 @@
 
 (defun part1 (input) (declare (ignore input)) 0)
 
+;; TODO: complete 2021-19.1
 (5am:def-test part1 (:suite :aoc-2021-19)
   (5am:skip ":aoc-2021-19.1 not implemented")
   ;; (5am:is (= -1 (part1 +example+)))
@@ -75,6 +76,7 @@
 
 (defun part2 (input) (declare (ignore input)) 0)
 
+;; TODO: complete 2021-19.2
 (5am:def-test part2 (:suite :aoc-2021-19)
   (5am:skip ":aoc-2021-19.2 not implemented")
   ;; (5am:is (= -1 (part2 +example+)))

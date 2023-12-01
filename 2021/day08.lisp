@@ -89,6 +89,7 @@
 
 ;; (defun part2 (input) :to-be-implemented)
 
+; TODO: complete 2021-08.2
 (5am:def-test part2 (:suite :aoc-2021-08)
   (5am:skip ":aoc-2021-08.2 not implemented")
   ;; (5am:is (= :answer (part2 +example+)))
