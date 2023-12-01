@@ -10,7 +10,7 @@
   :components ((:module "utils" :pathname ""
                 :components ((:file "tests")))
                (:module "problems" :pathname "" :depends-on ("utils")
-                :components ()))
+                :components ((:file "day01"))))
 
   :perform (test-op (o c)
                     (declare (ignore o c))
