@@ -119,8 +119,10 @@
 (defun part1 (input) (declare (ignore input)) 0)
 
 (5am:def-test part1 (:suite :aoc-2022-23)
-  (5am:is (= -1 (part1 +example+)))
-  (5am:is (= -1 (part1 +input+))))
+  (5am:skip ":aoc-2022-23.1 not implemented")
+  ;; (5am:is (= -1 (part1 +example+)))
+  ;; (5am:is (= -1 (part1 +input+)))
+  )
 
 (defun part2 (input) (declare (ignore input)) 0)
 
