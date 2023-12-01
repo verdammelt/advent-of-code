@@ -31,6 +31,7 @@
    #:download-puzzle-input
    #:read-data
    #:def-today-suite*
+   #:run-tests
 
    ;; dijkstra
    #:dijkstra

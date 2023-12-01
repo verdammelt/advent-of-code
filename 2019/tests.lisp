@@ -7,4 +7,4 @@
 (def-suite :aoc-2019)
 
 (defun run-tests (&optional day)
-  (run! (alexandria:make-keyword (format nil "AOC-2019~@[-~2,'0D~]" day))))
+  (aoc:run-tests 2019 day))

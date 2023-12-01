@@ -46,11 +46,12 @@ LINE-PARSER to each line and finally POST-PROCESS to all lines before returning.
        output))
     pathname))
 
-(defun current-year-day-keyword ()
-  (alexandria:make-keyword (format nil "AOC-~4,'0D-~2,'0D" (current-year) (current-day))))
-
-(defun current-year-keyword ()
-  (alexandria:make-keyword (format nil "AOC-~4,'0D" (current-year))))
+(defun year-day-keyword (year &optional day)
+  (keywordize (format nil "AOC-~4,'0D~@[-~2,'0D~]" year day)))
 
 (defmacro def-today-suite* ()
-  `(5am:def-suite* ,(current-year-day-keyword) :in ,(current-year-keyword)))
+  `(5am:def-suite* ,(year-day-keyword (current-year) (current-day))
+     :in ,(year-day-keyword (current-year))))
+
+(defun run-tests (year &optional day)
+  (5am:run! (year-day-keyword year day)))

@@ -10,6 +10,7 @@
     (if force (asdf:load-system sys :force t)
         (ql:quickload sys))))
 
+;; FIXME: does not stop or fail if there are test failures!
 (defun test-systems (&key force)
   (dolist (sys (all-systems))
     (asdf:test-system sys :force force)))
