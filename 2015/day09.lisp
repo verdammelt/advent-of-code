@@ -6,28 +6,17 @@
 (aoc:def-today-suite*)
 
 (defun make-route (from to cost)
-  ;; (list from to cost)
-  (cons (list from to) cost)
-  )
+  (cons (list from to) cost))
 
 (defun lookup-route (from to routes)
-  ;; (find-if #'(lambda (r) (or (and (eq from (first r))
-  ;;                            (eq to (second r)))
-  ;;                       (and (eq to (first r)) ;; should set up routes so this is not needed
-  ;;                            (eq from (second r)))))
-  ;;          routes)
   (or (assoc (list from to) routes :test #'equal)
       (assoc (list to from) routes :test #'equal)))
 
 (defun route-cost (route)
-  ;; (third route)
-  (cdr route)
-  )
+  (cdr route))
 
 (defun cities-in-route (route)
-  ;; (list (first route) (second route))
-  (car route)
-  )
+  (car route))
 
 (defun process-edge-string (str)
   (let ((parts (aoc:split-string-on-char #\Space str)))
@@ -54,8 +43,8 @@
   (cond ((null list) nil)
         ((null (cdr list)) (list list))
         (t (loop for element in list
-             append (mapcar (lambda (l) (cons element l))
-                            (all-permutations (remove element list)))))))
+                 append (mapcar (lambda (l) (cons element l))
+                                (all-permutations (remove element list)))))))
 
 (defun cost-lookup (from to routes)
   (if (or (null from) (null to)) 0
