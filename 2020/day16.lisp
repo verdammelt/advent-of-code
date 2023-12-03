@@ -49,7 +49,7 @@
 
 (defun part1 (input)
   (reduce #'+
-          (flatten
+          (aoc:flatten
            (mapcar (partial #'ticket-invalid-values (input-fields input))
                    (input-nearby-tickets input)))))
 

@@ -2,8 +2,7 @@
   (:use :cl)
   (:export :join-strings
            :combo-pairs
-           :partial :rpartial
-           :flatten))
+           :partial :rpartial))
 
 (in-package #:aoc-2020/utils)
 
@@ -26,6 +25,3 @@
   "Same as PARTIAL but args are in reverse order and appended to later ARGS"
   (lambda (&rest other-args)
     (apply fn (append other-args (reverse args)))))
-
-(defun flatten (list-of-lists)
-  (apply #'concatenate 'list list-of-lists))

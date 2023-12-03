@@ -9,6 +9,9 @@
    #:sum
    #:product
 
+   ;; sequences
+   #:flatten
+
    ;; strings
    #:empty-string-p
    #:split-lines-on-empty-line

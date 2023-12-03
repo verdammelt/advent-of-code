@@ -69,7 +69,7 @@
       ((>= d (length coord)) (remove coord neighbors :test #'equal))
     (let ((new (make-list (length offsets) :initial-element neighbors))
           (dim-list (make-list (length offsets) :initial-element d)))
-      (setf neighbors (flatten
+      (setf neighbors (aoc:flatten
                        (mapcar #'apply-offset-to-coords
                                offsets
                                dim-list

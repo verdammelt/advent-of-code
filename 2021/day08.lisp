@@ -70,14 +70,11 @@
     (8 . 7)
     (9 . 6)))
 
-(defun flatten (lists)
-  (apply #'append lists))
-
 ;; we only care about 1, 4, 7, 8 which have unique counts of segments. Since we
 ;; only care about how many of these there are we can just count the items with
 ;; the correct lengths!
 (defun part1 (input)
-  (let ((all-outputs (flatten (mapcar #'output-values input)))
+  (let ((all-outputs (aoc:flatten (mapcar #'output-values input)))
         (important-digits '(1 4 7 8)))
     (count-if #'(lambda (d) (member (car (rassoc (length d) +digit-num-segments+))
                                important-digits))

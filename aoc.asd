@@ -11,6 +11,7 @@
                (:module "utils" :pathname "" :depends-on ("package")
                 :components ((:file "arrays")
                              (:file "math")
+                             (:file "sequences")
                              (:file "strings")
                              (:file "symbols")
                              (:file "systems")
@@ -31,7 +32,7 @@
 
   :pathname "aoc/tests"
   :components ((:module "base" :pathname ""
-                              :components ((:file "package") (:file "suite")))
+                :components ((:file "package") (:file "suite")))
                (:module "utils" :depends-on ("base")
                         :components ((:file "symbols")))
                (:module "algorithms" :depends-on ("base")
