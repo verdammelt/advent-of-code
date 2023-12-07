@@ -56,7 +56,7 @@ two coordinates."
 (defun make-cave-map (lines)
   (let ((cave (make-hash-table :test #'equal)))
     (setf (get-feature cave (list 500 0)) :source)
-    (loop for l in (apply #'append lines)
+    (loop for l in (aoc:flatten lines)
           do (create-wall cave l))
     cave))
 

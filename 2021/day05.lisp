@@ -62,7 +62,7 @@ and y values of [-1, 0, 1]."
 
 (defun group-points (lines)
   "Produce a hashtable of POINT->NUMBER where NUMBER is the count of LINES that contain that point."
-  (let ((all-points (apply #'concatenate 'list (mapcar #'all-points-in-line lines))))
+  (let ((all-points (aoc:flatten (mapcar #'all-points-in-line lines))))
     (reduce #'(lambda (h p) (incf (gethash p h 0)) h)
             all-points
             :initial-value (make-hash-table :test #'equal))))

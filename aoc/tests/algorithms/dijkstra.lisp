@@ -15,7 +15,7 @@
     ((:e :f) . 9)))
 
 (defun neighbors-of (edges v)
-  (apply #'append (mapcar #'cdar (remove-if-not #'(lambda (edge) (eq (caar edge) v)) edges))))
+  (aoc:flatten (mapcar #'cdar (remove-if-not #'(lambda (edge) (eq (caar edge) v)) edges))))
 
 (defun edge-cost (edges u v)
   (let ((cost (cdr (assoc (list u v) edges :test #'equalp))))

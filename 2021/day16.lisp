@@ -158,8 +158,9 @@
 (defmethod packet-versions ((packet packet))
   (list (packet-version packet)))
 (defmethod packet-versions ((packet operator))
-  (apply #'append (list (packet-version packet))
-        (mapcar #'packet-versions (packet-operands packet))))
+  (apply #'append
+         (list (packet-version packet))
+         (mapcar #'packet-versions (packet-operands packet))))
 
 (defun part1 (input)
   (let* ((packet (read-packet input 0))

@@ -23,7 +23,7 @@
 
 (defun unmarked-numbers (board)
   (let ((columns (bingo-board-columns board)))
-    (remove nil (apply #'concatenate 'list columns))))
+    (remove nil (aoc:flatten columns))))
 
 (defun transpose (columns)
   (loop for i below (length (first columns))

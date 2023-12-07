@@ -56,7 +56,7 @@
 (defun compute-message (signal-data
                         &key (forced-offset nil) (repeat-count 10000))
   (let* ((offset (or forced-offset (get-message-offset signal-data)))
-         (full-signal (apply #'append (repeat repeat-count signal-data)))
+         (full-signal (aoc:flatten (repeat repeat-count signal-data)))
          (100th-phase (run-n-phases full-signal 100))
          (message (subseq 100th-phase offset (+ offset 8))))
     (parse-integer (write-signal message nil))))

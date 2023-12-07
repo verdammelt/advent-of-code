@@ -34,7 +34,7 @@ may return a list with duplicate items)"
 
 (defun part1 (rucksacks)
   (aoc:sum (mapcar #'priority
-                   (apply #'concatenate 'list
+                   (aoc:flatten
                           (mapcar #'in-both-compartments rucksacks)))))
 
 (5am:def-test part1 (:suite :aoc-2022-03)
@@ -49,7 +49,7 @@ may return a list with duplicate items)"
 
 (defun part2 (input)
   (aoc:sum (mapcar #'priority
-                   (apply #'concatenate 'list
+                   (aoc:flatten
                           (mapcar #'group-token (by-3s input))))))
 
 (5am:def-test part2 (:suite :aoc-2022-03)

@@ -7,7 +7,7 @@
 
 ;;; ---------- coordinates (x, y, z) ----------
 (defun make-coord (coords)
-  (apply #'append coords))
+  (aoc:flatten coords))
 (defun make-zero-coord ()
   (make-coord '((:x 0) (:y 0) (:z 0))))
 (defun coord-x (coord) (getf coord :x))

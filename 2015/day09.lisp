@@ -35,7 +35,7 @@
   (read-data (aoc:today-data-pathname)))
 
 (defun cities (routes)
-  (remove-duplicates (apply #'append (mapcar #'cities-in-route routes))))
+  (remove-duplicates (aoc:flatten (mapcar #'cities-in-route routes))))
 
 (defun all-permutations (list)
   "Return permutations of LIST
