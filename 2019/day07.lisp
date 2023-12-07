@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun csv->number-list (str)
-  (aoc:string-of-numbers->list-of-numbers str #\,))
+  (aoc:string-of-numbers->list-of-numbers str :delimiters #\,))
 
 (defparameter *amplifier-controller-software*
   (csv->number-list (first (aoc:read-data (aoc:today-data-pathname)))))

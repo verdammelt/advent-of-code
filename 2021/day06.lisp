@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-lanternfish-ages (str)
-  (aoc:string-of-numbers->list-of-numbers str #\,))
+  (aoc:string-of-numbers->list-of-numbers str :delimiters #\,))
 
 (defun read-data (file) (aoc:read-data file
                                        :line-parser #'parse-lanternfish-ages

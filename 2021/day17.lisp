@@ -7,8 +7,8 @@
 
 (defun parse-target-coords (s)
   (let ((coords
-          (remove nil (mapcar #'(lambda (s) (parse-integer s :junk-allowed t))
-                              (aoc:split-string-on-chars '(#\Space #\= #\. #\,) s)))))
+          (remove nil (aoc:string-of-numbers->list-of-numbers
+                       s :delimiters '(#\Space #\= #\. #\,) :junk-allowed t))))
     (pairlis '(:min-x :max-x :min-y :max-y) coords)))
 
 (defun min-x (target) (cdr (assoc :min-x target)))

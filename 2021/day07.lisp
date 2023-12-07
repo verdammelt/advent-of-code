@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-crab-data (data)
-  (aoc:string-of-numbers->list-of-numbers data #\,))
+  (aoc:string-of-numbers->list-of-numbers data :delimiters #\,))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-crab-data
                                        :post-process #'first))

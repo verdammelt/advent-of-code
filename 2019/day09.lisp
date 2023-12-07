@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun csv->numbers (csv)
-  (aoc:string-of-numbers->list-of-numbers csv #\,))
+  (aoc:string-of-numbers->list-of-numbers csv :delimiters #\,))
 
 (defparameter *test-programs*
     (list
@@ -21,7 +21,7 @@
 (defparameter *boost-program*
   (aoc:string-of-numbers->list-of-numbers
    (first (aoc:read-data (aoc:today-data-pathname)))
-   #\,))
+   :delimiters #\,))
 
 (defun boost (&optional (program *boost-program*) (input "1"))
   (string-trim '(#\Space)

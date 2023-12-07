@@ -11,7 +11,7 @@
         (t (error "Unknown reboot command ~S" cmd))))
 
 (defun parse-range (range-str)
-  (aoc:string-of-numbers->list-of-numbers range-str #\.))
+  (aoc:string-of-numbers->list-of-numbers range-str :delimiters #\.))
 
 (defun parse-coordinates (x-range y-range z-range)
   (loop for x from (first x-range) to (second x-range)

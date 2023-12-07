@@ -19,7 +19,7 @@
 (defun field-description (f) (third f))
 
 (defun parse-ticket (str)
-  (aoc:string-of-numbers->list-of-numbers str #\,))
+  (aoc:string-of-numbers->list-of-numbers str :delimiters #\,))
 
 (defun parse-input (lines)
   (destructuring-bind (field-ranges your-ticket nearby-tickets)

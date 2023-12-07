@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-line (line)
-  (aoc:string-of-numbers->list-of-numbers line #\x))
+  (aoc:string-of-numbers->list-of-numbers line :delimiters #\x))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-line))
 

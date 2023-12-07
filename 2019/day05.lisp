@@ -31,8 +31,7 @@
                             (with-output-to-string (output)
                               (with-input-from-string (input "1")
                                 (computer:compute *program-input* :input-stream input
-                                                                  :output-stream output))))
-               #\Space))))
+                                                                  :output-stream output))))))))
 
 (5am:def-test part1 (:suite :aoc-2019-05)
   (5am:is (= 7988899 (day5-part1))))

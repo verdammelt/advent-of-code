@@ -6,7 +6,9 @@
 (aoc:def-today-suite*)
 
 (defun read-input (file)
-  (aoc:string-of-numbers->list-of-numbers (car (aoc:read-data file)) #\,))
+  (aoc:string-of-numbers->list-of-numbers
+   (car (aoc:read-data file))
+   :delimiters #\,))
 
 (defun modify-memory (memory one-two)
   (setf (subseq memory 1 3) one-two)

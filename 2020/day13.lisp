@@ -9,8 +9,8 @@
   (destructuring-bind (target bus-ids) lines
     (list :target (parse-integer target)
           :bus-ids
-          (let ((ids (mapcar #'(lambda (s) (parse-integer s :junk-allowed t))
-                             (aoc:split-string-on-char #\, bus-ids))))
+          (let ((ids (aoc:string-of-numbers->list-of-numbers
+                      bus-ids :delimiters #\, :junk-allowed t)))
             (loop  for id in ids
                    for idx below (length ids)
                    when id collect (list id idx))))))

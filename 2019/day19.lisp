@@ -7,7 +7,8 @@
 
 (defun load-program (file)
   (aoc:string-of-numbers->list-of-numbers
-   (car (aoc:read-data file)) #\,))
+   (car (aoc:read-data file))
+   :delimiters #\,))
 
 (defun check-xy (program x y)
   (with-output-to-string (output)

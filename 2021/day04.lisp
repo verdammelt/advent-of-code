@@ -30,12 +30,12 @@
         collect (mapcar #'(lambda (col) (nth i col)) columns)))
 
 (defun parse-board (raw-board-data)
-  (let* ((columns (mapcar #'(lambda (s) (aoc:string-of-numbers->list-of-numbers s #\Space)) raw-board-data))
+  (let* ((columns (mapcar #'(lambda (s) (aoc:string-of-numbers->list-of-numbers s)) raw-board-data))
          (rows (transpose columns)))
     (make-bingo-board :columns columns :rows rows)))
 
 (defun parse-bingo-subsystem (raw-data)
-  (let ((numbers (aoc:string-of-numbers->list-of-numbers (caar raw-data) #\,))
+  (let ((numbers (aoc:string-of-numbers->list-of-numbers (caar raw-data) :delimiters #\,))
         (boards (mapcar #'parse-board (rest raw-data))))
     (make-bingo-subsytem :numbers numbers :boards boards)))
 

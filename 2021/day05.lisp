@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-point (str)
-  (aoc:string-of-numbers->list-of-numbers str #\,))
+  (aoc:string-of-numbers->list-of-numbers str :delimiters #\,))
 
 (defun make-point (x y) (list x y))
 (defun point-x (point) (first point))

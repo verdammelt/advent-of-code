@@ -8,7 +8,7 @@
 (defparameter *program*
   (aoc:string-of-numbers->list-of-numbers
    (first (aoc:read-data (aoc:today-data-pathname)))
-   #\,))
+   :delimiters #\,))
 
 (defun make-point (x y) (cons x y))
 (defun x (point) (car point))

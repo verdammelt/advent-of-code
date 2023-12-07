@@ -12,7 +12,7 @@
          ((and (> (length line) fold-prefix-len)
                (string= line fold-prefix :end1 fold-prefix-len))
           (list :fold (aoc:split-string-on-char #\= (subseq line fold-prefix-len))))
-         (t (aoc:string-of-numbers->list-of-numbers line #\,)))))
+         (t (aoc:string-of-numbers->list-of-numbers line :delimiters #\,)))))
 
 (defun get-max-coords (coords)
   (loop for c in coords

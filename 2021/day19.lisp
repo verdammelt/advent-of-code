@@ -9,7 +9,7 @@
   (if (or (aoc:empty-string-p l)
           (string= "---" l :end2 3))
       ""
-      (aoc:string-of-numbers->list-of-numbers l #\,)))
+      (aoc:string-of-numbers->list-of-numbers l :delimiters #\,)))
 
 (defun make-coord (x y z) (list x y z))
 (defun offset-coord (coord offset)

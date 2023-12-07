@@ -9,7 +9,7 @@
   (destructuring-bind (range character password)
       (aoc:split-string-on-char #\Space line)
     (list password
-          (list (aoc:string-of-numbers->list-of-numbers range #\-)
+          (list (aoc:string-of-numbers->list-of-numbers range :delimiters #\-)
                 (char character 0)))))
 
 (defparameter +data-set+
