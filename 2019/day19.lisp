@@ -6,8 +6,8 @@
 (aoc:def-today-suite*)
 
 (defun load-program (file)
-  (mapcar #'parse-integer
-          (aoc:split-string-on-char #\, (car (aoc:read-data file)))))
+  (aoc:string-of-numbers->list-of-numbers
+   (car (aoc:read-data file)) #\,))
 
 (defun check-xy (program x y)
   (with-output-to-string (output)

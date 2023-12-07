@@ -11,8 +11,8 @@
         (if (string= "TURN" (car instr)) (cdr instr) instr)
       (declare (ignore through))
       (list (aoc:keywordize command)
-            (mapcar #'parse-integer (aoc:split-string-on-char #\, from))
-            (mapcar #'parse-integer (aoc:split-string-on-char #\, to))))))
+            (aoc:string-of-numbers->list-of-numbers from #\,)
+            (aoc:string-of-numbers->list-of-numbers to #\,)))))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-instruction))
 

@@ -26,14 +26,13 @@
 (defun day5-part1 ()
   (first
    (remove-if #'zerop
-              (mapcar #'parse-integer
-                      (aoc:split-string-on-char
-                       #\Space
-                       (string-trim '(#\Space)
-                                    (with-output-to-string (output)
-                                      (with-input-from-string (input "1")
-                                        (computer:compute *program-input* :input-stream input
-                                                                          :output-stream output)))))))))
+              (aoc:string-of-numbers->list-of-numbers
+               (string-trim '(#\Space)
+                            (with-output-to-string (output)
+                              (with-input-from-string (input "1")
+                                (computer:compute *program-input* :input-stream input
+                                                                  :output-stream output))))
+               #\Space))))
 
 (5am:def-test part1 (:suite :aoc-2019-05)
   (5am:is (= 7988899 (day5-part1))))

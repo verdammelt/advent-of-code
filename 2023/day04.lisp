@@ -9,14 +9,11 @@
 (defun card-winning-numbers (card) (second card))
 (defun card-your-numbers (card) (third card))
 
-(defun string-of-numbers->list-of-numbers (str &optional (delimiter #\Space))
-  (mapcar #'parse-integer (aoc:split-string-on-char delimiter str)))
-
 (defun parse-scratch-card (str)
   (let ((raw-card (aoc:split-string-on-chars '(#\: #\|) str)))
     (list (parse-integer (subseq (first raw-card) (length "card")))
-          (string-of-numbers->list-of-numbers (second raw-card))
-          (string-of-numbers->list-of-numbers (third raw-card)))))
+          (aoc:string-of-numbers->list-of-numbers (second raw-card))
+          (aoc:string-of-numbers->list-of-numbers (third raw-card)))))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-scratch-card))
 

@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun parse-line (line)
-  (mapcar #'parse-integer (aoc:split-string-on-char #\x line)))
+  (aoc:string-of-numbers->list-of-numbers line #\x))
 
 (defun read-data (file) (aoc:read-data file :line-parser #'parse-line))
 

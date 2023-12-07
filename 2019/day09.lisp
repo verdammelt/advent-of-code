@@ -6,7 +6,7 @@
 (aoc:def-today-suite*)
 
 (defun csv->numbers (csv)
-  (mapcar #'parse-integer (aoc:split-string-on-char #\, csv)))
+  (aoc:string-of-numbers->list-of-numbers csv #\,))
 
 (defparameter *test-programs*
     (list
@@ -19,10 +19,9 @@
            :expected #'(lambda (actual) (5am:is (string= "1125899906842624" actual))))))
 
 (defparameter *boost-program*
-  (mapcar #'parse-integer
-          (aoc:split-string-on-char
-           #\,
-           (first (aoc:read-data (aoc:today-data-pathname))))))
+  (aoc:string-of-numbers->list-of-numbers
+   (first (aoc:read-data (aoc:today-data-pathname)))
+   #\,))
 
 (defun boost (&optional (program *boost-program*) (input "1"))
   (string-trim '(#\Space)

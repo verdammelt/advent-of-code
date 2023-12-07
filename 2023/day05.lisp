@@ -5,16 +5,12 @@
 
 (aoc:def-today-suite*)
 
-;; FIXME: push out to AOC - add start/end parameters too.
-(defun string-of-numbers->list-of-numbers (str &optional (delimiter #\Space))
-  (mapcar #'parse-integer (aoc:split-string-on-char delimiter str)))
-
 (defun parse-map (raw-map)
   "RAW-MAP is in the form (\"SRC-to-DEST-map: \" MAP-ROW+)
 MAP-ROW is a list of three integers: DEST-START SRC-START RANGE-lENGTH."
   (destructuring-bind (name &rest rows) raw-map
     (let ((parsed-name (aoc:split-string-on-chars '(#\Space #\-) name))
-          (parsed-rows (mapcar #'string-of-numbers->list-of-numbers rows)))
+          (parsed-rows (mapcar #'aoc:string-of-numbers->list-of-numbers rows)))
         `(:from ,(aoc:keywordize (first parsed-name))
           :to ,(aoc:keywordize (third parsed-name))
           :map ,(mapcar #'(lambda (row)
@@ -44,7 +40,7 @@ MAP-ROW is a list of three integers: DEST-START SRC-START RANGE-lENGTH."
 (defun parse-almanac (lines)
   "The LINES are ((SEED-DATA) MAP-DATA+)"
   (destructuring-bind ((seeds) &rest maps) (aoc:split-lines-on-empty-line lines)
-    `(:seeds ,(string-of-numbers->list-of-numbers (subseq seeds (length "seeds: ")))
+    `(:seeds ,(aoc:string-of-numbers->list-of-numbers (subseq seeds (length "seeds: ")))
              :maps ,(mapcar #'parse-map maps))))
 
 (defun almanac-seeds (almanac) (getf almanac :seeds))

@@ -34,9 +34,7 @@
     (abs (- x1 x2))))
 
 (defun parse-numbers-from-lines (lines)
-  (mapcar
-   #'(lambda (line) (mapcar #'parse-integer (aoc:split-string-on-char #\Space line)))
-   lines))
+  (mapcar #'aoc:string-of-numbers->list-of-numbers lines))
 
 (defun part1 (input)
   (aoc:product (apply #'mapcar #'number-of-ways-to-beat-record

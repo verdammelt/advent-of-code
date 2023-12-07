@@ -6,10 +6,9 @@
 (aoc:def-today-suite*)
 
 (defparameter *program*
-  (mapcar #'parse-integer
-          (aoc:split-string-on-char
-           #\,
-           (first (aoc:read-data (aoc:today-data-pathname))))))
+  (aoc:string-of-numbers->list-of-numbers
+   (first (aoc:read-data (aoc:today-data-pathname)))
+   #\,))
 
 (defun make-point (x y) (cons x y))
 (defun x (point) (car point))

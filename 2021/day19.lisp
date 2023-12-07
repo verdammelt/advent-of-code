@@ -9,7 +9,7 @@
   (if (or (aoc:empty-string-p l)
           (string= "---" l :end2 3))
       ""
-      (mapcar #'parse-integer (aoc:split-string-on-char #\, l))))
+      (aoc:string-of-numbers->list-of-numbers l #\,)))
 
 (defun make-coord (x y z) (list x y z))
 (defun offset-coord (coord offset)

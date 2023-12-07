@@ -16,3 +16,8 @@
 (defun number-string->list-of-digits (str)
   "/e.g/ \"1234\" -> '(1 2 3 4)"
   (map 'list #'digit-char-p str))
+
+;; TODO: add ability to ignore junk when parsing and to take a collection of delimeters
+(defun string-of-numbers->list-of-numbers (str &optional (delimiter #\Space))
+  "STR is a string containing numbers delimited by DELIMITER"
+  (mapcar #'parse-integer (aoc:split-string-on-char delimiter str)))

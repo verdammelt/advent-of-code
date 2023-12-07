@@ -8,7 +8,7 @@
 ;;; TODO: perhaps time for a COORD/POINT abstraction?
 (defun parse-coord (str)
   "Parse STR (assumed form: \"X,Y\") into a list of x, y."
-  (mapcar #'parse-integer (aoc:split-string-on-char #\, str)))
+  (aoc:string-of-numbers->list-of-numbers str #\,))
 
 (defun parse-line-segments (coords)
   "Pairs up the coordinates in COORDS to produce line segments which are a list of

@@ -18,6 +18,7 @@
    #:split-string-on-char
    #:split-string-on-chars
    #:number-string->list-of-digits
+   #:string-of-numbers->list-of-numbers
 
    ;; symbols
    #:keywordize
