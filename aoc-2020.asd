@@ -1,11 +1,16 @@
+(load-system "fiveam-asdf")
 (defsystem "aoc-2020"
   :description ""
   :version "0.0.0"
   :author "Mark Simpson"
   :mailto "verdammelt@gmail.com"
 
-  :depends-on ("aoc" "split-sequence" "fiveam")
+  :defsystem-depends-on ("fiveam-asdf")
+  :class fiveam-tester-system
+  :test-package :keyword
+  :test-names (:aoc-2020)
 
+  :depends-on ("aoc" "split-sequence")
   :pathname "2020"
   :components ((:module "utils" :pathname ""
                 :components ((:file "tests") (:file "utils")))
@@ -17,8 +22,4 @@
                              (:file "day13") (:file "day14") (:file "day15")
                              (:file "day16") (:file "day17") (:file "day18")
                              (:file "day19") (:file "day20") (:file "day22")
-                             (:file "day23") (:file "day24"))))
-
-  :perform (test-op (o c)
-                    (declare (ignore o c))
-                    (uiop:symbol-call '#:aoc-2020/test '#:run-tests)))
+                             (:file "day23") (:file "day24")))))

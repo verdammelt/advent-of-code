@@ -10,17 +10,18 @@
     (if force (asdf:load-system sys :force t)
         (ql:quickload sys))))
 
-;; FIXME: does not stop or fail if there are test failures!
 (defun test-systems (&key force)
   (dolist (sys (all-systems))
     (asdf:test-system sys :force force)))
 
 (defun test-system (year &optional day)
   "Load the system for YEAR and run the tests (for a specific DAY if specified)."
-  (let* ((year-symbol (format nil "aoc-~4,'0D" year))
-         (test-package (string-upcase (format nil "~A/test" year-symbol))))
-    (asdf:load-system year-symbol)
-    (funcall (find-symbol "RUN-TESTS" test-package) day)))
+  (let ((year-symbol (format nil "aoc-~4,'0D" year)))
+    (if day
+        (progn
+          (asdf:load-system year-symbol)
+          (5am:run! (year-day-keyword year day)))
+        (asdf:test-system year-symbol))))
 
 (defun reload-year (year)
   "Reload the system for YEAR. Removes any packages matching AOC-<YEAR>"
