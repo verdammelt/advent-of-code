@@ -10,10 +10,8 @@
   (list x y))
 
 (defun manhattan-distance (p1 p2)
-  (let ((x1 (first p1)) (y1 (second p1))
-        (x2 (first p2)) (y2 (second p2)))
-    (+ (abs (- x1 x2))
-       (abs (- y1 y2)))))
+  (aoc:manhattan-distance (cons (first p1) (second p1))
+                          (cons (first p2) (second p2))))
 
 (defun parse-integer-with-junk (str) (parse-integer str :junk-allowed t))
 

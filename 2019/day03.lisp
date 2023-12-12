@@ -83,8 +83,7 @@
 
 (defun manhattan-distance (coord paths)
   (declare (ignore paths))
-  (+ (abs (- (car *origin*) (car coord)))
-     (abs (- (cdr *origin*) (cdr coord)))))
+  (aoc:manhattan-distance *origin* coord))
 
 (defun signal-delay (coord paths)
   (apply #'+ (mapcar #'(lambda (path) (position coord path :test #'equal)) paths)))

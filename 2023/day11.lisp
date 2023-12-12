@@ -13,20 +13,6 @@
 (defparameter +input+
   (read-data (aoc:today-data-pathname)))
 
-;; TODO: [2023-12-11] promote to helper functions for matrix
-(defun array-row (array idx)
-  "Returns a vector which is row IDX of ARRAY"
-  (loop for col below (array-dimension array 1)
-        collect (aref array idx col) into result
-        finally (return (coerce result 'vector))))
-
-;; TODO: [2023-12-11] promote to helper functions for matrix
-(defun array-col (array idx)
-  "Returns a vector which is COL IDX of ARRAY"
-  (loop for row below (array-dimension array 0)
-        collect (aref array row idx) into result
-        finally (return (coerce result 'vector))))
-
 (defun empty-space-p (c)
   (char= c #\.))
 
@@ -42,20 +28,13 @@
      universe)
     stars))
 
-;; TODO: [2023-12-11] promote to helper functions for matrix
-(defun manhattan-distance (p1 p2)
-  (let ((x1 (car p1)) (y1 (cdr p1))
-        (x2 (car p2)) (y2 (cdr p2)))
-    (+ (abs (- x1 x2))
-       (abs (- y1 y2)))))
-
 (defun find-empty-rows-cols (universe)
   "Returns  ((:ROW ROW-IDX)* (:COL COL-IDX)*)"
   (loop for row-idx below (array-dimension universe 0)
         for col-idx below (array-dimension universe 1)
-        when (every #'empty-space-p (array-row universe row-idx))
+        when (every #'empty-space-p (aoc:slice-2d-array universe :row row-idx))
           collect (list :row row-idx)
-        when (every #'empty-space-p (array-col universe col-idx))
+        when (every #'empty-space-p (aoc:slice-2d-array universe :col col-idx))
           collect (list :col col-idx)))
 
 (defun count-crossings-of-the-void (galaxies empty-space)
@@ -79,7 +58,7 @@
     (alexandria:map-combinations
      #'(lambda (c)
          (destructuring-bind (p1 p2) c
-           (incf total (manhattan-distance p1 p2))
+           (incf total (aoc:manhattan-distance p1 p2))
            (incf total (* (count-crossings-of-the-void c empty-spaces)
                           (1- space-multiplier)))))
      galaxies

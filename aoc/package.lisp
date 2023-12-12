@@ -4,6 +4,8 @@
    ;; arrays
    #:lists->2d-array
    #:map-2d-array
+   #:slice-2d-array
+   #:manhattan-distance
 
    ;; math
    #:sum

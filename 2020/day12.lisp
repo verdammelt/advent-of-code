@@ -4,11 +4,9 @@
 (in-package #:aoc-2020-12)
 (aoc:def-today-suite*)
 
-(defun manhattan-distance (xy1 xy2)
-  (let ((x1 (first xy1)) (y1 (second xy1))
-        (x2 (first xy2)) (y2 (second xy2)))
-    (+ (abs (- x1 x2))
-       (abs (- y1 y2)))))
+(defun distance (xy1 xy2)
+  ;; wrapper needed because point representations differ
+  (aoc:manhattan-distance (apply #'cons xy1) (apply #'cons xy2)))
 
 (defun make-navcomm (command value)
   (list command value))
@@ -105,7 +103,7 @@
 
 (defun part1 (instructions)
   (let ((starting-position (list 0 0)))
-    (manhattan-distance
+    (distance
      starting-position
      (ferry-position (follow-instructions instructions
                                           (make-ferry starting-position :east))))))
@@ -163,7 +161,7 @@
 (defun part2 (instructions)
   (let ((position (list 0 0))
         (waypoint (list 10 1)))
-    (manhattan-distance
+    (distance
      position
      (ferry-position (follow-instructions instructions
                                           (make-ferry position :east waypoint)
