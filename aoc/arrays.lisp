@@ -31,6 +31,22 @@ example:
                   (aref array n idx))))
       vec)))
 
+(defun print-2d-array (array &key (stream t) (draw-axis-p t))
+  (destructuring-bind (max-row max-col) (array-dimensions array)
+    (let ((row-idx-width (ceiling (log max-row 10))))
+      (with-output-to-string (str)
+        (when draw-axis-p
+          (progn (format stream "~vT" (1+ row-idx-width))
+                 (loop for col below max-col
+                       do (princ (if (zerop (mod col 10)) #\+ #\-) stream))))
+        (loop for row below max-row
+              do (fresh-line stream)
+              when draw-axis-p
+                do (format stream "~v,' D " row-idx-width row)
+              do (loop for col below (array-dimension array 1)
+                       do (princ (aref array row col) stream))))))
+  (values))
+
 (defun manhattan-distance (p1 p2)
   "Compute the 'Manhattan Distance' (https://simple.wikipedia.org/wiki/Manhattan_distance)
 between P1 and P2. Both points are in the form (X . Y)"
