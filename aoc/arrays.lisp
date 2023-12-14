@@ -22,7 +22,7 @@ example:
   (declare (type (member :row :col) direction))
   (declare (type integer idx))
   (destructuring-bind (max-row max-col) (array-dimensions array)
-    (let* ((max (if (eq direction :row) max-row max-col))
+    (let* ((max (if (eq direction :row) max-col max-row))
            (vec (make-array (list max))))
       (dotimes (n max)
         (setf (aref vec n)
