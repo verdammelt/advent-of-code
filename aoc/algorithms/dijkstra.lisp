@@ -1,8 +1,10 @@
 (in-package :aoc)
 
-(defun dijkstra (graph start end neighbors cost all-vertexes)
+(defun dijkstra (graph start end neighbors cost all-vertexes &key (test #'equalp))
   "Find the shortest path between START and END on GRAPH. If END is NIL then
 find all shortest paths.
+
+TEST is used to determine if the node being looked at is equal to END.
 
 What this function returns differs depending on if END is NIL or not.
 
@@ -29,8 +31,13 @@ the GRAPH."
                                     ((null x) nil)
                                     (t t)))
              (pop-least ()
-               (setf queue (sort queue #'less-than :key #'(lambda (node) (gethash node dist))))
-               (pop queue))
+               (let ((least
+                       (reduce #'(lambda (n1 n2) (if (less-than (gethash n1 dist)
+                                                           (gethash n2 dist))
+                                                n1 n2))
+                               queue)))
+                 (setf queue (remove least queue :test #'equalp))
+                 least))
              (path-to (node)
                (append (list node)
                        (loop for next = (gethash node prev) then (gethash next prev)
@@ -39,7 +46,8 @@ the GRAPH."
              (plus-costs (x y) (if (and x y) (+ x y) nil)))
       (loop while (plusp (length queue))
             for u = (pop-least)
-            when (equalp u end) do (return)
+            when (funcall test u end)
+              do (progn (setf end u) (return))
             do (loop for v in (funcall neighbors graph u)
                      do (let ((alt (plus-costs (gethash u dist)
                                                (funcall cost graph u v))))
