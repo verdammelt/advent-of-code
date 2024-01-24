@@ -1,2 +1,3 @@
 *.fasl
 secrets.lisp
+inputs
