@@ -16,4 +16,5 @@
                 :components ((:file "tests")))
                (:module "problems" :pathname "" :depends-on ("utils")
                 :components ((:file "day01")
-                             (:file "day02")))))
+                             (:file "day02")
+                             (:file "day03")))))
