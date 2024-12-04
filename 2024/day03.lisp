@@ -19,7 +19,7 @@
 
 (defun extract-muls (str)
   (cl-ppcre:all-matches-as-strings
-   "mul\\\([0-9]+,[0-9]+\\\)"
+   "mul\\\(\\d+,\\d+\\\)"
    str))
 
 (defun extract-number-pairs (muls)
@@ -42,7 +42,7 @@
 
 (defun extract-instructions (str)
   (cl-ppcre:all-matches-as-strings
-   "do\\\(\\\)\|don't\\\(\\\)\|mul\\\([0-9]+,[0-9]+\\\)"
+   "do\\\(\\\)\|don't\\\(\\\)\|mul\\\(\\d+,\\d+\\\)"
    str))
 
 (defun process-conditionals (instructions)
