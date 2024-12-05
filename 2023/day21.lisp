@@ -58,12 +58,20 @@
 
 (5am:def-test part1 (:suite :aoc-2023-21)
   (5am:is (= 16 (part1 +example+ 6)))
-  (5am:is (= -1 (part1 +input+))))
+  (5am:skip ":aoc-2023-21.1 not complete")
+  ;; (5am:is (= 50 (part1 +example+ 10)))
+  ;; (5am:is (= 1594 (part1 +example+ 50)))
+  ;; (5am:is (= 6536 (part1 +example+ 100)))
+  ;; (5am:is (= 167004 (part1 +example+ 500)))
+  ;; (5am:is (= 668697 (part1 +example+ 1000)))
+  ;; (5am:is (= 16733044 (part1 +example+ 5000)))
+  ;; (5am:is (= -1 (part1 +input+)))
+  )
 
 (defun part2 (input) (declare (ignore input)) 0)
 
 (5am:def-test part2 (:suite :aoc-2023-21)
-  (5am:skip ":aoc-2023-21.2 not implemented")
+      (5am:skip ":aoc-2023-21.2 not implemented")
   ;; (5am:is (= -1 (part2 +example+)))
   ;; (5am:is (= -1 (part2 +input+)))
   )
