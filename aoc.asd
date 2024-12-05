@@ -17,6 +17,7 @@
   :components ((:file "package")
                (:module "utils" :pathname "" :depends-on ("package")
                 :components ((:file "arrays")
+                             (:file "coords")
                              (:file "math")
                              (:file "sequences")
                              (:file "strings")

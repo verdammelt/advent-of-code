@@ -9,6 +9,15 @@
    #:print-2d-array
    #:manhattan-distance
 
+   ;; coords
+   #:make-coord
+   #:coord-x
+   #:coord-y
+   #:coord-add
+   #:coord-in-bounds
+   #:coord-aref
+   #:coord-safe-aref
+
    ;; math
    #:sum
    #:product
