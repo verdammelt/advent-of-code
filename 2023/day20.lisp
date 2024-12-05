@@ -203,7 +203,7 @@ relationship."
 
 (5am:def-test part1 (:suite :aoc-2023-20)
   (5am:is (= 32000000 (part1 +example1+)))
-  (5am:is (= 11687500 (part1 +example1+)))
+  (5am:is (= 11687500 (part1 +example2+)))
   (5am:is (= 814934624 (part1 +input+))))
 
 ;; do not! use this... very bad idea
