@@ -13,6 +13,7 @@
    #:make-coord
    #:coord-x
    #:coord-y
+   #:coord-equal
    #:coord-add
    #:coord-in-bounds
    #:coord-aref

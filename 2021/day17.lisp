@@ -27,14 +27,6 @@
 (defparameter +input+
   (read-data (aoc:today-data-pathname)))
 
-(defun make-coord (x y) (cons x y))
-(defun coord-x (c) (car c))
-(defun coord-y (c) (cdr c))
-
-(defun coord-+ (c1 c2)
-  (make-coord (+ (coord-x c1) (coord-x c2))
-              (+ (coord-y c1) (coord-y c2))))
-
 (defun make-probe (location velocity) (cons location velocity))
 (defun probe-location (p) (car p))
 (defun probe-velocity (p) (cdr p))
@@ -49,17 +41,17 @@
 
 (defun step-probe (p)
   (make-probe
-   (coord-+ (probe-location p) (probe-velocity p))
-   (make-coord (apply-drag (coord-x (probe-velocity p)))
-               (apply-gravity (coord-y (probe-velocity p))))))
+   (aoc:coord-add (probe-location p) (probe-velocity p))
+   (aoc:make-coord (apply-drag (aoc:coord-x (probe-velocity p)))
+                   (apply-gravity (aoc:coord-y (probe-velocity p))))))
 
 (defun past-target-p (location target)
-  (or (> (coord-x location) (max-x target))
-      (< (coord-y location) (min-y target))))
+  (or (> (aoc:coord-x location) (max-x target))
+      (< (aoc:coord-y location) (min-y target))))
 
 (defun in-target-p (location target)
-  (and (<= (min-x target) (coord-x location) (max-x target))
-       (<= (min-y target) (coord-y location) (max-y target))))
+  (and (<= (min-x target) (aoc:coord-x location) (max-x target))
+       (<= (min-y target) (aoc:coord-y location) (max-y target))))
 
 (defun will-land-in-target-p (probe target)
   (cond ((past-target-p (probe-location probe) target) nil)
@@ -70,8 +62,8 @@
 
 (defun find-all-target-velocities (target)
   "!!!(minimally) BRUTE FORCE!!! Checks for velocities in the range x = [0,maxx] and y=[miny,-miny]"
-  (flet ((start-probe (vel-x vel-y) (make-probe (make-coord 0 0)
-                                                (make-coord vel-x vel-y))))
+  (flet ((start-probe (vel-x vel-y) (make-probe (aoc:make-coord 0 0)
+                                                (aoc:make-coord vel-x vel-y))))
     (loop for x from 0 to (max-x target)
           append (loop for y from (min-y target) to (abs (min-y target))
                        for probe = (start-probe x y) then (start-probe x y)
@@ -82,7 +74,7 @@
 
 (defun part1 (input)
   (let ((velocities (find-all-target-velocities input)))
-    (gauss-sum (coord-y (first (sort velocities #'> :key #'coord-y))))))
+    (gauss-sum (aoc:coord-y (first (sort velocities #'> :key #'aoc:coord-y))))))
 
 (5am:def-test part1 (:suite :aoc-2021-17)
   (5am:is (= 45 (part1 +example+)))

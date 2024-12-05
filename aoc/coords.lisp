@@ -6,6 +6,8 @@
 (defun coord-x (coord) (first coord))
 (defun coord-y (coord) (second coord))
 
+(defun coord-equal (c1 c2) (equal c1 c2))
+
 (defun coord-add (coord &rest other-coords)
   (make-coord (apply #'+ (coord-x coord) (mapcar #'coord-x other-coords))
               (apply #'+ (coord-y coord) (mapcar #'coord-y other-coords))))
