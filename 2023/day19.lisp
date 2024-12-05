@@ -125,7 +125,7 @@
                        (part-sum p)
                        0))
                parts
-               (mapcar #'(lambda (p) (funcall start-fn p)) parts))))))b
+               (mapcar #'(lambda (p) (funcall start-fn p)) parts))))))
 
 (5am:def-test part1 (:suite :aoc-2023-19)
   (5am:is (= 19114 (part1 +example+)))
