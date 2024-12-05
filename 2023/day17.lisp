@@ -15,9 +15,6 @@
 (defparameter +input+
   (read-data (aoc:today-data-pathname)))
 
-(defun make-coord (x y) (list x y))
-(defun coord-x (coord) (first coord))
-(defun coord-y (coord) (second coord))
 (defun make-node (coord direction step)
   (list coord direction step))
 (defun node-coord (node) (first node))
@@ -33,19 +30,19 @@
           (minusp row) (minusp col)
           (>= row max-row) (>= col max-col)))))
 
-(defparameter *start-node* (make-node (make-coord 0 0) nil nil))
+(defparameter *start-node* (make-node (aoc:make-coord 0 0) nil nil))
 
 (defun neighbors (graph node)
   (if (node-equal node *start-node*)
-      (list (make-node (make-coord 0 1) :east 1)
-            (make-node (make-coord 1 0) :south 1))
+      (list (make-node (aoc:make-coord 0 1) :east 1)
+            (make-node (aoc:make-coord 1 0) :south 1))
       (destructuring-bind (max-row max-col) (array-dimensions graph)
         (destructuring-bind ((row col) dir step) node
           (flet ((move-dir (row col dir) (ecase dir
-                                           (:north (make-coord (1- row) col))
-                                           (:south (make-coord (1+ row) col))
-                                           (:east (make-coord row (1- col)))
-                                           (:west (make-coord row (1+ col)))))
+                                           (:north (aoc:make-coord (1- row) col))
+                                           (:south (aoc:make-coord (1+ row) col))
+                                           (:east (aoc:make-coord row (1- col)))
+                                           (:west (aoc:make-coord row (1+ col)))))
                  (turn-left (dir) (ecase dir
                                     (:north :west)
                                     (:south :east)
@@ -58,8 +55,8 @@
                                      (:west :north)))
                  (invalid-p (node) (invalid-node-p graph node))
                  (tweak-if-end-node (node)
-                   (if (and (= (1- max-row) (coord-x (node-coord node)))
-                            (= (1- max-col) (coord-y (node-coord node))))
+                   (if (and (= (1- max-row) (aoc:coord-x (node-coord node)))
+                            (= (1- max-col) (aoc:coord-y (node-coord node))))
                        (make-node (node-coord node) nil nil)
                        node)))
             (mapcar #'tweak-if-end-node
@@ -92,7 +89,7 @@
                     append (loop for col below max-col
                                  append (loop for dir in '(:north :south :east :west)
                                               append (loop for step from 1 to 3
-                                                           collect (make-node (make-coord row col)
+                                                           collect (make-node (aoc:make-coord row col)
                                                                               dir step)))))))
         (setf all (remove-if #'invalid-p all))
         (push *start-node* all)
