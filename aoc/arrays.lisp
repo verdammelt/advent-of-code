@@ -5,7 +5,7 @@
               :initial-contents lists))
 
 (defun map-2d-array (fn array)
-  "Maps FN across each item in ARRAY creating a new array (of same diminesions)
+  "Maps FN across each item in ARRAY creating a new array (of same dimensions)
 with the results. FN is a function that takes 3 arguments: the ARRAY, the ROW
 coordinate and the COLUMN coordinate."
   (let* ((new-array (make-array (array-dimensions array) :initial-element nil)))
@@ -13,6 +13,11 @@ coordinate and the COLUMN coordinate."
           do (loop for col from 0 below (array-dimension array 1)
                    do (setf (aref new-array row col) (funcall fn array row col))))
     new-array))
+
+(defun map-2d-array-values (fn array)
+  "Map FN across each value in ARRAY creating a new array (of same dimensions)
+with the results. FN is a function that takes a single argument: the VALUE."
+  (map-2d-array #'(lambda (a x y) (funcall fn (aref a x y))) array))
 
 (defun slice-2d-array (array direction idx)
   "Returns a ROW or COL slice of ARRAY based upon DIRECTION and IDX.

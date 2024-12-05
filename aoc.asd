@@ -41,6 +41,7 @@
   :components ((:module "base" :pathname ""
                 :components ((:file "package") (:file "suite")))
                (:module "utils" :depends-on ("base")
-                        :components ((:file "symbols")))
+                :components ((:file "arrays")
+                             (:file "symbols")))
                (:module "algorithms" :depends-on ("base")
                        :components ((:file "dijkstra")))))

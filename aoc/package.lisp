@@ -4,6 +4,7 @@
    ;; arrays
    #:lists->2d-array
    #:map-2d-array
+   #:map-2d-array-values
    #:slice-2d-array
    #:print-2d-array
    #:manhattan-distance
