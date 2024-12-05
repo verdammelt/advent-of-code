@@ -23,22 +23,17 @@
   (destructuring-bind (coord . dir) beam
     (funcall fn coord dir)))
 
-(defun make-coord (x y) (cons x y))
-(defun coord-less-p (c1 c2)
-  (if (= (car c1) (car c2))
-      (< (cdr c1) (cdr c2))
-      (< (car c1) (car c2))))
-(defun coord-equal (c1 c2) (equalp c1 c2))
 (defun out-of-bounds-p (bounds coord)
-  (destructuring-bind (x . y) coord
+  (let ((x (aoc:coord-x coord))
+        (y (aoc:coord-y coord)))
     (destructuring-bind (max-x max-y) bounds
       (or (minusp x) (minusp y)
           (>= x max-x) (>= y max-y)))))
 
-(defun left (coord) (cons (car coord) (1- (cdr coord))))
-(defun right (coord) (cons (car coord) (1+ (cdr coord))))
-(defun up (coord) (cons (1- (car coord)) (cdr coord)))
-(defun down (coord) (cons (1+ (car coord)) (cdr coord)))
+(defun left (coord) (aoc:make-coord (aoc:coord-x coord) (1- (aoc:coord-y coord))))
+(defun right (coord) (aoc:make-coord (aoc:coord-x coord) (1+ (aoc:coord-y coord))))
+(defun up (coord) (aoc:make-coord (1- (aoc:coord-x coord)) (aoc:coord-y coord)))
+(defun down (coord) (aoc:make-coord (1+ (aoc:coord-x coord)) (aoc:coord-y coord)))
 
 (defun dir->fn (dir)
   (ecase dir
@@ -98,7 +93,7 @@ list sorted"
   (hash-table-count energized))
 
 (defun tile-at (layout coord)
-  (aref layout (car coord) (cdr coord)))
+  (aref layout (aoc:coord-x coord) (aoc:coord-y coord)))
 
 (defparameter *seen-beams* (make-hash-table :test #'equalp))
 (defun clear-seen-beams () (clrhash *seen-beams*))
@@ -123,7 +118,7 @@ Evalutate to values: (BEAMS ENERGIZED)"
           (dolist (b (modify-beam beam (tile-at layout (beam-coord beam))))
             (when (ok-beam b layout)
               (push b result-beams))))))
-    (setf result-beams (remove-if #'deja-vu-beam-p (remove-duplicates result-beams :test #'coord-equal))
+    (setf result-beams (remove-if #'deja-vu-beam-p (remove-duplicates result-beams :test #'aoc:coord-equal))
           energized (reduce #'energize-tile
                             (mapcar #'beam-coord result-beams)
                             :initial-value energized))
@@ -169,7 +164,7 @@ changed in N ticks)"
     (num-energized energized)))
 
 (defun part1 (input)
-  (num-energized-with-initial-beam input (make-beam (make-coord 0 -1) :right)))
+  (num-energized-with-initial-beam input (make-beam (aoc:make-coord 0 -1) :right)))
 
 (5am:def-test part1 (:suite :aoc-2023-16)
   (5am:is (= 46 (part1 +example+)))
@@ -180,13 +175,13 @@ changed in N ticks)"
     (loop for row below max-row
           for col below max-col
           maximize (num-energized-with-initial-beam
-                    input (make-beam (make-coord row -1) :right))
+                    input (make-beam (aoc:make-coord row -1) :right))
           maximize (num-energized-with-initial-beam
-                    input (make-beam (make-coord row max-col) :left))
+                    input (make-beam (aoc:make-coord row max-col) :left))
           maximize (num-energized-with-initial-beam
-                    input (make-beam (make-coord -1 col) :down))
+                    input (make-beam (aoc:make-coord -1 col) :down))
           maximize (num-energized-with-initial-beam
-                    input (make-beam (make-coord max-row col) :up)))))
+                    input (make-beam (aoc:make-coord max-row col) :up)))))
 
 (5am:def-test part2 (:suite :aoc-2023-16)
   (5am:is (= 51 (part2 +example+)))
