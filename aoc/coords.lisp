@@ -20,5 +20,8 @@
 (defun coord-aref (map coord)
   (aref map (coord-x coord) (coord-y coord)))
 
+(defun (setf coord-aref) (new-value map coord)
+  (setf (aref map (coord-x coord) (coord-y coord)) new-value))
+
 (defun coord-safe-aref (map coord)
   (and (coord-in-bounds map coord) (coord-aref map coord)))
