@@ -18,4 +18,5 @@
                 :components ((:file "day01")
                              (:file "day02")
                              (:file "day03")
-                             (:file "day04")))))
+                             (:file "day04")
+                             (:file "day05")))))
