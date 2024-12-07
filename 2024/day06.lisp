@@ -86,13 +86,10 @@
          (map (copy-map map))
          (visited-locations (list)))
         ((not (guard-on-map-p map guard)) visited-locations)
-      ;; (mark-map map (guard-location guard) #\X)
       (push (guard-location guard) visited-locations)
       (if (at-barrier-p map guard)
           (turn-guard guard)
-          (move-guard guard))
-      ;; (mark-map map (guard-location guard) (guard-figure guard))
-      )
+          (move-guard guard)))
     :test #'equal)))
 
 (defun part1 (input)
@@ -102,37 +99,43 @@
   (5am:is (= 41 (part1 +example+)))
   (5am:is (= 5516 (part1 +input+))))
 
-(defun guard-has-looped-p (guard past-positions)
-  (find guard past-positions :test #'guard-equal))
-
 (defun check-if-guard-loops-on-map (map guard)
-  (do ((guard (copy-guard guard))
-       (past-positions (list)))
-      ((or (not (guard-on-map-p map guard))
-           (guard-has-looped-p guard past-positions))
-       (guard-has-looped-p guard past-positions))
-    ;; (mark-map map (guard-location guard) #\X)
-    (push (copy-guard guard) past-positions)
-    (if (at-barrier-p map guard)
-        (turn-guard guard)
-        (move-guard guard))
-     ;; (mark-map map (guard-location guard) (guard-figure guard))
-    ))
+  (labels ((guard-hash-key (guard) (cons (guard-location guard) (guard-direction guard)))
+           (record-guard-position (guard positions)
+             (setf (gethash (guard-hash-key guard) positions) t))
+           (guard-has-looped-p (guard positions)
+             (gethash (guard-hash-key guard) positions)))
+
+    (do ((guard (copy-guard guard))
+         (past-positions (make-hash-table :test #'equal))
+         (looped nil (guard-has-looped-p guard past-positions)))
+
+        ((or (not (guard-on-map-p map guard)) looped) looped)
+
+      (record-guard-position guard past-positions)
+      (if (at-barrier-p map guard)
+          (turn-guard guard)
+          (move-guard guard)))))
 
 (defun part2 (input)
   (let ((current-path (get-guard-path input))
         (initial-guard (make-guard (find-guard input) (aoc:make-coord -1 0)))
+        (map (copy-map input))
         (count-of-maps-with-loops 0))
+
     (dolist (possible-barrier
              (remove (guard-location initial-guard) current-path :test #'aoc:coord-equal))
-      (let ((map (copy-map input))
-            (guard (copy-guard initial-guard)))
-        ;; add a new barrier
-        (mark-map map possible-barrier #\O)
 
-        ;; see if guard goes into a loop or walks off map like normal
-        (when (check-if-guard-loops-on-map map guard)
-          (incf count-of-maps-with-loops))))
+      ;; add a new barrier
+      (mark-map map possible-barrier #\O)
+
+      ;; see if guard goes into a loop or walks off map like normal
+      (when (check-if-guard-loops-on-map map initial-guard)
+        (incf count-of-maps-with-loops))
+
+      ;; remove that barrier
+      (mark-map map possible-barrier #\.))
+
     count-of-maps-with-loops))
 
 (5am:def-test part2 (:suite :aoc-2024-06)
