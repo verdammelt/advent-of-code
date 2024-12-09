@@ -54,16 +54,17 @@ Evaluates to a list of triples: (COORD1 COORD2 DISTANCE)."
 (defun part1 (input)
   (let ((antennae (collect-antennae input))
         (antinodes (list)))
-    ;; collect all possible antinodes
+
     (maphash #'(lambda (freqency locations)
                  (declare (ignore freqency))
-                 (push (compute-antinodes-for-antenna locations) antinodes))
+                 (setf antinodes
+                       (append (compute-antinodes-for-antenna locations) antinodes)))
              antennae)
 
     (length
      (remove-if-not
       #'(lambda (coord) (aoc:coord-in-bounds input coord))
-      (remove-duplicates (aoc:flatten antinodes) :test #'aoc:coord-equal)))))
+      (remove-duplicates antinodes :test #'aoc:coord-equal)))))
 
 (5am:def-test part1 (:suite :aoc-2024-08)
   (5am:is (= 14 (part1 +example+)))
@@ -73,24 +74,21 @@ Evaluates to a list of triples: (COORD1 COORD2 DISTANCE)."
   (let ((distances (compute-distances locations))
         (antinodes (list)))
     (flet ((in-bounds (c) (aoc:coord-in-bounds map c)))
-      (remove-if-not
-       #'in-bounds ;; still have some out-of-bounds items to remove (see comment below)
-       (dolist (triple distances antinodes)
-         (do ((start (first triple))
-              (end (second triple))
-              (distance (third triple)))
+      (dolist (triple distances antinodes)
+        (do ((start (first triple))
+             (end (second triple))
+             (distance (third triple)))
 
-             ;; Keep going as long as one direction is in bounds. Not super-great
-             ;; because then we need to remove the out-of-bounds items above...
-             ;; but it *works* and is relatively easy to comprehend
-             ;; TODO: [2024-12-08] stop collecting out-of-bounds
-             ((not (or (in-bounds start) (in-bounds end))))
+            ((and (null start) (null end)))
 
-           (push start antinodes)
-           (push end antinodes)
-
-           (setq start (aoc:coord-add start distance)
-                 end (aoc:coord-add end (coord-inverse distance)))))))))
+          (if (and start (in-bounds start))
+              (progn (push start antinodes)
+                     (setq start (aoc:coord-add start distance)))
+              (setq start nil))
+          (if (and end (in-bounds end))
+              (progn (push end antinodes)
+                     (setq end (aoc:coord-add end (coord-inverse distance))))
+              (setq end nil)))))))
 
 (defun part2 (input)
   (let ((antennae (collect-antennae input))
