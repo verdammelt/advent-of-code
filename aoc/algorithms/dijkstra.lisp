@@ -55,7 +55,7 @@ the GRAPH."
                             (setf (gethash v dist) alt)
                             (setf (gethash v prev) u)))))
       (if end
-          (values (gethash end dist) (path-to end))
+          (values (gethash end dist) (when (gethash end dist) (path-to end)))
           (let ((paths (make-hash-table :test #'equalp)))
             (maphash #'(lambda (node prev-node)
                          (declare (ignore prev-node))
