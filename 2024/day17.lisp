@@ -93,7 +93,7 @@ Else set INSTRUCTION-POINTER to value of OPERAND."
   (nth op-code (list #'adv #'bxl #'bst #'jnz #'bxc #'out #'bdv #'cdv)))
 
 (defun run-program (machine)
-  (format t "~S~&" machine)
+  ;; (format t "~S~&" machine)
   (flet ((get-op-code (machine)
            (nth (getf machine :ip) (getf machine :instructions)))
          (get-operand (machine)
@@ -103,13 +103,13 @@ Else set INSTRUCTION-POINTER to value of OPERAND."
        ((>= (getf machine :ip) (length (getf machine :instructions)))
         machine)
 
-     (format t "~D: (~S ~S) = " (getf machine :ip)
-             (op-code-lookup op-code) operand)
+     ;; (format t "~D: (~S ~S) = " (getf machine :ip)
+     ;;         (op-code-lookup op-code) operand)
 
      (setf (getf machine :ip)
            (funcall (op-code-lookup op-code) operand machine))
 
-     (format t "~S~&" machine)
+     ;; (format t "~S~&" machine)
 
      )))
 
